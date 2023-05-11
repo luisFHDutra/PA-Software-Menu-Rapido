@@ -34,7 +34,7 @@ public class Sys {
         try
         {
             this.dbcm = new DataBaseConnectionManager( DataBaseConnectionManager.POSTGRESQL,
-                    "menuRapido","postgres","postgres");
+                    "menurapido","postgres","postgres");
         } 
         catch (DataBaseException ex)
         {

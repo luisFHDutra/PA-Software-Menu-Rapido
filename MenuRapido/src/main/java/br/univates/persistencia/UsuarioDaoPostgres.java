@@ -30,8 +30,8 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
             
             String sql = "INSERT INTO usuario VALUES ( ?, ?, ?, ?);";
             
-            dbcm.runPreparedSQL(sql, user.getIdUser(), user.getLogName(),
-                    user.getName(), user.getHashCode());
+            dbcm.runPreparedSQL(sql, user.getIdUser(), user.getName(),
+                    user.getLogName(), user.getHashCode());
         } 
         catch (DataBaseException ex)
         {
