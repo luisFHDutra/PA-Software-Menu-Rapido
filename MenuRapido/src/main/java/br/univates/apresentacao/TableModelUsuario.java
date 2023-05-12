@@ -20,6 +20,10 @@ public class TableModelUsuario extends TableModelViewAdapter{
         this.lista = lista;
     }
 
+    public ArrayList<Usuario> getUsuarios() {
+        return lista;
+    }
+    
     @Override
     public int getRowCount()
     {

@@ -4,13 +4,14 @@
  */
 package br.univates.negocio;
 
+import br.univates.raiz.auth.Authenticator;
 import br.univates.raiz.auth.User;
 
 /**
  *
  * @author luis.dutra
  */
-public class Usuario implements User {
+public class Usuario implements User, Comparable<Usuario> {
     
     private int idUser;
     private String nome;
@@ -24,6 +25,13 @@ public class Usuario implements User {
         this.hashCode = hashCode;
     }
 
+    public Usuario() {
+        this.idUser = 0;
+        this.nome = "";
+        this.user = "";
+        this.hashCode = "";
+    }
+    
     @Override
     public String getLogName() {
         return user;
@@ -42,5 +50,45 @@ public class Usuario implements User {
     public int getIdUser() {
         return idUser;
     }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setHashCode(String hashCode) {
+        this.hashCode = Authenticator.getHashCode(hashCode);
+    }
     
+    @Override
+    public int compareTo(Usuario usuario) {
+        
+        return (toString().compareTo(usuario.idUser+""));
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.idUser+"";
+    }
+    
+    @Override
+    public boolean equals(Object objeto)
+    {
+        Usuario outroUsuario = (Usuario)objeto;
+        return ( toString().equalsIgnoreCase(outroUsuario.getIdUser()+"") );
+    }
+    
+    @Override
+    public Usuario clone()
+    {
+        return new Usuario(this.idUser,this.nome,this.user,this.hashCode);
+    }
 }

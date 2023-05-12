@@ -13,6 +13,7 @@ import br.univates.raiz.persistence.NotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,7 +36,9 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
         } 
         catch (DataBaseException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "Chave primária duplicada",
+                    "Inserção no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
         
     }
@@ -66,11 +69,15 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
         } 
         catch (DataBaseException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "Erro de sintaxe ou semântica",
+                    "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         } 
         catch (SQLException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "DataType errado na query",
+                    "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
         
         return u;
@@ -109,24 +116,52 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
         } 
         catch (DataBaseException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "Erro de sintaxe ou semântica",
+                    "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         } 
         catch (SQLException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "DataType errado na query",
+                    "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
         
         return lista;
     }
 
     @Override
-    public void update(Usuario objeto) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(Usuario usuario) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "UPDATE usuario SET nome = ? WHERE id_usuario = ?";
+            dbcm.runPreparedSQL(sql, usuario.getName(), usuario.getIdUser() );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public void delete(Integer primaryKey) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer id_usuario) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "DELETE FROM usuario WHERE id_usuario = ?";
+            dbcm.runPreparedSQL(sql, id_usuario );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
     
 }

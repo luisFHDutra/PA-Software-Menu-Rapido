@@ -7,6 +7,7 @@ package br.univates.menurapido;
 import br.univates.raiz.auth.User;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,6 +39,9 @@ public class Sys {
         } 
         catch (DataBaseException ex)
         {
+            JOptionPane.showMessageDialog(null, 
+                    "Erro fatal na configuração de acesso ao banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
     }

@@ -5,7 +5,7 @@
 
 package br.univates.menurapido;
 
-import br.univates.apresentacao.Tela;
+import br.univates.apresentacao.TelaMenuUI;
 import br.univates.negocio.Usuario;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.auth.Authenticator;
@@ -22,9 +22,9 @@ public class MenuRapido {
         
         ArrayList<Usuario> users = DaoFactory.criarUsuarioDao().readAll();
         
-        for(Usuario user: users) {
-            System.out.println(user.getIdUser() + "" + user.getHashCode());
-        }
+//        for(Usuario user: users) {
+//            System.out.println(user.getIdUser() + "" + user.getHashCode());
+//        }
         
         Authenticator auth = new Authenticator( users );
 
@@ -32,7 +32,23 @@ public class MenuRapido {
         {
             sys.setUser( auth.getLoggedUser() );
             
-            Tela t = new Tela();
+            TelaMenuUI t = new TelaMenuUI();
+            t.setVisible(true);
+        }  
+    }
+    
+    public static void runMain(){
+        Sys sys = Sys.getInstance();
+        
+        ArrayList<Usuario> users = DaoFactory.criarUsuarioDao().readAll();
+        
+        Authenticator auth = new Authenticator( users );
+
+        if (auth.showDialog(true))
+        {
+            sys.setUser( auth.getLoggedUser() );
+            
+            TelaMenuUI t = new TelaMenuUI();
             t.setVisible(true);
         }  
     }

@@ -15,6 +15,7 @@ import br.univates.raiz.persistence.NotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,11 +33,13 @@ public class ItemPedidoDaoPostgres extends DaoAdapter<ItemPedido,Integer>{
             String sql = "INSERT INTO item_pedido VALUES ( ?, ?, ?, ?);";
             
             dbcm.runPreparedSQL(sql, item.getProduto().getIdProduto(), item.getPedido().getIdPedido(),
-                    item.getValorProduto(), item.getQuantidade());
+                    item.getQuantidade(), item.getValorProduto() );
         } 
         catch (DataBaseException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "Chave primária duplicada",
+                    "Inserção no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -92,11 +95,15 @@ public class ItemPedidoDaoPostgres extends DaoAdapter<ItemPedido,Integer>{
         } 
         catch (DataBaseException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "Erro de sintaxe ou semântica",
+                    "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         } 
         catch (SQLException ex)
         {
-            System.out.println("deu pau");
+            JOptionPane.showMessageDialog(null, 
+                    "DataType errado na query",
+                    "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
         
         return lista;
