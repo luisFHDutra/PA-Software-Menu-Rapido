@@ -11,8 +11,6 @@ import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -37,15 +35,11 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.tbConsultaUsuarios.setModel( new TableModelUsuario(usuarios));
         this.novo = false;
         
-        this.btnSalvarEditar.setEnabled(false);
-        this.btnSalvarNovo.setEnabled(false);
+        this.btnSalvar.setEnabled(false);
         
-        this.btnCancelarEditar.setEnabled(false);
-        this.btnCancelarNovo.setEnabled(false);
+        this.btnCancelar.setEnabled(false);
         
         this.btnVoltar.setEnabled(true);
-        
-        this.painelAbas.setSelectedIndex(0);
         
         this.setLocationRelativeTo(null);
     }
@@ -54,9 +48,14 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     
         this.usuarioCurrent = usuario;
         
-        this.tfIDUsuario.setText("");
+        if (usuario.getIdUser() == 0) {
+            this.tfIDUsuario.setText("" );
+        } else {
+            this.tfIDUsuario.setInteger(usuario.getIdUser());
+        }
+        
         this.tfNomeUsuario.setText(usuario.getName());
-        this.tfSenhaUsuario.setText(usuario.getHashCode());
+        this.tfSenhaUsuario.setText("");
         this.tfUserUsuario.setText(usuario.getLogName());
     }
 
@@ -75,25 +74,17 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
-        painelAbas = new javax.swing.JTabbedPane();
-        tabInicial = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        tabNovo = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        tfIDUsuario = new br.univates.raiz.JIntegerField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         tfNomeUsuario = new br.univates.raiz.JTextFieldCustomized();
+        jLabel4 = new javax.swing.JLabel();
         tfUserUsuario = new br.univates.raiz.JTextFieldCustomized();
-        tfIDUsuario = new br.univates.raiz.JIntegerField();
         tfSenhaUsuario = new br.univates.raiz.JTextFieldCustomized();
-        btnCancelarNovo = new javax.swing.JButton();
-        btnSalvarNovo = new javax.swing.JButton();
-        tabEditar = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        tfNovoNomeUsuario = new br.univates.raiz.JTextFieldCustomized();
-        btnSalvarEditar = new javax.swing.JButton();
-        btnCancelarEditar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,36 +134,15 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
 
-        painelAbas.setToolTipText("");
-
-        jLabel1.setText("Tela de Usuários");
-
-        javax.swing.GroupLayout tabInicialLayout = new javax.swing.GroupLayout(tabInicial);
-        tabInicial.setLayout(tabInicialLayout);
-        tabInicialLayout.setHorizontalGroup(
-            tabInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabInicialLayout.createSequentialGroup()
-                .addGap(137, 137, 137)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(158, Short.MAX_VALUE))
-        );
-        tabInicialLayout.setVerticalGroup(
-            tabInicialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabInicialLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
-        );
-
-        painelAbas.addTab("inicial", tabInicial);
+        tfIDUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfIDUsuarioFocusLost(evt);
+            }
+        });
 
         jLabel2.setText("ID: ");
 
         jLabel3.setText("Nome: ");
-
-        jLabel4.setText("User: ");
-
-        jLabel5.setText("Senha: ");
 
         tfNomeUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -180,15 +150,11 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("User: ");
+
         tfUserUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfUserUsuarioFocusLost(evt);
-            }
-        });
-
-        tfIDUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfIDUsuarioFocusLost(evt);
             }
         });
 
@@ -198,130 +164,76 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
 
-        btnCancelarNovo.setText("Cancelar");
-        btnCancelarNovo.addActionListener(new java.awt.event.ActionListener() {
+        jLabel5.setText("Senha: ");
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarNovoActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
 
-        btnSalvarNovo.setText("Salvar");
-        btnSalvarNovo.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarNovoActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout tabNovoLayout = new javax.swing.GroupLayout(tabNovo);
-        tabNovo.setLayout(tabNovoLayout);
-        tabNovoLayout.setHorizontalGroup(
-            tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabNovoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(tabNovoLayout.createSequentialGroup()
-                        .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCancelar)
                         .addGap(18, 18, 18)
-                        .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tfNomeUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalvar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfUserUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfIDUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)))
-                    .addGroup(tabNovoLayout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabNovoLayout.createSequentialGroup()
-                                .addComponent(btnCancelarNovo)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSalvarNovo))
-                            .addComponent(tfSenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(15, Short.MAX_VALUE))
+                            .addComponent(tfSenhaUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfNomeUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tfIDUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
-        tabNovoLayout.setVerticalGroup(
-            tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabNovoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(tfIDUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfIDUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(tfNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(tfUserUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfUserUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addGap(18, 18, 18)
-                .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(tfSenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(tabNovoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelarNovo)
-                    .addComponent(btnSalvarNovo))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        painelAbas.addTab("novo", tabNovo);
-
-        jLabel6.setText("Nome: ");
-
-        tfNovoNomeUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfNovoNomeUsuarioFocusLost(evt);
-            }
-        });
-
-        btnSalvarEditar.setText("Salvar");
-        btnSalvarEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarEditarActionPerformed(evt);
-            }
-        });
-
-        btnCancelarEditar.setText("Cancelar");
-        btnCancelarEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarEditarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout tabEditarLayout = new javax.swing.GroupLayout(tabEditar);
-        tabEditar.setLayout(tabEditarLayout);
-        tabEditarLayout.setHorizontalGroup(
-            tabEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabEditarLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(tabEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(tabEditarLayout.createSequentialGroup()
-                        .addComponent(btnCancelarEditar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalvarEditar))
-                    .addGroup(tabEditarLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(tfNovoNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-        tabEditarLayout.setVerticalGroup(
-            tabEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabEditarLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(tabEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(tfNovoNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
-                .addGroup(tabEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSalvarEditar)
-                    .addComponent(btnCancelarEditar))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfSenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar)
+                    .addComponent(btnSalvar))
                 .addContainerGap())
         );
-
-        painelAbas.addTab("editar", tabEditar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -335,24 +247,25 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                 .addComponent(btnEditar)
                 .addGap(18, 18, 18)
                 .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addContainerGap())
-            .addComponent(painelAbas)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painelAbas, javax.swing.GroupLayout.PREFERRED_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNovo)
-                    .addComponent(btnEditar)
-                    .addComponent(btnExcluir)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnExcluir)
+                        .addComponent(btnEditar)
+                        .addComponent(btnNovo))
                     .addComponent(btnVoltar))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -368,10 +281,9 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tbConsultaUsuariosMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        this.painelAbas.setSelectedIndex(1);
         
-        this.btnSalvarNovo.setEnabled(true);
-        this.btnCancelarNovo.setEnabled(true);
+        this.btnSalvar.setEnabled(true);
+        this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
         
         this.tfIDUsuario.setEditable(true);
@@ -390,17 +302,19 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        this.painelAbas.setSelectedIndex(2);
         
         if (usuarioCurrent != null) {
             this.usuarioOld = usuarioCurrent.clone();
-            this.btnSalvarEditar.setEnabled(true);
-            this.btnCancelarEditar.setEnabled(true);
+            this.btnSalvar.setEnabled(true);
+            this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
             
             this.novo = false;
-            this.tfNovoNomeUsuario.setEditable(true);
-            this.tfNovoNomeUsuario.requestFocus();
+            this.tfIDUsuario.setEditable(false);
+            this.tfUserUsuario.setEditable(false);
+            this.tfSenhaUsuario.setEditable(false);
+            this.tfNomeUsuario.setEditable(true);
+            this.tfNomeUsuario.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela");
         }
@@ -428,7 +342,10 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                     this.tfNomeUsuario.setText( "" );
                     this.tfSenhaUsuario.setText( "" );
                     this.tfUserUsuario.setText( "" );
-                    this.tfNovoNomeUsuario.setText( "" );
+                    
+                    this.tfSenhaUsuario.setText( "" );
+                    this.tfSenhaUsuario.setVisible(false);
+                    
                     this.usuarioCurrent = null;
                 }
             } 
@@ -463,11 +380,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.usuarioCurrent.setHashCode(this.tfSenhaUsuario.getText());
     }//GEN-LAST:event_tfSenhaUsuarioFocusLost
 
-    private void tfNovoNomeUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNovoNomeUsuarioFocusLost
-        this.usuarioCurrent.setNome(this.tfNovoNomeUsuario.getText());
-    }//GEN-LAST:event_tfNovoNomeUsuarioFocusLost
-
-    private void btnCancelarNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarNovoActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         if (usuarioOld != null)
         {
             this.usuarioCurrent.setIdUser(this.usuarioOld.getIdUser() );
@@ -477,7 +390,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.tfIDUsuario.setText( this.usuarioOld.getIdUser()+"" );
             this.tfNomeUsuario.setText( this.usuarioOld.getName());
             this.tfUserUsuario.setText( this.usuarioOld.getLogName());
-            this.tfSenhaUsuario.setText( this.usuarioOld.getHashCode());
+            this.tfSenhaUsuario.setText( "" );
         }
         
         this.tbConsultaUsuarios.revalidate();
@@ -488,32 +401,12 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.tfUserUsuario.setEditable(false);
         this.tfSenhaUsuario.setEditable(false);
 
-        this.btnSalvarNovo.setEnabled(false);
-        this.btnCancelarNovo.setEnabled(false);
+        this.btnSalvar.setEnabled(false);
+        this.btnCancelar.setEnabled(false);
         this.btnVoltar.setEnabled(true);
-    }//GEN-LAST:event_btnCancelarNovoActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnCancelarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarEditarActionPerformed
-        if (usuarioOld != null)
-        {
-            this.usuarioCurrent.setIdUser(this.usuarioOld.getIdUser() );
-            this.usuarioCurrent.setNome( this.usuarioOld.getName() );
-            this.usuarioCurrent.setUser(this.usuarioOld.getLogName() );
-            this.usuarioCurrent.setHashCode(this.usuarioOld.getHashCode() );
-            this.tfNovoNomeUsuario.setText( this.usuarioOld.getName() );
-        }
-        
-        this.tbConsultaUsuarios.revalidate();
-        this.tbConsultaUsuarios.repaint();
-        
-        this.tfNovoNomeUsuario.setEditable(false);
-
-        this.btnSalvarEditar.setEnabled(false);
-        this.btnCancelarEditar.setEnabled(false);
-        this.btnVoltar.setEnabled(true);
-    }//GEN-LAST:event_btnCancelarEditarActionPerformed
-
-    private void btnSalvarNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarNovoActionPerformed
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         IDao<Usuario,Integer> dao = DaoFactory.criarUsuarioDao();
 
         try
@@ -524,6 +417,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
 
                 TableModelUsuario model = (TableModelUsuario)this.tbConsultaUsuarios.getModel();
                 model.getUsuarios().add(usuarioCurrent);
+            } else {
+                dao.update(usuarioCurrent);
             }
 
             this.tbConsultaUsuarios.revalidate();
@@ -534,65 +429,35 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.tfUserUsuario.setEditable(false);
             this.tfSenhaUsuario.setEditable(false);
 
-            this.btnSalvarNovo.setEnabled(false);
-            this.btnCancelarNovo.setEnabled(false);
+            this.btnSalvar.setEnabled(false);
+            this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
         }
         catch (KeyViolationException | InvalidKeyException ex) 
         {
             JOptionPane.showMessageDialog(this, ex.getMessage() );
-        }
-    }//GEN-LAST:event_btnSalvarNovoActionPerformed
-
-    private void btnSalvarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarEditarActionPerformed
-        IDao<Usuario,Integer> dao = DaoFactory.criarUsuarioDao();
-
-        try
-        {
-            if (!novo)
-            {
-                dao.update(usuarioCurrent);
-            }
-
-            this.tbConsultaUsuarios.revalidate();
-            this.tbConsultaUsuarios.repaint();
-
-            this.tfNovoNomeUsuario.setEditable(false);
-
-            this.btnSalvarEditar.setEnabled(false);
-            this.btnCancelarEditar.setEnabled(false);
-            this.btnVoltar.setEnabled(true);
-            
         } catch (NotFoundException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage() );
         }
-    }//GEN-LAST:event_btnSalvarEditarActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelarEditar;
-    private javax.swing.JButton btnCancelarNovo;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
-    private javax.swing.JButton btnSalvarEditar;
-    private javax.swing.JButton btnSalvarNovo;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane painelAbas;
-    private javax.swing.JPanel tabEditar;
-    private javax.swing.JPanel tabInicial;
-    private javax.swing.JPanel tabNovo;
     private javax.swing.JTable tbConsultaUsuarios;
     private br.univates.raiz.JIntegerField tfIDUsuario;
     private br.univates.raiz.JTextFieldCustomized tfNomeUsuario;
-    private br.univates.raiz.JTextFieldCustomized tfNovoNomeUsuario;
     private br.univates.raiz.JTextFieldCustomized tfSenhaUsuario;
     private br.univates.raiz.JTextFieldCustomized tfUserUsuario;
     // End of variables declaration//GEN-END:variables
