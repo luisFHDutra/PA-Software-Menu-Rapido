@@ -54,7 +54,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     
         this.usuarioCurrent = usuario;
         
-        this.tfIDUsuario.setText(usuario.getIdUser()+"");
+        this.tfIDUsuario.setText("");
         this.tfNomeUsuario.setText(usuario.getName());
         this.tfSenhaUsuario.setText(usuario.getHashCode());
         this.tfUserUsuario.setText(usuario.getLogName());
