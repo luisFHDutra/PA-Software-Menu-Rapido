@@ -39,6 +39,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         lbUsuarioConectado = new javax.swing.JLabel();
         btnTelaStatus = new javax.swing.JButton();
         btnTelaTipo = new javax.swing.JButton();
+        btnTelaCategoria = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnSistema = new javax.swing.JMenu();
         btnLoggin = new javax.swing.JMenuItem();
@@ -73,6 +74,13 @@ public class TelaMenuUI extends javax.swing.JFrame {
         btnTelaTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTelaTipoActionPerformed(evt);
+            }
+        });
+
+        btnTelaCategoria.setText("Categoria Produtos");
+        btnTelaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaCategoriaActionPerformed(evt);
             }
         });
 
@@ -112,6 +120,9 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTelaCategoria)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btnTelaTipo)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -132,7 +143,9 @@ public class TelaMenuUI extends javax.swing.JFrame {
                     .addComponent(btnTelaStatus))
                 .addGap(36, 36, 36)
                 .addComponent(btnTelaTipo)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(btnTelaCategoria)
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         pack();
@@ -186,10 +199,17 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaTipoActionPerformed
 
+    private void btnTelaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaCategoriaActionPerformed
+        TelaCategoriaUI tela = new TelaCategoriaUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaCategoriaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
     private javax.swing.JMenu btnSistema;
+    private javax.swing.JButton btnTelaCategoria;
     private javax.swing.JButton btnTelaStatus;
     private javax.swing.JButton btnTelaTipo;
     private javax.swing.JButton btnTelaUsuario;

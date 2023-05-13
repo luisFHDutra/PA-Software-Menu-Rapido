@@ -124,13 +124,37 @@ public class CategoriaProdutoDaoPostgres extends DaoAdapter<CategoriaProduto,Int
     }
 
     @Override
-    public void update(CategoriaProduto objeto) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(CategoriaProduto categoria) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "UPDATE categoria_produto SET nome = ? WHERE id_categoria = ?";
+            dbcm.runPreparedSQL(sql, categoria.getNome(), categoria.getIdCategoria() );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public void delete(Integer primaryKey) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer id_categoria) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "DELETE FROM categoria_produto WHERE id_categoria = ?";
+            dbcm.runPreparedSQL(sql, id_categoria );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
     
 }

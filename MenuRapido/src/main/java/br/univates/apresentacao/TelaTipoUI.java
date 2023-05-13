@@ -285,7 +285,7 @@ public class TelaTipoUI extends javax.swing.JFrame {
             this.tfNome.setEditable(true);
             this.tfNome.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela");
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -300,10 +300,10 @@ public class TelaTipoUI extends javax.swing.JFrame {
                 
                 if (x == 0)
                 {
-                    DaoFactory.criarUsuarioDao().delete( tipoCurrent.getIdTipo() );
+                    DaoFactory.criarTipoPagamentoDao().delete( tipoCurrent.getIdTipo() );
 
-                    TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                    model.getStatus().remove(tipoCurrent);
+                    TableModelTipo model = (TableModelTipo)this.tbConsulta.getModel();
+                    model.getTipos().remove(tipoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
@@ -315,12 +315,12 @@ public class TelaTipoUI extends javax.swing.JFrame {
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Este usuário não pode ser deletado");
+                JOptionPane.showMessageDialog(this, "Este tipo de pagamento não pode ser deletado");
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela");
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 

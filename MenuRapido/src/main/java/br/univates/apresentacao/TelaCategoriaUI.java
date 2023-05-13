@@ -4,7 +4,7 @@
  */
 package br.univates.apresentacao;
 
-import br.univates.negocio.StatusAtendimento;
+import br.univates.negocio.CategoriaProduto;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
@@ -18,22 +18,22 @@ import javax.swing.JOptionPane;
  *
  * @author luis.dutra
  */
-public class TelaStatusUI extends javax.swing.JFrame {
+public class TelaCategoriaUI extends javax.swing.JFrame {
 
-    private StatusAtendimento statusCurrent;
-    private StatusAtendimento statusOld;
+    private CategoriaProduto categoriaCurrent;
+    private CategoriaProduto categoriaOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
     
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaStatusUI( TelaMenuUI tela) {
+    public TelaCategoriaUI( TelaMenuUI tela) {
         initComponents();
         
-        ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
+        ArrayList<CategoriaProduto> categoria = DaoFactory.criarCategoriaProdutoDao().readAll();
         
-        this.tbConsulta.setModel( new TableModelStatus(status));
+        this.tbConsulta.setModel( new TableModelCategoria(categoria));
         this.novo = false;
         
         this.btnSalvar.setEnabled(false);
@@ -49,17 +49,17 @@ public class TelaStatusUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setStatus(StatusAtendimento status) {
+    public void setTipo(CategoriaProduto categoria) {
     
-        this.statusCurrent = status;
+        this.categoriaCurrent = categoria;
         
-        if (status.getIdStatus() == 0) {
+        if (categoria.getIdCategoria() == 0) {
             this.tfID.setText("" );
         } else {
-            this.tfID.setInteger(status.getIdStatus());
+            this.tfID.setInteger(categoria.getIdCategoria());
         }
         
-        this.tfNome.setText(status.getNome());
+        this.tfNome.setText(categoria.getNome());
     }
 
     /**
@@ -247,10 +247,10 @@ public class TelaStatusUI extends javax.swing.JFrame {
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
         int linhaSelecionada  = this.tbConsulta.getSelectedRow();
         
-        TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-        StatusAtendimento status = model.getStatus().get( linhaSelecionada );
+        TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
+        CategoriaProduto categoria = model.getCategorias().get( linhaSelecionada );
         
-        this.setStatus(status);
+        this.setTipo(categoria);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -264,18 +264,18 @@ public class TelaStatusUI extends javax.swing.JFrame {
         
         this.novo = true;
         
-        if (statusCurrent != null) {
-            this.statusOld = statusCurrent.clone();
+        if (categoriaCurrent != null) {
+            this.categoriaOld = categoriaCurrent.clone();
         }
         
-        this.setStatus(new StatusAtendimento());
+        this.setTipo(new CategoriaProduto());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         
-        if (statusCurrent != null) {
-            this.statusOld = statusCurrent.clone();
+        if (categoriaCurrent != null) {
+            this.categoriaOld = categoriaCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
@@ -285,12 +285,12 @@ public class TelaStatusUI extends javax.swing.JFrame {
             this.tfNome.setEditable(true);
             this.tfNome.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela");
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (statusCurrent != null)
+        if (categoriaCurrent != null)
         {
             try
             {
@@ -300,27 +300,27 @@ public class TelaStatusUI extends javax.swing.JFrame {
                 
                 if (x == 0)
                 {
-                    DaoFactory.criarStatusAtendimentoDao().delete( statusCurrent.getIdStatus() );
+                    DaoFactory.criarCategoriaProdutoDao().delete( categoriaCurrent.getIdCategoria() );
 
-                    TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                    model.getStatus().remove(statusCurrent);
+                    TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
+                    model.getCategorias().remove(categoriaCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
                     this.tfID.setText( "" );
                     this.tfNome.setText( "" );
                     
-                    this.statusCurrent = null;
+                    this.categoriaCurrent = null;
                 }
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Este status de atendimento não pode ser deletado");
+                JOptionPane.showMessageDialog(this, "Esta categoria não pode ser deletada");
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela");
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -330,20 +330,20 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tfIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfIDFocusLost
-        this.statusCurrent.setIdStatus(this.tfID.getInteger());
+        this.categoriaCurrent.setIdCategoria(this.tfID.getInteger());
     }//GEN-LAST:event_tfIDFocusLost
 
     private void tfNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNomeFocusLost
-        this.statusCurrent.setNome(this.tfNome.getText());
+        this.categoriaCurrent.setNome(this.tfNome.getText());
     }//GEN-LAST:event_tfNomeFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (statusOld != null)
+        if (categoriaOld != null)
         {
-            this.statusCurrent.setIdStatus(this.statusOld.getIdStatus() );
-            this.statusCurrent.setNome( this.statusOld.getNome() );
-            this.tfID.setInteger(this.statusOld.getIdStatus() );
-            this.tfNome.setText( this.statusOld.getNome());
+            this.categoriaCurrent.setIdCategoria(this.categoriaOld.getIdCategoria());
+            this.categoriaCurrent.setNome( this.categoriaOld.getNome() );
+            this.tfID.setInteger(this.categoriaOld.getIdCategoria());
+            this.tfNome.setText( this.categoriaOld.getNome());
         }
         
         this.tbConsulta.revalidate();
@@ -358,18 +358,18 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<StatusAtendimento,Integer> dao = DaoFactory.criarStatusAtendimentoDao();
+        IDao<CategoriaProduto,Integer> dao = DaoFactory.criarCategoriaProdutoDao();
 
         try
         {
             if (novo)
             {
-                dao.create(statusCurrent);
+                dao.create(categoriaCurrent);
 
-                TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                model.getStatus().add(statusCurrent);
+                TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
+                model.getCategorias().add(categoriaCurrent);
             } else {
-                dao.update(statusCurrent);
+                dao.update(categoriaCurrent);
             }
 
             this.tbConsulta.revalidate();
