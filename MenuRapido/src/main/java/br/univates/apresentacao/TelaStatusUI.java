@@ -285,7 +285,7 @@ public class TelaStatusUI extends javax.swing.JFrame {
             this.tfNome.setEditable(true);
             this.tfNome.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -315,12 +315,12 @@ public class TelaStatusUI extends javax.swing.JFrame {
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Este status de atendimento não pode ser deletado");
+                JOptionPane.showMessageDialog(this, "Este status de atendimento não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 

@@ -49,7 +49,7 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setTipo(CategoriaProduto categoria) {
+    public void setCategoria(CategoriaProduto categoria) {
     
         this.categoriaCurrent = categoria;
         
@@ -250,7 +250,7 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
         TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
         CategoriaProduto categoria = model.getCategorias().get( linhaSelecionada );
         
-        this.setTipo(categoria);
+        this.setCategoria(categoria);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -268,7 +268,7 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
             this.categoriaOld = categoriaCurrent.clone();
         }
         
-        this.setTipo(new CategoriaProduto());
+        this.setCategoria(new CategoriaProduto());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
@@ -285,7 +285,7 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
             this.tfNome.setEditable(true);
             this.tfNome.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -315,12 +315,12 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Esta categoria não pode ser deletada");
+                JOptionPane.showMessageDialog(this, "Esta categoria não pode ser deletada", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 

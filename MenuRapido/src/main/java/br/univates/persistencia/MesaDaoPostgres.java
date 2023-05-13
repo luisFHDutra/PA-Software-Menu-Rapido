@@ -124,13 +124,37 @@ public class MesaDaoPostgres extends DaoAdapter<Mesa,Integer>{
     }
 
     @Override
-    public void update(Mesa objeto) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(Mesa mesa) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "UPDATE mesa SET quant_lugares = ? WHERE nro_mesa = ?";
+            dbcm.runPreparedSQL(sql, mesa.getNroMesa(), mesa.getQuantidadeLugares() );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public void delete(Integer primaryKey) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer nro_mesa) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "DELETE FROM mesa WHERE nro_mesa = ?";
+            dbcm.runPreparedSQL(sql, nro_mesa );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
     
     

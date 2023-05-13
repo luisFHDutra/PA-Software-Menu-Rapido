@@ -40,6 +40,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         btnTelaStatus = new javax.swing.JButton();
         btnTelaTipo = new javax.swing.JButton();
         btnTelaCategoria = new javax.swing.JButton();
+        btnTelaMesas = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnSistema = new javax.swing.JMenu();
         btnLoggin = new javax.swing.JMenuItem();
@@ -84,6 +85,13 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaMesas.setText("Mesas");
+        btnTelaMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaMesasActionPerformed(evt);
+            }
+        });
+
         btnSistema.setText("Sistema");
 
         btnLoggin.setText("Log in / off");
@@ -122,13 +130,16 @@ public class TelaMenuUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnTelaCategoria)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTelaTipo)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTelaUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTelaStatus)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnTelaTipo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnTelaMesas))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnTelaUsuario)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnTelaStatus)))
                         .addGap(69, 69, 69))))
         );
         layout.setVerticalGroup(
@@ -142,7 +153,9 @@ public class TelaMenuUI extends javax.swing.JFrame {
                     .addComponent(btnTelaUsuario)
                     .addComponent(btnTelaStatus))
                 .addGap(36, 36, 36)
-                .addComponent(btnTelaTipo)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTelaTipo)
+                    .addComponent(btnTelaMesas))
                 .addGap(29, 29, 29)
                 .addComponent(btnTelaCategoria)
                 .addContainerGap(81, Short.MAX_VALUE))
@@ -205,11 +218,18 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaCategoriaActionPerformed
 
+    private void btnTelaMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaMesasActionPerformed
+        TelaMesaUI tela = new TelaMesaUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaMesasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
     private javax.swing.JMenu btnSistema;
     private javax.swing.JButton btnTelaCategoria;
+    private javax.swing.JButton btnTelaMesas;
     private javax.swing.JButton btnTelaStatus;
     private javax.swing.JButton btnTelaTipo;
     private javax.swing.JButton btnTelaUsuario;

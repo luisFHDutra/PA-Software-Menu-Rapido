@@ -285,7 +285,7 @@ public class TelaTipoUI extends javax.swing.JFrame {
             this.tfNome.setEditable(true);
             this.tfNome.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -315,12 +315,12 @@ public class TelaTipoUI extends javax.swing.JFrame {
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Este tipo de pagamento não pode ser deletado");
+                JOptionPane.showMessageDialog(this, "Este tipo de pagamento não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela");
+            JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
