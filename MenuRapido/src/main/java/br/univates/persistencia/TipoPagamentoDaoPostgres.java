@@ -124,13 +124,37 @@ public class TipoPagamentoDaoPostgres extends DaoAdapter<TipoPagamento,Integer>{
     }
 
     @Override
-    public void update(TipoPagamento objeto) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(TipoPagamento tipo) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "UPDATE tipo_pagamento SET nome = ? WHERE id_tipo = ?";
+            dbcm.runPreparedSQL(sql, tipo.getNome(), tipo.getIdTipo() );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public void delete(Integer primaryKey) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer id_tipo) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "DELETE FROM tipo_pagamento WHERE id_tipo = ?";
+            dbcm.runPreparedSQL(sql, id_tipo );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
     
 }

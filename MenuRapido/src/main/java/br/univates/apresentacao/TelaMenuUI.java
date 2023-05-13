@@ -38,6 +38,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lbUsuarioConectado = new javax.swing.JLabel();
         btnTelaStatus = new javax.swing.JButton();
+        btnTelaTipo = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnSistema = new javax.swing.JMenu();
         btnLoggin = new javax.swing.JMenuItem();
@@ -65,6 +66,13 @@ public class TelaMenuUI extends javax.swing.JFrame {
         btnTelaStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTelaStatusActionPerformed(evt);
+            }
+        });
+
+        btnTelaTipo.setText("Tipo de Pagamento");
+        btnTelaTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaTipoActionPerformed(evt);
             }
         });
 
@@ -102,10 +110,15 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addComponent(btnTelaUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnTelaStatus)
-                .addGap(69, 69, 69))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTelaTipo)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTelaUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTelaStatus)
+                        .addGap(69, 69, 69))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,7 +130,9 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnTelaUsuario)
                     .addComponent(btnTelaStatus))
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(btnTelaTipo)
+                .addContainerGap(142, Short.MAX_VALUE))
         );
 
         pack();
@@ -165,11 +180,18 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaStatusActionPerformed
 
+    private void btnTelaTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaTipoActionPerformed
+        TelaTipoUI tela = new TelaTipoUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaTipoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
     private javax.swing.JMenu btnSistema;
     private javax.swing.JButton btnTelaStatus;
+    private javax.swing.JButton btnTelaTipo;
     private javax.swing.JButton btnTelaUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu3;

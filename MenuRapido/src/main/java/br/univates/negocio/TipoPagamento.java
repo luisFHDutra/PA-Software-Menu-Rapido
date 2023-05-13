@@ -8,7 +8,7 @@ package br.univates.negocio;
  *
  * @author luis.dutra
  */
-public class TipoPagamento {
+public class TipoPagamento implements Comparable<TipoPagamento> {
     
     private int idTipo;
     private String nome;
@@ -18,6 +18,11 @@ public class TipoPagamento {
         this.nome = nome;
     }
 
+    public TipoPagamento() {
+        this.idTipo = 0;
+        this.nome = "";
+    }
+    
     public int getIdTipo() {
         return idTipo;
     }
@@ -25,6 +30,37 @@ public class TipoPagamento {
     public String getNome() {
         return nome;
     }
+
+    public void setIdTipo(int idTipo) {
+        this.idTipo = idTipo;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
     
+    @Override
+    public int compareTo(TipoPagamento tipo) {
+        
+        return (toString().compareTo(tipo.getIdTipo()+""));
+    }
     
+    @Override
+    public String toString()
+    {
+        return this.idTipo+"";
+    }
+    
+    @Override
+    public boolean equals(Object objeto)
+    {
+        TipoPagamento outroTipo = (TipoPagamento)objeto;
+        return ( toString().equalsIgnoreCase(outroTipo.getIdTipo()+"") );
+    }
+    
+    @Override
+    public TipoPagamento clone()
+    {
+        return new TipoPagamento(this.idTipo,this.nome);
+    }
 }

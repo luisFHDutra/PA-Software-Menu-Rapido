@@ -4,7 +4,7 @@
  */
 package br.univates.apresentacao;
 
-import br.univates.negocio.StatusAtendimento;
+import br.univates.negocio.TipoPagamento;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
@@ -18,22 +18,22 @@ import javax.swing.JOptionPane;
  *
  * @author luis.dutra
  */
-public class TelaStatusUI extends javax.swing.JFrame {
+public class TelaTipoUI extends javax.swing.JFrame {
 
-    private StatusAtendimento statusCurrent;
-    private StatusAtendimento statusOld;
+    private TipoPagamento tipoCurrent;
+    private TipoPagamento tipoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
     
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaStatusUI( TelaMenuUI tela) {
+    public TelaTipoUI( TelaMenuUI tela) {
         initComponents();
         
-        ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
+        ArrayList<TipoPagamento> tipo = DaoFactory.criarTipoPagamentoDao().readAll();
         
-        this.tbConsulta.setModel( new TableModelStatus(status));
+        this.tbConsulta.setModel( new TableModelTipo(tipo));
         this.novo = false;
         
         this.btnSalvar.setEnabled(false);
@@ -49,17 +49,17 @@ public class TelaStatusUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setStatus(StatusAtendimento status) {
+    public void setTipo(TipoPagamento tipo) {
     
-        this.statusCurrent = status;
+        this.tipoCurrent = tipo;
         
-        if (status.getIdStatus() == 0) {
+        if (tipo.getIdTipo() == 0) {
             this.tfID.setText("" );
         } else {
-            this.tfID.setInteger(status.getIdStatus());
+            this.tfID.setInteger(tipo.getIdTipo());
         }
         
-        this.tfNome.setText(status.getNome());
+        this.tfNome.setText(tipo.getNome());
     }
 
     /**
@@ -247,10 +247,10 @@ public class TelaStatusUI extends javax.swing.JFrame {
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
         int linhaSelecionada  = this.tbConsulta.getSelectedRow();
         
-        TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-        StatusAtendimento status = model.getStatus().get( linhaSelecionada );
+        TableModelTipo model = (TableModelTipo)this.tbConsulta.getModel();
+        TipoPagamento tipo = model.getTipos().get( linhaSelecionada );
         
-        this.setStatus(status);
+        this.setTipo(tipo);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -264,18 +264,18 @@ public class TelaStatusUI extends javax.swing.JFrame {
         
         this.novo = true;
         
-        if (statusCurrent != null) {
-            this.statusOld = statusCurrent.clone();
+        if (tipoCurrent != null) {
+            this.tipoOld = tipoCurrent.clone();
         }
         
-        this.setStatus(new StatusAtendimento());
+        this.setTipo(new TipoPagamento());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         
-        if (statusCurrent != null) {
-            this.statusOld = statusCurrent.clone();
+        if (tipoCurrent != null) {
+            this.tipoOld = tipoCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
@@ -290,7 +290,7 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (statusCurrent != null)
+        if (tipoCurrent != null)
         {
             try
             {
@@ -300,17 +300,17 @@ public class TelaStatusUI extends javax.swing.JFrame {
                 
                 if (x == 0)
                 {
-                    DaoFactory.criarUsuarioDao().delete( statusCurrent.getIdStatus() );
+                    DaoFactory.criarUsuarioDao().delete( tipoCurrent.getIdTipo() );
 
                     TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                    model.getStatus().remove(statusCurrent);
+                    model.getStatus().remove(tipoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
                     this.tfID.setText( "" );
                     this.tfNome.setText( "" );
                     
-                    this.statusCurrent = null;
+                    this.tipoCurrent = null;
                 }
             } 
             catch (NotFoundException ex)
@@ -330,20 +330,20 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tfIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfIDFocusLost
-        this.statusCurrent.setIdStatus(this.tfID.getInteger());
+        this.tipoCurrent.setIdTipo(this.tfID.getInteger());
     }//GEN-LAST:event_tfIDFocusLost
 
     private void tfNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNomeFocusLost
-        this.statusCurrent.setNome(this.tfNome.getText());
+        this.tipoCurrent.setNome(this.tfNome.getText());
     }//GEN-LAST:event_tfNomeFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (statusOld != null)
+        if (tipoOld != null)
         {
-            this.statusCurrent.setIdStatus(this.statusOld.getIdStatus() );
-            this.statusCurrent.setNome( this.statusOld.getNome() );
-            this.tfID.setInteger(this.statusOld.getIdStatus() );
-            this.tfNome.setText( this.statusOld.getNome());
+            this.tipoCurrent.setIdTipo(this.tipoOld.getIdTipo());
+            this.tipoCurrent.setNome( this.tipoOld.getNome() );
+            this.tfID.setInteger(this.tipoOld.getIdTipo());
+            this.tfNome.setText( this.tipoOld.getNome());
         }
         
         this.tbConsulta.revalidate();
@@ -358,18 +358,18 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<StatusAtendimento,Integer> dao = DaoFactory.criarStatusAtendimentoDao();
+        IDao<TipoPagamento,Integer> dao = DaoFactory.criarTipoPagamentoDao();
 
         try
         {
             if (novo)
             {
-                dao.create(statusCurrent);
+                dao.create(tipoCurrent);
 
-                TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                model.getStatus().add(statusCurrent);
+                TableModelTipo model = (TableModelTipo)this.tbConsulta.getModel();
+                model.getTipos().add(tipoCurrent);
             } else {
-                dao.update(statusCurrent);
+                dao.update(tipoCurrent);
             }
 
             this.tbConsulta.revalidate();
