@@ -124,13 +124,37 @@ public class StatusAtendimentoDaoPostgres extends DaoAdapter<StatusAtendimento,I
     }
 
     @Override
-    public void update(StatusAtendimento objeto) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(StatusAtendimento status) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "UPDATE status_atendimento SET nome = ? WHERE id_status = ?";
+            dbcm.runPreparedSQL(sql, status.getNome(), status.getIdStatus() );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public void delete(Integer primaryKey) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer id_status) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "DELETE FROM status_atendimento WHERE id_status = ?";
+            dbcm.runPreparedSQL(sql, id_status );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
     
 }

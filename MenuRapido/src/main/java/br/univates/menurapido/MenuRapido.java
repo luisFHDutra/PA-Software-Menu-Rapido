@@ -22,10 +22,6 @@ public class MenuRapido {
         
         ArrayList<Usuario> users = DaoFactory.criarUsuarioDao().readAll();
         
-//        for(Usuario user: users) {
-//            System.out.println(user.getIdUser() + "" + user.getHashCode());
-//        }
-        
         Authenticator auth = new Authenticator( users );
 
         if (auth.showDialog(true))
