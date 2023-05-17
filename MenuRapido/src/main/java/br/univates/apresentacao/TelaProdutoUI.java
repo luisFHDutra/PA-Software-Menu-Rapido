@@ -7,7 +7,6 @@ package br.univates.apresentacao;
 import br.univates.negocio.CategoriaProduto;
 import br.univates.negocio.Produto;
 import br.univates.persistencia.DaoFactory;
-import br.univates.raiz.persistence.Filter;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
@@ -47,9 +46,11 @@ public class TelaProdutoUI extends javax.swing.JFrame {
         this.tfNome.setEditable(false);
         this.tfDescricao.setEditable(false);
         this.tfValor.setEditable(false);
-//        this.cbCategoria.setEditable(false);
+        this.cbCategoria.setEnabled(false);
         
         this.initCombos(DaoFactory.criarCategoriaProdutoDao().readAll());
+        
+        this.cbCategoria.setRenderer(new ClassCellRenderer());
         
         this.telaMenu = tela;
         
@@ -350,7 +351,7 @@ public class TelaProdutoUI extends javax.swing.JFrame {
         this.tfNome.setEditable(true);
         this.tfDescricao.setEditable(true);
         this.tfValor.setEditable(true);
-//        this.cbCategoria.setEditable(true);
+        this.cbCategoria.setEnabled(true);
         
         this.novo = true;
         
@@ -375,7 +376,7 @@ public class TelaProdutoUI extends javax.swing.JFrame {
             this.tfDescricao.setEditable(false);
             this.tfValor.setEditable(true);
             this.tfNome.setEditable(false);
-//            this.cbCategoria.setEditable(false);
+            this.cbCategoria.setEnabled(false);
             this.tfNome.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um produto na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -454,7 +455,7 @@ public class TelaProdutoUI extends javax.swing.JFrame {
         this.tfNome.setEditable(false);
         this.tfDescricao.setEditable(false);
         this.tfValor.setEditable(false);
-//        this.cbCategoria.setEditable(false);
+        this.cbCategoria.setEnabled(false);
 
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
@@ -483,7 +484,7 @@ public class TelaProdutoUI extends javax.swing.JFrame {
             this.tfNome.setEditable(false);
             this.tfDescricao.setEditable(false);
             this.tfValor.setEditable(false);
-//            this.cbCategoria.setEditable(false);
+            this.cbCategoria.setEnabled(false);
 
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);

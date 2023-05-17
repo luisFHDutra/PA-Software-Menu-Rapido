@@ -34,7 +34,7 @@ CREATE TABLE "produto" (
   "id_categoria" integer,
   "nome" varchar,
   "descricao" varchar,
-  "pro_valor" real
+  "pro_valor" double precision
 );
 
 CREATE TABLE "pedido" (
@@ -48,7 +48,7 @@ CREATE TABLE "item_pedido" (
   "id_produto" integer,
   "id_pedido" integer,
   "quantidade" integer,
-  "pro_valor" real,
+  "pro_valor" double precision,
   PRIMARY KEY ("id_produto", "id_pedido")
 );
 
