@@ -8,7 +8,7 @@ package br.univates.negocio;
  *
  * @author luis.dutra
  */
-public class Produto {
+public class Produto implements Comparable<Produto> {
     
     private int idProduto;
     private CategoriaProduto categoria;
@@ -24,6 +24,14 @@ public class Produto {
         this.valorProduto = valorProduto;
     }
 
+    public Produto() {
+        this.idProduto = 0;
+        this.categoria = null;
+        this.nome = "";
+        this.descricao = "";
+        this.valorProduto = 0;
+    }
+    
     public int getIdProduto() {
         return idProduto;
     }
@@ -43,7 +51,50 @@ public class Produto {
     public double getValorProduto() {
         return valorProduto;
     }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public void setCategoria(CategoriaProduto categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setValorProduto(double valorProduto) {
+        this.valorProduto = valorProduto;
+    }
     
+    @Override
+    public int compareTo(Produto produto) {
+        
+        return (toString().compareTo(produto.idProduto+""));
+    }
     
+    @Override
+    public String toString()
+    {
+        return this.idProduto+"";
+    }
+    
+    @Override
+    public boolean equals(Object objeto)
+    {
+        Produto outroProduto = (Produto)objeto;
+        return ( toString().equalsIgnoreCase(outroProduto.getIdProduto()+"") );
+    }
+    
+    @Override
+    public Produto clone()
+    {
+        return new Produto(this.idProduto, this.categoria, this.nome, this.descricao, this.valorProduto);
+    }
     
 }

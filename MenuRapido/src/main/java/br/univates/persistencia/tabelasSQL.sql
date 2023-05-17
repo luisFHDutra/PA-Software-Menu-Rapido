@@ -1,4 +1,4 @@
--- CREATE DATABASE menuRapido;
+CREATE DATABASE menuRapido;
 
 CREATE TABLE "usuario" (
   "id_usuario" integer PRIMARY KEY,
@@ -34,7 +34,7 @@ CREATE TABLE "produto" (
   "id_categoria" integer,
   "nome" varchar,
   "descricao" varchar,
-  "pro_valor" decimal(11,5)
+  "pro_valor" real
 );
 
 CREATE TABLE "pedido" (
@@ -48,7 +48,7 @@ CREATE TABLE "item_pedido" (
   "id_produto" integer,
   "id_pedido" integer,
   "quantidade" integer,
-  "pro_valor" decimal(11,5),
+  "pro_valor" real,
   PRIMARY KEY ("id_produto", "id_pedido")
 );
 
@@ -64,11 +64,11 @@ ALTER TABLE "item_pedido" ADD FOREIGN KEY ("id_produto") REFERENCES "produto" ("
 
 ALTER TABLE "item_pedido" ADD FOREIGN KEY ("id_pedido") REFERENCES "pedido" ("id_pedido");
 
-SELECT * FROM usuario;
-SELECT * FROM status_atendimento;
-SELECT * FROM tipo_pagamento;
-SELECT * FROM mesa;
-SELECT * FROM categoria_produto;
-SELECT * FROM produto;
-SELECT * FROM pedido;
-SELECT * FROM item_pedido;
+-- SELECT * FROM usuario;
+-- SELECT * FROM status_atendimento;
+-- SELECT * FROM tipo_pagamento;
+-- SELECT * FROM mesa;
+-- SELECT * FROM categoria_produto;
+-- SELECT * FROM produto;
+-- SELECT * FROM pedido;
+-- SELECT * FROM item_pedido;

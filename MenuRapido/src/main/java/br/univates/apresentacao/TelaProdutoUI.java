@@ -4,8 +4,10 @@
  */
 package br.univates.apresentacao;
 
-import br.univates.negocio.Usuario;
+import br.univates.negocio.CategoriaProduto;
+import br.univates.negocio.Produto;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.persistence.Filter;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
@@ -18,22 +20,22 @@ import javax.swing.JOptionPane;
  *
  * @author luis.dutra
  */
-public class TelaUsuarioUI extends javax.swing.JFrame {
+public class TelaProdutoUI extends javax.swing.JFrame {
 
-    private Usuario usuarioCurrent;
-    private Usuario usuarioOld;
+    private Produto produtoCurrent;
+    private Produto produtoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
     
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaUsuarioUI( TelaMenuUI tela) {
+    public TelaProdutoUI( TelaMenuUI tela) {
         initComponents();
         
-        ArrayList<Usuario> usuarios = DaoFactory.criarUsuarioDao().readAll();
+        ArrayList<Produto> produtos = DaoFactory.criarProdutoDao().readAll();
         
-        this.tbConsulta.setModel( new TableModelUsuario(usuarios));
+        this.tbConsulta.setModel( new TableModelProduto(produtos));
         this.novo = false;
         
         this.btnSalvar.setEnabled(false);
@@ -43,29 +45,52 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
-        this.tfUser.setEditable(false);
-        this.tfSenha.setEditable(false);
+        this.tfDescricao.setEditable(false);
+        this.tfValor.setEditable(false);
+//        this.cbCategoria.setEditable(false);
+        
+        this.initCombos(DaoFactory.criarCategoriaProdutoDao().readAll());
         
         this.telaMenu = tela;
         
         this.setLocationRelativeTo(null);
     }
     
-    public void setUsuario(Usuario usuario) {
+    public void setProduto(Produto produto) {
     
-        this.usuarioCurrent = usuario;
+        this.produtoCurrent = produto;
         
-        if (usuario.getIdUser() == 0) {
+        if (produto.getIdProduto()== 0) {
             this.tfID.setText("" );
         } else {
-            this.tfID.setInteger(usuario.getIdUser());
+            this.tfID.setInteger(produto.getIdProduto());
         }
         
-        this.tfNome.setText(usuario.getName());
-        this.tfSenha.setText("");
-        this.tfUser.setText(usuario.getLogName());
+        this.tfNome.setText(produto.getNome());
+        this.tfDescricao.setText(produto.getDescricao());
+        
+//        if (produto.getValorProduto()== 0) {
+//            this.tfValor.setText("");
+//        } else {
+//            this.tfValor.setDouble(produto.getValorProduto());
+//        }
+        
+        this.tfValor.setDouble(produto.getValorProduto());
+        
+        if (produto.getCategoria() != null) {
+            this.cbCategoria.setSelectedItem(produto.getCategoria());
+        }
     }
 
+    public void initCombos(ArrayList<CategoriaProduto> categoriaValidadas)
+    {
+        this.cbCategoria.removeAllItems();
+        for (CategoriaProduto categoria: categoriaValidadas)
+        {
+            cbCategoria.addItem(categoria);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,11 +112,13 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         tfNome = new br.univates.raiz.JTextFieldCustomized();
         jLabel4 = new javax.swing.JLabel();
-        tfUser = new br.univates.raiz.JTextFieldCustomized();
-        tfSenha = new br.univates.raiz.JTextFieldCustomized();
         jLabel5 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        tfDescricao = new br.univates.raiz.JTextFieldCustomized();
+        cbCategoria = new javax.swing.JComboBox<>();
+        tfValor = new br.univates.raiz.JCurrencyField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -162,21 +189,9 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("User: ");
+        jLabel4.setText("Descrição:");
 
-        tfUser.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfUserFocusLost(evt);
-            }
-        });
-
-        tfSenha.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfSenhaFocusLost(evt);
-            }
-        });
-
-        jLabel5.setText("Senha: ");
+        jLabel5.setText("Valor:");
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -192,59 +207,92 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Categoria:");
+
+        tfDescricao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfDescricaoFocusLost(evt);
+            }
+        });
+
+        cbCategoria.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbCategoriaFocusLost(evt);
+            }
+        });
+
+        tfValor.setText("jCurrencyField1");
+        tfValor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfValorFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalvar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnCancelar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSalvar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3)
+                        .addGap(34, 34, 34)
+                        .addComponent(tfNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)
+                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel5)
+                    .addComponent(tfValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnSalvar))
-                .addContainerGap())
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -259,7 +307,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                 .addComponent(btnEditar)
                 .addGap(18, 18, 18)
                 .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -286,10 +334,10 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
         int linhaSelecionada  = this.tbConsulta.getSelectedRow();
         
-        TableModelUsuario model = (TableModelUsuario)this.tbConsulta.getModel();
-        Usuario usuario = model.getUsuarios().get( linhaSelecionada );
+        TableModelProduto model = (TableModelProduto)this.tbConsulta.getModel();
+        Produto produto = model.getProdutos().get( linhaSelecionada );
         
-        this.setUsuario(usuario);
+        this.setProduto(produto);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -300,40 +348,42 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         
         this.tfID.setEditable(true);
         this.tfNome.setEditable(true);
-        this.tfUser.setEditable(true);
-        this.tfSenha.setEditable(true);
+        this.tfDescricao.setEditable(true);
+        this.tfValor.setEditable(true);
+//        this.cbCategoria.setEditable(true);
         
         this.novo = true;
         
-        if (usuarioCurrent != null) {
-            this.usuarioOld = usuarioCurrent.clone();
+        if (produtoCurrent != null) {
+            this.produtoOld = produtoCurrent.clone();
         }
         
-        this.setUsuario(new Usuario());
+        this.setProduto(new Produto());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         
-        if (usuarioCurrent != null) {
-            this.usuarioOld = usuarioCurrent.clone();
+        if (produtoCurrent != null) {
+            this.produtoOld = produtoCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
             
             this.novo = false;
             this.tfID.setEditable(false);
-            this.tfUser.setEditable(false);
-            this.tfSenha.setEditable(false);
-            this.tfNome.setEditable(true);
+            this.tfDescricao.setEditable(false);
+            this.tfValor.setEditable(true);
+            this.tfNome.setEditable(false);
+//            this.cbCategoria.setEditable(false);
             this.tfNome.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione um produto na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (usuarioCurrent != null)
+        if (produtoCurrent != null)
         {
             try
             {
@@ -343,32 +393,29 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                 
                 if (x == 0)
                 {
-                    DaoFactory.criarUsuarioDao().delete( usuarioCurrent.getIdUser() );
+                    DaoFactory.criarProdutoDao().delete( produtoCurrent.getIdProduto());
 
-                    TableModelUsuario model = (TableModelUsuario)this.tbConsulta.getModel();
-                    model.getUsuarios().remove(usuarioCurrent);
+                    TableModelProduto model = (TableModelProduto)this.tbConsulta.getModel();
+                    model.getProdutos().remove(produtoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
                     this.tfID.setText( "" );
                     this.tfNome.setText( "" );
-                    this.tfSenha.setText( "" );
-                    this.tfUser.setText( "" );
+                    this.tfDescricao.setText( "" );
+                    this.tfValor.setText( "" );
                     
-                    this.tfSenha.setText( "" );
-                    this.tfSenha.setVisible(false);
-                    
-                    this.usuarioCurrent = null;
+                    this.produtoCurrent = null;
                 }
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Este usuário não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Este produto não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione um produto na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -378,32 +425,26 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tfIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfIDFocusLost
-        this.usuarioCurrent.setIdUser(this.tfID.getInteger());
+        this.produtoCurrent.setIdProduto(this.tfID.getInteger());
     }//GEN-LAST:event_tfIDFocusLost
 
     private void tfNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNomeFocusLost
-        this.usuarioCurrent.setNome(this.tfNome.getText());
+        this.produtoCurrent.setNome(this.tfNome.getText());
     }//GEN-LAST:event_tfNomeFocusLost
 
-    private void tfUserFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfUserFocusLost
-        this.usuarioCurrent.setUser(this.tfUser.getText());
-    }//GEN-LAST:event_tfUserFocusLost
-
-    private void tfSenhaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfSenhaFocusLost
-        this.usuarioCurrent.setHashCode(this.tfSenha.getText());
-    }//GEN-LAST:event_tfSenhaFocusLost
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (usuarioOld != null)
+        if (produtoOld != null)
         {
-            this.usuarioCurrent.setIdUser(this.usuarioOld.getIdUser() );
-            this.usuarioCurrent.setNome( this.usuarioOld.getName() );
-            this.usuarioCurrent.setUser(this.usuarioOld.getLogName() );
-            this.usuarioCurrent.setHashCode(this.usuarioOld.getHashCode() );
-            this.tfID.setInteger(this.usuarioOld.getIdUser() );
-            this.tfNome.setText( this.usuarioOld.getName());
-            this.tfUser.setText( this.usuarioOld.getLogName());
-            this.tfSenha.setText( "" );
+            this.produtoCurrent.setIdProduto(this.produtoOld.getIdProduto());
+            this.produtoCurrent.setNome( this.produtoOld.getNome());
+            this.produtoCurrent.setCategoria(this.produtoOld.getCategoria());
+            this.produtoCurrent.setDescricao(this.produtoOld.getDescricao());
+            this.produtoCurrent.setValorProduto(this.produtoOld.getValorProduto());
+            this.tfID.setInteger(this.produtoOld.getIdProduto() );
+            this.tfNome.setText( this.produtoOld.getNome());
+            this.tfDescricao.setText( this.produtoOld.getDescricao());
+            this.tfValor.setDouble( this.produtoOld.getValorProduto() );
+            this.cbCategoria.setSelectedItem(this.produtoOld.getCategoria());
         }
         
         this.tbConsulta.revalidate();
@@ -411,8 +452,9 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
-        this.tfUser.setEditable(false);
-        this.tfSenha.setEditable(false);
+        this.tfDescricao.setEditable(false);
+        this.tfValor.setEditable(false);
+//        this.cbCategoria.setEditable(false);
 
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
@@ -420,18 +462,18 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<Usuario,Integer> dao = DaoFactory.criarUsuarioDao();
+        IDao<Produto,Integer> dao = DaoFactory.criarProdutoDao();
 
         try
         {
             if (novo)
             {
-                dao.create(usuarioCurrent);
+                dao.create(produtoCurrent);
 
-                TableModelUsuario model = (TableModelUsuario)this.tbConsulta.getModel();
-                model.getUsuarios().add(usuarioCurrent);
+                TableModelProduto model = (TableModelProduto)this.tbConsulta.getModel();
+                model.getProdutos().add(produtoCurrent);
             } else {
-                dao.update(usuarioCurrent);
+                dao.update(produtoCurrent);
             }
 
             this.tbConsulta.revalidate();
@@ -439,8 +481,9 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
 
             this.tfID.setEditable(false);
             this.tfNome.setEditable(false);
-            this.tfUser.setEditable(false);
-            this.tfSenha.setEditable(false);
+            this.tfDescricao.setEditable(false);
+            this.tfValor.setEditable(false);
+//            this.cbCategoria.setEditable(false);
 
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
@@ -458,6 +501,18 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowClosing
 
+    private void tfDescricaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfDescricaoFocusLost
+        this.produtoCurrent.setDescricao(this.tfDescricao.getText());
+    }//GEN-LAST:event_tfDescricaoFocusLost
+
+    private void cbCategoriaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbCategoriaFocusLost
+        this.produtoCurrent.setCategoria((CategoriaProduto)this.cbCategoria.getSelectedItem());
+    }//GEN-LAST:event_cbCategoriaFocusLost
+
+    private void tfValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfValorFocusLost
+        this.produtoCurrent.setValorProduto(this.tfValor.getDouble());
+    }//GEN-LAST:event_tfValorFocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -466,6 +521,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JComboBox<CategoriaProduto> cbCategoria;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -473,9 +530,9 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbConsulta;
+    private br.univates.raiz.JTextFieldCustomized tfDescricao;
     private br.univates.raiz.JIntegerField tfID;
     private br.univates.raiz.JTextFieldCustomized tfNome;
-    private br.univates.raiz.JTextFieldCustomized tfSenha;
-    private br.univates.raiz.JTextFieldCustomized tfUser;
+    private br.univates.raiz.JCurrencyField tfValor;
     // End of variables declaration//GEN-END:variables
 }
