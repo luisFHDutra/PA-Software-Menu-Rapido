@@ -42,20 +42,20 @@ public class StatusAtendimento implements Comparable<StatusAtendimento> {
     @Override
     public int compareTo(StatusAtendimento status) {
         
-        return (toString().compareTo(status.getIdStatus()+""));
+        return (toString().compareTo(status.getNome()));
     }
     
     @Override
     public String toString()
     {
-        return this.idStatus+"";
+        return this.nome+"";
     }
     
     @Override
     public boolean equals(Object objeto)
     {
         StatusAtendimento outroStatus = (StatusAtendimento)objeto;
-        return ( toString().equalsIgnoreCase(outroStatus.getIdStatus()+"") );
+        return ( this.idStatus == outroStatus.getIdStatus() );
     }
     
     @Override

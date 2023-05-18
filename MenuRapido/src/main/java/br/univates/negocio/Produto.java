@@ -29,7 +29,6 @@ public class Produto implements Comparable<Produto> {
         this.categoria = null;
         this.nome = "";
         this.descricao = "";
-        this.valorProduto = 0;
     }
     
     public int getIdProduto() {

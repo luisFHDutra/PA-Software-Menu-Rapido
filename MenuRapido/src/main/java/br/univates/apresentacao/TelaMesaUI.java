@@ -49,7 +49,7 @@ public class TelaMesaUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setMesa(Mesa mesa) {
+    private void setMesa(Mesa mesa) {
     
         this.mesaCurrent = mesa;
         

@@ -5,7 +5,6 @@
 package br.univates.persistencia;
 
 import br.univates.negocio.CategoriaProduto;
-import br.univates.negocio.ItemPedido;
 import br.univates.negocio.Mesa;
 import br.univates.negocio.Pedido;
 import br.univates.negocio.Produto;
@@ -23,11 +22,6 @@ public class DaoFactory {
     public static IDao<CategoriaProduto,Integer> criarCategoriaProdutoDao()
     {
         return new CategoriaProdutoDaoPostgres();
-    }
-    
-    public static IDao<ItemPedido,Integer> criarItemPedidoDao()
-    {
-        return new ItemPedidoDaoPostgres();
     }
     
     public static IDao<Mesa,Integer> criarMesaDao()

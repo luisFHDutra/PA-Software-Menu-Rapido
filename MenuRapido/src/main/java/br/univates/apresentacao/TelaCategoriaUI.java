@@ -49,7 +49,7 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setCategoria(CategoriaProduto categoria) {
+    private void setCategoria(CategoriaProduto categoria) {
     
         this.categoriaCurrent = categoria;
         

@@ -49,7 +49,7 @@ public class TelaTipoUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setTipo(TipoPagamento tipo) {
+    private void setTipo(TipoPagamento tipo) {
     
         this.tipoCurrent = tipo;
         

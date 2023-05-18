@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author luis.dutra
  */
-public class Pedido {
+public class Pedido implements Comparable<Pedido>{
     
     private int idPedido;
     private StatusAtendimento statusAtendimento;
@@ -25,6 +25,14 @@ public class Pedido {
         this.pagamento = pagamento;
         this.itemPedido = itemPedido;
     }
+
+    public Pedido() {
+        this.idPedido = 0;
+        this.statusAtendimento = null;
+        this.mesa = null;
+        this.pagamento = null;
+        this.itemPedido = new ArrayList();
+    }
     
     public int getIdPedido() {
         return idPedido;
@@ -32,10 +40,6 @@ public class Pedido {
 
     public StatusAtendimento getStatusAtendimento() {
         return statusAtendimento;
-    }
-    
-    public ArrayList<ItemPedido> getItem() {
-        return itemPedido;
     }
 
     public Mesa getMesa() {
@@ -59,6 +63,51 @@ public class Pedido {
         }
         
         return valorTotal;
+    }
+
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public void setStatusAtendimento(StatusAtendimento statusAtendimento) {
+        this.statusAtendimento = statusAtendimento;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+
+    public void setPagamento(TipoPagamento pagamento) {
+        this.pagamento = pagamento;
+    }
+
+    public void setItemPedido(ArrayList<ItemPedido> itemPedido) {
+        this.itemPedido = itemPedido;
+    }
+    
+    @Override
+    public int compareTo(Pedido pedido) {
+        
+        return (toString().compareTo(pedido.idPedido+""));
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.idPedido+"";
+    }
+    
+    @Override
+    public boolean equals(Object objeto)
+    {
+        Pedido outroPedido = (Pedido)objeto;
+        return ( toString().equalsIgnoreCase(outroPedido.getIdPedido()+"") );
+    }
+    
+    @Override
+    public Pedido clone()
+    {
+        return new Pedido(this.idPedido, this.statusAtendimento, this.mesa, this.pagamento, this.itemPedido);
     }
     
 }

@@ -30,7 +30,7 @@ public class ProdutoDaoPostgres extends DaoAdapter<Produto,Integer>{
             dbcm = Sys.getInstance().getDB();
             
             String sql = "INSERT INTO produto VALUES ( ?, ?, ?, ?, ?);";
-            
+                
             dbcm.runPreparedSQL(sql, produto.getIdProduto(), produto.getCategoria().getIdCategoria(),
                     produto.getNome(), produto.getDescricao(), produto.getValorProduto());
         } 

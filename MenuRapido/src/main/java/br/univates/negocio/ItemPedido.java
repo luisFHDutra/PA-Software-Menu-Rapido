@@ -11,13 +11,11 @@ package br.univates.negocio;
 public class ItemPedido {
     
     private Produto produto;
-    private Pedido pedido;
     private double valorProduto;
     private int quantidade;
 
-    public ItemPedido(Produto produto, Pedido pedido, double valorProduto, int quantidade) {
+    public ItemPedido(Produto produto, double valorProduto, int quantidade) {
         this.produto = produto;
-        this.pedido = pedido;
         this.valorProduto = valorProduto;
         this.quantidade = quantidade;
     }
@@ -32,10 +30,6 @@ public class ItemPedido {
 
     public int getQuantidade() {
         return quantidade;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
     }
     
     public double getTotalItem() {

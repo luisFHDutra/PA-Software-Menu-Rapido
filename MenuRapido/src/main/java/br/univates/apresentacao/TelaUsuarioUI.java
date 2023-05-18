@@ -51,7 +51,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    public void setUsuario(Usuario usuario) {
+    private void setUsuario(Usuario usuario) {
     
         this.usuarioCurrent = usuario;
         

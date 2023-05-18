@@ -40,22 +40,22 @@ public class CategoriaProduto implements Comparable<CategoriaProduto> {
     }
     
     @Override
-    public int compareTo(CategoriaProduto tipo) {
+    public int compareTo(CategoriaProduto categoria) {
         
-        return (toString().compareTo(tipo.getIdCategoria()+""));
+        return (toString().compareTo(categoria.getNome()));
     }
     
     @Override
     public String toString()
     {
-        return this.idCategoria+"";
+        return this.nome+"";
     }
     
     @Override
     public boolean equals(Object objeto)
     {
         CategoriaProduto outraCategoria = (CategoriaProduto)objeto;
-        return ( toString().equalsIgnoreCase(outraCategoria.getIdCategoria()+"") );
+        return ( this.idCategoria == outraCategoria.getIdCategoria() );
     }
     
     @Override

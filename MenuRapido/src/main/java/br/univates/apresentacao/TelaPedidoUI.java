@@ -4,7 +4,10 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.negocio.Mesa;
+import br.univates.negocio.Pedido;
 import br.univates.negocio.StatusAtendimento;
+import br.univates.negocio.TipoPagamento;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
@@ -18,22 +21,22 @@ import javax.swing.JOptionPane;
  *
  * @author luis.dutra
  */
-public class TelaStatusUI extends javax.swing.JFrame {
+public class TelaPedidoUI extends javax.swing.JFrame {
 
-    private StatusAtendimento statusCurrent;
-    private StatusAtendimento statusOld;
+    private Pedido pedidoCurrent;
+    private Pedido pedidoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
     
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaStatusUI( TelaMenuUI tela) {
+    public TelaPedidoUI( TelaMenuUI tela) {
         initComponents();
         
-        ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
+        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
         
-        this.tbConsulta.setModel( new TableModelStatus(status));
+        this.tbConsulta.setModel( new TableModelPedido(pedidos));
         this.novo = false;
         
         this.btnSalvar.setEnabled(false);
@@ -42,26 +45,87 @@ public class TelaStatusUI extends javax.swing.JFrame {
         this.btnVoltar.setEnabled(true);
         
         this.tfID.setEditable(false);
-        this.tfNome.setEditable(false);
+        
+        ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
+        if (status == null) {
+            this.initCBStatus( new ArrayList<>() );
+        } else {
+            this.initCBStatus(status);
+        }
+        
+        ArrayList<Mesa> mesas = DaoFactory.criarMesaDao().readAll();
+        if (mesas == null) {
+            this.initCBMesa(new ArrayList<>() );
+        } else {
+            this.initCBMesa(mesas);
+        }
+        
+        ArrayList<TipoPagamento> tipos = DaoFactory.criarTipoPagamentoDao().readAll();
+        if (tipos == null) {
+            this.initCBTipo(new ArrayList<>() );
+        } else {
+            this.initCBTipo(tipos);
+        }
+        
+        this.cbTipoPagamento.setEnabled(false);
+        this.cbMesa.setEnabled(false);
+        this.cbStatus.setEnabled(false);
         
         this.telaMenu = tela;
         
         this.setLocationRelativeTo(null);
     }
     
-    private void setStatus(StatusAtendimento status) {
+    public void setProduto(Pedido pedido) {
     
-        this.statusCurrent = status;
+        this.pedidoCurrent = pedido;
         
-        if (status.getIdStatus() == 0) {
+        if (pedido.getIdPedido()== 0) {
             this.tfID.setText("" );
         } else {
-            this.tfID.setInteger(status.getIdStatus());
+            this.tfID.setInteger(pedido.getIdPedido());
         }
         
-        this.tfNome.setText(status.getNome());
+        if (pedido.getStatusAtendimento()!= null) {
+            this.cbStatus.setSelectedItem(pedido.getStatusAtendimento());
+        }
+        
+        if (pedido.getMesa()!= null) {
+            this.cbMesa.setSelectedItem(pedido.getMesa());
+        }
+        
+        if (pedido.getPagamento()!= null) {
+            this.cbTipoPagamento.setSelectedItem(pedido.getPagamento());
+        }
     }
 
+    private void initCBStatus(ArrayList<StatusAtendimento> status)
+    {
+        this.cbStatus.removeAllItems();
+        for (StatusAtendimento s: status)
+        {
+            cbStatus.addItem(s);
+        }
+    }
+    
+    private void initCBMesa(ArrayList<Mesa> mesas)
+    {
+        this.cbMesa.removeAllItems();
+        for (Mesa mesa: mesas)
+        {
+            cbMesa.addItem(mesa);
+        }
+    }
+    
+    private void initCBTipo(ArrayList<TipoPagamento> tipos)
+    {
+        this.cbTipoPagamento.removeAllItems();
+        for (TipoPagamento tipo: tipos)
+        {
+            cbTipoPagamento.addItem(tipo);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,9 +145,14 @@ public class TelaStatusUI extends javax.swing.JFrame {
         tfID = new br.univates.raiz.JIntegerField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        tfNome = new br.univates.raiz.JTextFieldCustomized();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        cbStatus = new javax.swing.JComboBox<>();
+        cbMesa = new javax.swing.JComboBox<>();
+        cbTipoPagamento = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -146,13 +215,11 @@ public class TelaStatusUI extends javax.swing.JFrame {
 
         jLabel2.setText("ID: ");
 
-        jLabel3.setText("Nome: ");
+        jLabel3.setText("Tipo Pagamento:");
 
-        tfNome.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfNomeFocusLost(evt);
-            }
-        });
+        jLabel4.setText("Itens:");
+
+        jLabel5.setText("Mesa:");
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -168,44 +235,87 @@ public class TelaStatusUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Status:");
+
+        cbStatus.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbStatusFocusLost(evt);
+            }
+        });
+
+        cbMesa.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbMesaFocusLost(evt);
+            }
+        });
+
+        cbTipoPagamento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbTipoPagamentoFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel4)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(67, 67, 67)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cbStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, 366, Short.MAX_VALUE)
+                                    .addComponent(cbMesa, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(33, 33, 33))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalvar)))
-                .addContainerGap())
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnCancelar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSalvar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cbTipoPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 27, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)
+                    .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(cbMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cbTipoPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnSalvar))
-                .addGap(80, 80, 80))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -220,7 +330,7 @@ public class TelaStatusUI extends javax.swing.JFrame {
                 .addComponent(btnEditar)
                 .addGap(18, 18, 18)
                 .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -228,9 +338,9 @@ public class TelaStatusUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -238,7 +348,7 @@ public class TelaStatusUI extends javax.swing.JFrame {
                         .addComponent(btnEditar)
                         .addComponent(btnNovo))
                     .addComponent(btnVoltar))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -247,10 +357,10 @@ public class TelaStatusUI extends javax.swing.JFrame {
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
         int linhaSelecionada  = this.tbConsulta.getSelectedRow();
         
-        TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-        StatusAtendimento status = model.getStatus().get( linhaSelecionada );
+        TableModelPedido model = (TableModelPedido)this.tbConsulta.getModel();
+        Pedido pedido = model.getPedidos().get( linhaSelecionada );
         
-        this.setStatus(status);
+        this.setProduto(pedido);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -260,37 +370,41 @@ public class TelaStatusUI extends javax.swing.JFrame {
         this.btnVoltar.setEnabled(true);
         
         this.tfID.setEditable(true);
-        this.tfNome.setEditable(true);
+        this.cbTipoPagamento.setEnabled(true);
+        this.cbMesa.setEnabled(true);
+        this.cbStatus.setEnabled(true);
         
         this.novo = true;
         
-        if (statusCurrent != null) {
-            this.statusOld = statusCurrent.clone();
+        if (pedidoCurrent != null) {
+            this.pedidoOld = pedidoCurrent.clone();
         }
         
-        this.setStatus(new StatusAtendimento());
+        this.setProduto(new Pedido());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         
-        if (statusCurrent != null) {
-            this.statusOld = statusCurrent.clone();
+        if (pedidoCurrent != null) {
+            this.pedidoOld = pedidoCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
             
             this.novo = false;
             this.tfID.setEditable(false);
-            this.tfNome.setEditable(true);
-            this.tfNome.requestFocus();
+            this.cbMesa.setEnabled(false);
+            this.cbTipoPagamento.setEnabled(false);
+            this.cbStatus.setEnabled(true);
+            this.cbStatus.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (statusCurrent != null)
+        if (pedidoCurrent != null)
         {
             try
             {
@@ -300,27 +414,26 @@ public class TelaStatusUI extends javax.swing.JFrame {
                 
                 if (x == 0)
                 {
-                    DaoFactory.criarStatusAtendimentoDao().delete( statusCurrent.getIdStatus() );
+                    DaoFactory.criarPedidoDao().delete( pedidoCurrent.getIdPedido());
 
-                    TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                    model.getStatus().remove(statusCurrent);
+                    TableModelPedido model = (TableModelPedido)this.tbConsulta.getModel();
+                    model.getPedidos().remove(pedidoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
                     this.tfID.setText( "" );
-                    this.tfNome.setText( "" );
                     
-                    this.statusCurrent = null;
+                    this.pedidoCurrent = null;
                 }
             } 
             catch (NotFoundException ex)
             {
-                JOptionPane.showMessageDialog(this, "Este status de atendimento não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Este pedido não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -330,27 +443,30 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void tfIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfIDFocusLost
-        this.statusCurrent.setIdStatus(this.tfID.getInteger());
+        this.pedidoCurrent.setIdPedido(this.tfID.getInteger());
     }//GEN-LAST:event_tfIDFocusLost
 
-    private void tfNomeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNomeFocusLost
-        this.statusCurrent.setNome(this.tfNome.getText());
-    }//GEN-LAST:event_tfNomeFocusLost
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (statusOld != null)
+        if (pedidoOld != null)
         {
-            this.statusCurrent.setIdStatus(this.statusOld.getIdStatus() );
-            this.statusCurrent.setNome( this.statusOld.getNome() );
-            this.tfID.setInteger(this.statusOld.getIdStatus() );
-            this.tfNome.setText( this.statusOld.getNome());
+            this.pedidoCurrent.setIdPedido(this.pedidoOld.getIdPedido());
+            this.pedidoCurrent.setMesa(this.pedidoOld.getMesa());
+            this.pedidoCurrent.setPagamento(this.pedidoOld.getPagamento());
+            this.pedidoCurrent.setStatusAtendimento(this.pedidoOld.getStatusAtendimento());
+            this.pedidoCurrent.setItemPedido(this.pedidoOld.getItemPedido());
+            this.tfID.setInteger(this.pedidoOld.getIdPedido() );
+            this.cbTipoPagamento.setSelectedItem( this.pedidoOld.getPagamento());
+            this.cbMesa.setSelectedItem( this.pedidoOld.getMesa() );
+            this.cbStatus.setSelectedItem(this.pedidoOld.getStatusAtendimento());
         }
         
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
         
         this.tfID.setEditable(false);
-        this.tfNome.setEditable(false);
+        this.cbTipoPagamento.setEnabled(false);
+        this.cbMesa.setEnabled(false);
+        this.cbStatus.setEnabled(false);
 
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
@@ -358,25 +474,29 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<StatusAtendimento,Integer> dao = DaoFactory.criarStatusAtendimentoDao();
-
+        IDao<Pedido,Integer> dao = DaoFactory.criarPedidoDao();
+        
         try
         {
             if (novo)
             {
-                dao.create(statusCurrent);
+                
+                dao.create(pedidoCurrent);
 
-                TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-                model.getStatus().add(statusCurrent);
+                TableModelPedido model = (TableModelPedido)this.tbConsulta.getModel();
+                model.getPedidos().add(pedidoCurrent);
             } else {
-                dao.update(statusCurrent);
+                
+                dao.update(pedidoCurrent);
             }
 
             this.tbConsulta.revalidate();
             this.tbConsulta.repaint();
 
             this.tfID.setEditable(false);
-            this.tfNome.setEditable(false);
+            this.cbTipoPagamento.setEnabled(false);
+            this.cbMesa.setEnabled(false);
+            this.cbStatus.setEnabled(false);
 
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
@@ -394,6 +514,18 @@ public class TelaStatusUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowClosing
 
+    private void cbStatusFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbStatusFocusLost
+        this.pedidoCurrent.setStatusAtendimento((StatusAtendimento)this.cbStatus.getSelectedItem());
+    }//GEN-LAST:event_cbStatusFocusLost
+
+    private void cbMesaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbMesaFocusLost
+        this.pedidoCurrent.setMesa((Mesa)this.cbMesa.getSelectedItem());
+    }//GEN-LAST:event_cbMesaFocusLost
+
+    private void cbTipoPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbTipoPagamentoFocusLost
+        this.pedidoCurrent.setPagamento((TipoPagamento)this.cbTipoPagamento.getSelectedItem());
+    }//GEN-LAST:event_cbTipoPagamentoFocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -402,12 +534,17 @@ public class TelaStatusUI extends javax.swing.JFrame {
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JComboBox<Mesa> cbMesa;
+    private javax.swing.JComboBox<StatusAtendimento> cbStatus;
+    private javax.swing.JComboBox<TipoPagamento> cbTipoPagamento;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbConsulta;
     private br.univates.raiz.JIntegerField tfID;
-    private br.univates.raiz.JTextFieldCustomized tfNome;
     // End of variables declaration//GEN-END:variables
 }

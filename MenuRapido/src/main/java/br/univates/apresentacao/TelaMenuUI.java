@@ -6,7 +6,11 @@ package br.univates.apresentacao;
 
 import br.univates.menurapido.MenuRapido;
 import br.univates.menurapido.Sys;
+import br.univates.negocio.Usuario;
+import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.auth.Authenticator;
 import br.univates.raiz.db.DataBaseException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,11 +23,31 @@ public class TelaMenuUI extends javax.swing.JFrame {
      * Creates new form Tela
      */
     public TelaMenuUI() {
+        
         initComponents();
+        
+        this.btnTelaCategoria.setEnabled(false);
+        this.btnTelaMesas.setEnabled(false);
+        this.btnTelaProdutos.setEnabled(false);
+        this.btnTelaStatus.setEnabled(false);
+        this.btnTelaTipo.setEnabled(false);
+        this.btnTelaUsuario.setEnabled(false);
+        
         this.setLocationRelativeTo(null);
-        lbUsuarioConectado.setText(Sys.getInstance().getUser().getName());
     }
 
+    private Usuario userVerifier()
+    {
+        ArrayList<Usuario> users = DaoFactory.criarUsuarioDao().readAll();
+        Authenticator auth = new Authenticator( users );
+        if (auth.showDialog(true))
+        {
+            return (Usuario)auth.getLoggedUser();
+        }
+        return null;
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,6 +66,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         btnTelaCategoria = new javax.swing.JButton();
         btnTelaMesas = new javax.swing.JButton();
         btnTelaProdutos = new javax.swing.JButton();
+        btnTelaPedidos = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnSistema = new javax.swing.JMenu();
         btnLoggin = new javax.swing.JMenuItem();
@@ -100,6 +125,13 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaPedidos.setText("Pedidos");
+        btnTelaPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaPedidosActionPerformed(evt);
+            }
+        });
+
         btnSistema.setText("Sistema");
 
         btnLoggin.setText("Log in / off");
@@ -148,6 +180,10 @@ public class TelaMenuUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnTelaStatus)))
                 .addGap(69, 69, 69))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(144, 144, 144)
+                .addComponent(btnTelaPedidos)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,7 +203,9 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTelaCategoria)
                     .addComponent(btnTelaProdutos))
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnTelaPedidos)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -198,9 +236,27 @@ public class TelaMenuUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnLogginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogginActionPerformed
-        this.dispose();
+        
+        Usuario aux = (Usuario)Sys.getInstance().getUser();
         Sys.getInstance().setUser(null);
-        MenuRapido.runMain();
+        
+        Usuario u = userVerifier();
+        if (u != null)
+        {
+            Sys.getInstance().setUser(u);
+            this.lbUsuarioConectado.setText(u.getName());
+            
+            this.btnTelaCategoria.setEnabled(true);
+            this.btnTelaMesas.setEnabled(true);
+            this.btnTelaProdutos.setEnabled(true);
+            this.btnTelaStatus.setEnabled(true);
+            this.btnTelaTipo.setEnabled(true);
+            this.btnTelaUsuario.setEnabled(true);
+        }
+        else
+        {
+            Sys.getInstance().setUser(aux);
+        }
     }//GEN-LAST:event_btnLogginActionPerformed
 
     private void btnTelaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaUsuarioActionPerformed
@@ -239,12 +295,19 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaProdutosActionPerformed
 
+    private void btnTelaPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaPedidosActionPerformed
+        TelaPedidoUI tela = new TelaPedidoUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaPedidosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
     private javax.swing.JMenu btnSistema;
     private javax.swing.JButton btnTelaCategoria;
     private javax.swing.JButton btnTelaMesas;
+    private javax.swing.JButton btnTelaPedidos;
     private javax.swing.JButton btnTelaProdutos;
     private javax.swing.JButton btnTelaStatus;
     private javax.swing.JButton btnTelaTipo;

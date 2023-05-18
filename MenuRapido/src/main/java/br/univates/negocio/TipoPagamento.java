@@ -42,20 +42,20 @@ public class TipoPagamento implements Comparable<TipoPagamento> {
     @Override
     public int compareTo(TipoPagamento tipo) {
         
-        return (toString().compareTo(tipo.getIdTipo()+""));
+        return (toString().compareTo(tipo.getNome()));
     }
     
     @Override
     public String toString()
     {
-        return this.idTipo+"";
+        return this.nome+"";
     }
     
     @Override
     public boolean equals(Object objeto)
     {
         TipoPagamento outroTipo = (TipoPagamento)objeto;
-        return ( toString().equalsIgnoreCase(outroTipo.getIdTipo()+"") );
+        return ( this.idTipo == outroTipo.getIdTipo() );
     }
     
     @Override

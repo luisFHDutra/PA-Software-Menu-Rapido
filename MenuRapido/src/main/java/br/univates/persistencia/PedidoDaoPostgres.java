@@ -8,16 +8,18 @@ import br.univates.menurapido.Sys;
 import br.univates.negocio.ItemPedido;
 import br.univates.negocio.Mesa;
 import br.univates.negocio.Pedido;
+import br.univates.negocio.Produto;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.negocio.TipoPagamento;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.DaoAdapter;
-import br.univates.raiz.persistence.Filter;
 import br.univates.raiz.persistence.NotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,16 +31,32 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
     @Override
     public void create(Pedido pedido) {
         DataBaseConnectionManager dbcm;
+        dbcm = Sys.getInstance().getDB();
         try {
-            dbcm = Sys.getInstance().getDB();
-
+            dbcm.runSQL("begin transaction;");
+            
             String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?);";
 
             dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getStatusAtendimento().getIdStatus(),
                     pedido.getMesa().getNroMesa(), pedido.getPagamento().getIdTipo());
+            
+            ArrayList<ItemPedido> item = pedido.getItemPedido();
+            for (ItemPedido itemPedido : item) 
+            {
+                String sqlItem = "INSERT INTO item_pedido VALUES ( ?, ?, ?, ?);";
+                dbcm.runPreparedSQL(sqlItem, itemPedido.getProduto().getIdProduto(), pedido.getIdPedido(),
+                        itemPedido.getQuantidade(), itemPedido.getValorProduto() );
+            }
+            dbcm.runSQL("commit;");
+            
         } catch (DataBaseException ex) {
+            try {
+                dbcm.runSQL("roolback;");
+            } catch (DataBaseException ex1) {
+                Logger.getLogger(PedidoDaoPostgres.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             JOptionPane.showMessageDialog(null, 
-                    "Chave primária duplicada",
+                    "Erro no banco de dados",
                     "Inserção no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -84,13 +102,33 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                     System.out.println("não existe");
                 }
 
-                ArrayList<ItemPedido> itens = DaoFactory.criarItemPedidoDao().readAll(new Filter<ItemPedido>() {
-                    @Override
-                    public boolean isAccept(ItemPedido record) {
-                        return (record.getPedido().getIdPedido() == id);
+                ArrayList<ItemPedido> itens = new ArrayList();
+                
+                String sqlItem = "SELECT * FROM item_pedido WHERE id_pedido = ?;";
+                ResultSet rsItem = dbcm.runPreparedQuerySQL(sqlItem, id_pedido);
+                
+                if (rsItem.isBeforeFirst()) // acho alguma coisa?
+                {
+                    rsItem.next();
+                    while (!rs.isAfterLast()) {
+                        int idProduto = rsItem.getInt("id_produto");
+                        int quantidade = rsItem.getInt("quantidade");
+                        double pro_valor = rsItem.getDouble("pro_valor");
+                        
+                        Produto pro = null;
+                        try {
+                            pro = DaoFactory.criarProdutoDao().read(idProduto);
+                        } catch (NotFoundException ex) {
+                            System.out.println("não existe");
+                        }
+                        
+                        ItemPedido i = new ItemPedido(pro, pro_valor, quantidade);
+                        itens.add(i);
+                        
+                        rs.next();
                     }
-                });
-
+                }
+                
                 p = new Pedido(id, s, m, t, itens);
             }
         }catch (DataBaseException ex)
@@ -125,7 +163,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             {
                 rs.next();
                 while (!rs.isAfterLast()) {
-                    int id = rs.getInt("id_pedido");
+                    int idPedido = rs.getInt("id_pedido");
                     int idStatus = rs.getInt("id_status");
                     int mesa = rs.getInt("nro_mesa");
                     int idTipo = rs.getInt("id_tipo");
@@ -151,14 +189,34 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                         System.out.println("não existe");
                     }
 
-                    ArrayList<ItemPedido> itens = DaoFactory.criarItemPedidoDao().readAll(new Filter<ItemPedido>() {
-                        @Override
-                        public boolean isAccept(ItemPedido record) {
-                            return (record.getPedido().getIdPedido() == id);
-                        }
-                    });
+                    ArrayList<ItemPedido> itens = new ArrayList();
+                
+                    String sqlItem = "SELECT * FROM item_pedido WHERE id_pedido = ?;";
+                    ResultSet rsItem = dbcm.runPreparedQuerySQL(sqlItem, idPedido);
 
-                    Pedido p = new Pedido(id, s, m, t, itens);
+                    if (rsItem.isBeforeFirst()) // acho alguma coisa?
+                    {
+                        rsItem.next();
+                        while (!rs.isAfterLast()) {
+                            int idProduto = rsItem.getInt("id_produto");
+                            int quantidade = rsItem.getInt("quantidade");
+                            double pro_valor = rsItem.getDouble("pro_valor");
+
+                            Produto pro = null;
+                            try {
+                                pro = DaoFactory.criarProdutoDao().read(idProduto);
+                            } catch (NotFoundException ex) {
+                                System.out.println("não existe");
+                            }
+
+                            ItemPedido i = new ItemPedido(pro, pro_valor, quantidade);
+                            itens.add(i);
+
+                            rs.next();
+                        }
+                    }
+
+                    Pedido p = new Pedido(idPedido, s, m, t, itens);
                     lista.add(p);
 
                     rs.next();
@@ -182,13 +240,37 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
     }
 
     @Override
-    public void update(Pedido objeto) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(Pedido pedido) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "UPDATE pedido SET id_status = ? WHERE id_pedido = ?";
+            dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getIdPedido());
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
     @Override
-    public void delete(Integer primaryKey) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void delete(Integer id_pedido) throws NotFoundException {
+        DataBaseConnectionManager dbcm;
+        
+        try
+        {
+            dbcm = Sys.getInstance().getDB();
+            
+            String sql = "DELETE FROM pedido WHERE id_pedido = ?";
+            dbcm.runPreparedSQL(sql, id_pedido );
+        } 
+        catch (DataBaseException ex)
+        {
+            throw new NotFoundException();
+        }
     }
 
 }
