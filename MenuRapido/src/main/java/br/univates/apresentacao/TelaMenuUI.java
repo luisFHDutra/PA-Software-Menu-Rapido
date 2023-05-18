@@ -32,6 +32,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.btnTelaStatus.setEnabled(false);
         this.btnTelaTipo.setEnabled(false);
         this.btnTelaUsuario.setEnabled(false);
+        this.btnTelaPedidos.setEnabled(false);
         
         this.setLocationRelativeTo(null);
     }
@@ -252,6 +253,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
             this.btnTelaStatus.setEnabled(true);
             this.btnTelaTipo.setEnabled(true);
             this.btnTelaUsuario.setEnabled(true);
+            this.btnTelaPedidos.setEnabled(true);
         }
         else
         {

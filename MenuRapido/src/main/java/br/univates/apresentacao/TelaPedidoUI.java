@@ -4,6 +4,7 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.negocio.ItemPedido;
 import br.univates.negocio.Mesa;
 import br.univates.negocio.Pedido;
 import br.univates.negocio.StatusAtendimento;
@@ -27,6 +28,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     private Pedido pedidoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
+    public ArrayList<ItemPedido> itens;
     
     /**
      * Creates new form TelaUsuarioUI
@@ -35,7 +37,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         initComponents();
         
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
-        
+        System.out.println("tamanho: " + pedidos.size());
         this.tbConsulta.setModel( new TableModelPedido(pedidos));
         this.novo = false;
         
@@ -71,6 +73,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         this.cbMesa.setEnabled(false);
         this.cbStatus.setEnabled(false);
         
+        this.btnTelaItens.setEnabled(false);
+        
         this.telaMenu = tela;
         
         this.setLocationRelativeTo(null);
@@ -97,6 +101,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         if (pedido.getPagamento()!= null) {
             this.cbTipoPagamento.setSelectedItem(pedido.getPagamento());
         }
+        
+        this.itens = pedido.getItemPedido();
     }
 
     private void initCBStatus(ArrayList<StatusAtendimento> status)
@@ -153,6 +159,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         cbStatus = new javax.swing.JComboBox<>();
         cbMesa = new javax.swing.JComboBox<>();
         cbTipoPagamento = new javax.swing.JComboBox<>();
+        btnTelaItens = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -255,6 +262,13 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaItens.setText("Lista de itens");
+        btnTelaItens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaItensActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -263,32 +277,35 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addGap(67, 67, 67)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(cbStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, 366, Short.MAX_VALUE)
-                                    .addComponent(cbMesa, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnCancelar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSalvar))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cbTipoPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 27, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                        .addComponent(jLabel4)
+                        .addGap(76, 76, 76)
+                        .addComponent(btnTelaItens)
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 229, Short.MAX_VALUE)
+                                    .addComponent(btnCancelar)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnSalvar)
+                                    .addGap(17, 17, 17))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(cbTipoPagamento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addContainerGap())))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2))
+                            .addGap(61, 61, 61)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cbStatus, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbMesa, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tfID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addContainerGap()))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,8 +327,10 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(cbTipoPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addGap(9, 9, 9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(btnTelaItens))
+                .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnSalvar))
@@ -322,7 +341,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNovo)
@@ -330,7 +349,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                 .addComponent(btnEditar)
                 .addGap(18, 18, 18)
                 .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -374,6 +393,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         this.cbMesa.setEnabled(true);
         this.cbStatus.setEnabled(true);
         
+        this.btnTelaItens.setEnabled(true);
+        
         this.novo = true;
         
         if (pedidoCurrent != null) {
@@ -398,6 +419,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.cbTipoPagamento.setEnabled(false);
             this.cbStatus.setEnabled(true);
             this.cbStatus.requestFocus();
+            
+            this.btnTelaItens.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -468,6 +491,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         this.cbMesa.setEnabled(false);
         this.cbStatus.setEnabled(false);
 
+        this.btnTelaItens.setEnabled(false);
+        
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
         this.btnVoltar.setEnabled(true);
@@ -498,6 +523,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.cbMesa.setEnabled(false);
             this.cbStatus.setEnabled(false);
 
+            this.btnTelaItens.setEnabled(false);
+            
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
@@ -526,6 +553,12 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         this.pedidoCurrent.setPagamento((TipoPagamento)this.cbTipoPagamento.getSelectedItem());
     }//GEN-LAST:event_cbTipoPagamentoFocusLost
 
+    private void btnTelaItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaItensActionPerformed
+        TelaItemPedidoUI tela = new TelaItemPedidoUI(this, itens);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaItensActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -533,6 +566,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnTelaItens;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JComboBox<Mesa> cbMesa;
     private javax.swing.JComboBox<StatusAtendimento> cbStatus;

@@ -260,7 +260,7 @@ public class TelaProdutoUI extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tfNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGap(0, 170, Short.MAX_VALUE)
                                         .addComponent(btnCancelar)
                                         .addGap(18, 18, 18)
                                         .addComponent(btnSalvar))))))

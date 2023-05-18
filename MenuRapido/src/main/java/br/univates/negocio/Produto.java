@@ -74,20 +74,20 @@ public class Produto implements Comparable<Produto> {
     @Override
     public int compareTo(Produto produto) {
         
-        return (toString().compareTo(produto.idProduto+""));
+        return (toString().compareTo(produto.nome+""));
     }
     
     @Override
     public String toString()
     {
-        return this.idProduto+"";
+        return this.nome+"";
     }
     
     @Override
     public boolean equals(Object objeto)
     {
         Produto outroProduto = (Produto)objeto;
-        return ( toString().equalsIgnoreCase(outroProduto.getIdProduto()+"") );
+        return ( this.idProduto == outroProduto.getIdProduto() );
     }
     
     @Override
