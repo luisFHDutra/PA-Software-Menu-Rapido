@@ -4,19 +4,20 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.ItemPedido;
 import br.univates.negocio.Mesa;
 import br.univates.negocio.Pedido;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.negocio.TipoPagamento;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -29,109 +30,103 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     private boolean novo;
     private TelaMenuUI telaMenu;
     public ArrayList<ItemPedido> itens;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaPedidoUI( TelaMenuUI tela) {
+    public TelaPedidoUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
-        System.out.println("tamanho: " + pedidos.size());
-        this.tbConsulta.setModel( new TableModelPedido(pedidos));
+
+        this.tbConsulta.setModel(new TableModelPedido(pedidos));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(false);
-        
+
         ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
         if (status == null) {
-            this.initCBStatus( new ArrayList<>() );
+            this.initCBStatus(new ArrayList<>());
         } else {
             this.initCBStatus(status);
         }
-        
+
         ArrayList<Mesa> mesas = DaoFactory.criarMesaDao().readAll();
         if (mesas == null) {
-            this.initCBMesa(new ArrayList<>() );
+            this.initCBMesa(new ArrayList<>());
         } else {
             this.initCBMesa(mesas);
         }
-        
+
         ArrayList<TipoPagamento> tipos = DaoFactory.criarTipoPagamentoDao().readAll();
         if (tipos == null) {
-            this.initCBTipo(new ArrayList<>() );
+            this.initCBTipo(new ArrayList<>());
         } else {
             this.initCBTipo(tipos);
         }
-        
+
         this.cbTipoPagamento.setEnabled(false);
         this.cbMesa.setEnabled(false);
         this.cbStatus.setEnabled(false);
-        
+
         this.btnTelaItens.setEnabled(false);
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     public void setProduto(Pedido pedido) {
-    
+
         this.pedidoCurrent = pedido;
-        
-        if (pedido.getIdPedido()== 0) {
-            this.tfID.setText("" );
+
+        if (pedido.getIdPedido() == 0) {
+            this.tfID.setText("");
         } else {
             this.tfID.setInteger(pedido.getIdPedido());
         }
-        
-        if (pedido.getStatusAtendimento()!= null) {
+
+        if (pedido.getStatusAtendimento() != null) {
             this.cbStatus.setSelectedItem(pedido.getStatusAtendimento());
         }
-        
-        if (pedido.getMesa()!= null) {
+
+        if (pedido.getMesa() != null) {
             this.cbMesa.setSelectedItem(pedido.getMesa());
         }
-        
-        if (pedido.getPagamento()!= null) {
+
+        if (pedido.getPagamento() != null) {
             this.cbTipoPagamento.setSelectedItem(pedido.getPagamento());
         }
-        
+
         this.itens = pedido.getItemPedido();
     }
 
-    private void initCBStatus(ArrayList<StatusAtendimento> status)
-    {
+    private void initCBStatus(ArrayList<StatusAtendimento> status) {
         this.cbStatus.removeAllItems();
-        for (StatusAtendimento s: status)
-        {
+        for (StatusAtendimento s : status) {
             cbStatus.addItem(s);
         }
     }
-    
-    private void initCBMesa(ArrayList<Mesa> mesas)
-    {
+
+    private void initCBMesa(ArrayList<Mesa> mesas) {
         this.cbMesa.removeAllItems();
-        for (Mesa mesa: mesas)
-        {
+        for (Mesa mesa : mesas) {
             cbMesa.addItem(mesa);
         }
     }
-    
-    private void initCBTipo(ArrayList<TipoPagamento> tipos)
-    {
+
+    private void initCBTipo(ArrayList<TipoPagamento> tipos) {
         this.cbTipoPagamento.removeAllItems();
-        for (TipoPagamento tipo: tipos)
-        {
+        for (TipoPagamento tipo : tipos) {
             cbTipoPagamento.addItem(tipo);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -374,52 +369,52 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelPedido model = (TableModelPedido)this.tbConsulta.getModel();
-        Pedido pedido = model.getPedidos().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelPedido model = (TableModelPedido) this.tbConsulta.getModel();
+        Pedido pedido = model.getPedidos().get(linhaSelecionada);
+
         this.setProduto(pedido);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(true);
         this.cbTipoPagamento.setEnabled(true);
         this.cbMesa.setEnabled(true);
         this.cbStatus.setEnabled(true);
-        
+
         this.btnTelaItens.setEnabled(true);
-        
+
         this.novo = true;
-        
+
         if (pedidoCurrent != null) {
             this.pedidoOld = pedidoCurrent.clone();
         }
-        
+
         this.setProduto(new Pedido());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (pedidoCurrent != null) {
             this.pedidoOld = pedidoCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfID.setEditable(false);
             this.cbMesa.setEnabled(false);
             this.cbTipoPagamento.setEnabled(false);
             this.cbStatus.setEnabled(true);
             this.cbStatus.requestFocus();
-            
+
             this.btnTelaItens.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -427,35 +422,28 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (pedidoCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarPedidoDao().delete( pedidoCurrent.getIdPedido());
+        if (pedidoCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelPedido model = (TableModelPedido)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarPedidoDao().delete(pedidoCurrent.getIdPedido());
+
+                    TableModelPedido model = (TableModelPedido) this.tbConsulta.getModel();
                     model.getPedidos().remove(pedidoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfID.setText( "" );
-                    
+                    this.tfID.setText("");
+
                     this.pedidoCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Este pedido não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -470,48 +458,45 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfIDFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (pedidoOld != null)
-        {
+        if (pedidoOld != null) {
             this.pedidoCurrent.setIdPedido(this.pedidoOld.getIdPedido());
             this.pedidoCurrent.setMesa(this.pedidoOld.getMesa());
             this.pedidoCurrent.setPagamento(this.pedidoOld.getPagamento());
             this.pedidoCurrent.setStatusAtendimento(this.pedidoOld.getStatusAtendimento());
             this.pedidoCurrent.setItemPedido(this.pedidoOld.getItemPedido());
-            this.tfID.setInteger(this.pedidoOld.getIdPedido() );
-            this.cbTipoPagamento.setSelectedItem( this.pedidoOld.getPagamento());
-            this.cbMesa.setSelectedItem( this.pedidoOld.getMesa() );
+            this.tfID.setInteger(this.pedidoOld.getIdPedido());
+            this.cbTipoPagamento.setSelectedItem(this.pedidoOld.getPagamento());
+            this.cbMesa.setSelectedItem(this.pedidoOld.getMesa());
             this.cbStatus.setSelectedItem(this.pedidoOld.getStatusAtendimento());
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfID.setEditable(false);
         this.cbTipoPagamento.setEnabled(false);
         this.cbMesa.setEnabled(false);
         this.cbStatus.setEnabled(false);
 
         this.btnTelaItens.setEnabled(false);
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
         this.btnVoltar.setEnabled(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<Pedido,Integer> dao = DaoFactory.criarPedidoDao();
-        
-        try
-        {
-            if (novo)
-            {
-                
+        IDao<Pedido, Integer> dao = DaoFactory.criarPedidoDao();
+
+        try {
+            if (novo) {
+
                 dao.create(pedidoCurrent);
 
-                TableModelPedido model = (TableModelPedido)this.tbConsulta.getModel();
+                TableModelPedido model = (TableModelPedido) this.tbConsulta.getModel();
                 model.getPedidos().add(pedidoCurrent);
             } else {
-                
+
                 dao.update(pedidoCurrent);
             }
 
@@ -524,33 +509,38 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.cbStatus.setEnabled(false);
 
             this.btnTelaItens.setEnabled(false);
-            
+
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void cbStatusFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbStatusFocusLost
-        this.pedidoCurrent.setStatusAtendimento((StatusAtendimento)this.cbStatus.getSelectedItem());
+        this.pedidoCurrent.setStatusAtendimento((StatusAtendimento) this.cbStatus.getSelectedItem());
     }//GEN-LAST:event_cbStatusFocusLost
 
     private void cbMesaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbMesaFocusLost
-        this.pedidoCurrent.setMesa((Mesa)this.cbMesa.getSelectedItem());
+        this.pedidoCurrent.setMesa((Mesa) this.cbMesa.getSelectedItem());
     }//GEN-LAST:event_cbMesaFocusLost
 
     private void cbTipoPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbTipoPagamentoFocusLost
-        this.pedidoCurrent.setPagamento((TipoPagamento)this.cbTipoPagamento.getSelectedItem());
+        this.pedidoCurrent.setPagamento((TipoPagamento) this.cbTipoPagamento.getSelectedItem());
     }//GEN-LAST:event_cbTipoPagamentoFocusLost
 
     private void btnTelaItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaItensActionPerformed

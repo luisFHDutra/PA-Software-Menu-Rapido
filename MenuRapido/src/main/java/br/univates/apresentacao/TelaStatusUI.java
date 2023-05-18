@@ -4,15 +4,16 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -24,41 +25,41 @@ public class TelaStatusUI extends javax.swing.JFrame {
     private StatusAtendimento statusOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaStatusUI( TelaMenuUI tela) {
+    public TelaStatusUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
-        
-        this.tbConsulta.setModel( new TableModelStatus(status));
+
+        this.tbConsulta.setModel(new TableModelStatus(status));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     private void setStatus(StatusAtendimento status) {
-    
+
         this.statusCurrent = status;
-        
+
         if (status.getIdStatus() == 0) {
-            this.tfID.setText("" );
+            this.tfID.setText("");
         } else {
             this.tfID.setInteger(status.getIdStatus());
         }
-        
+
         this.tfNome.setText(status.getNome());
     }
 
@@ -245,41 +246,41 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
-        StatusAtendimento status = model.getStatus().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelStatus model = (TableModelStatus) this.tbConsulta.getModel();
+        StatusAtendimento status = model.getStatus().get(linhaSelecionada);
+
         this.setStatus(status);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(true);
         this.tfNome.setEditable(true);
-        
+
         this.novo = true;
-        
+
         if (statusCurrent != null) {
             this.statusOld = statusCurrent.clone();
         }
-        
+
         this.setStatus(new StatusAtendimento());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (statusCurrent != null) {
             this.statusOld = statusCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfID.setEditable(false);
             this.tfNome.setEditable(true);
@@ -290,36 +291,29 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (statusCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarStatusAtendimentoDao().delete( statusCurrent.getIdStatus() );
+        if (statusCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarStatusAtendimentoDao().delete(statusCurrent.getIdStatus());
+
+                    TableModelStatus model = (TableModelStatus) this.tbConsulta.getModel();
                     model.getStatus().remove(statusCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfID.setText( "" );
-                    this.tfNome.setText( "" );
-                    
+                    this.tfID.setText("");
+                    this.tfNome.setText("");
+
                     this.statusCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Este status de atendimento não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -338,17 +332,16 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNomeFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (statusOld != null)
-        {
-            this.statusCurrent.setIdStatus(this.statusOld.getIdStatus() );
-            this.statusCurrent.setNome( this.statusOld.getNome() );
-            this.tfID.setInteger(this.statusOld.getIdStatus() );
-            this.tfNome.setText( this.statusOld.getNome());
+        if (statusOld != null) {
+            this.statusCurrent.setIdStatus(this.statusOld.getIdStatus());
+            this.statusCurrent.setNome(this.statusOld.getNome());
+            this.tfID.setInteger(this.statusOld.getIdStatus());
+            this.tfNome.setText(this.statusOld.getNome());
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
 
@@ -358,15 +351,13 @@ public class TelaStatusUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<StatusAtendimento,Integer> dao = DaoFactory.criarStatusAtendimentoDao();
+        IDao<StatusAtendimento, Integer> dao = DaoFactory.criarStatusAtendimentoDao();
 
-        try
-        {
-            if (novo)
-            {
+        try {
+            if (novo) {
                 dao.create(statusCurrent);
 
-                TableModelStatus model = (TableModelStatus)this.tbConsulta.getModel();
+                TableModelStatus model = (TableModelStatus) this.tbConsulta.getModel();
                 model.getStatus().add(statusCurrent);
             } else {
                 dao.update(statusCurrent);
@@ -381,17 +372,22 @@ public class TelaStatusUI extends javax.swing.JFrame {
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
 

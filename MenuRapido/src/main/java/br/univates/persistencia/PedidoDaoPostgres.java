@@ -198,7 +198,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                     if (rsItem.isBeforeFirst()) // acho alguma coisa?
                     {
                         rsItem.next();
-                        while (!rs.isAfterLast()) 
+                        while (!rsItem.isAfterLast()) 
                         {
                             int idProduto = rsItem.getInt("id_produto");
                             int quantidade = rsItem.getInt("quantidade");
@@ -214,7 +214,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                             ItemPedido i = new ItemPedido(pro, pro_valor, quantidade);
                             itens.add(i);
 
-                            rs.next();
+                            rsItem.next();
                         }
                     }
 

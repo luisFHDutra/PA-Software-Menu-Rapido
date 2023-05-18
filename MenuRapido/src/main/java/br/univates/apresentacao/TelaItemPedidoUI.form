@@ -141,10 +141,8 @@
                   </Group>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="tfQuantidade" pref="320" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="tfValor" max="32767" attributes="0"/>
-                          <Component id="cbProduto" pref="320" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="tfValor" alignment="0" max="32767" attributes="0"/>
+                      <Component id="cbProduto" alignment="0" pref="320" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>

@@ -4,15 +4,16 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.CategoriaProduto;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -24,41 +25,41 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
     private CategoriaProduto categoriaOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaCategoriaUI( TelaMenuUI tela) {
+    public TelaCategoriaUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<CategoriaProduto> categoria = DaoFactory.criarCategoriaProdutoDao().readAll();
-        
-        this.tbConsulta.setModel( new TableModelCategoria(categoria));
+
+        this.tbConsulta.setModel(new TableModelCategoria(categoria));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     private void setCategoria(CategoriaProduto categoria) {
-    
+
         this.categoriaCurrent = categoria;
-        
+
         if (categoria.getIdCategoria() == 0) {
-            this.tfID.setText("" );
+            this.tfID.setText("");
         } else {
             this.tfID.setInteger(categoria.getIdCategoria());
         }
-        
+
         this.tfNome.setText(categoria.getNome());
     }
 
@@ -245,41 +246,41 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
-        CategoriaProduto categoria = model.getCategorias().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelCategoria model = (TableModelCategoria) this.tbConsulta.getModel();
+        CategoriaProduto categoria = model.getCategorias().get(linhaSelecionada);
+
         this.setCategoria(categoria);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(true);
         this.tfNome.setEditable(true);
-        
+
         this.novo = true;
-        
+
         if (categoriaCurrent != null) {
             this.categoriaOld = categoriaCurrent.clone();
         }
-        
+
         this.setCategoria(new CategoriaProduto());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (categoriaCurrent != null) {
             this.categoriaOld = categoriaCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfID.setEditable(false);
             this.tfNome.setEditable(true);
@@ -290,36 +291,29 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (categoriaCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarCategoriaProdutoDao().delete( categoriaCurrent.getIdCategoria() );
+        if (categoriaCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarCategoriaProdutoDao().delete(categoriaCurrent.getIdCategoria());
+
+                    TableModelCategoria model = (TableModelCategoria) this.tbConsulta.getModel();
                     model.getCategorias().remove(categoriaCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfID.setText( "" );
-                    this.tfNome.setText( "" );
-                    
+                    this.tfID.setText("");
+                    this.tfNome.setText("");
+
                     this.categoriaCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Esta categoria não pode ser deletada", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -338,17 +332,16 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNomeFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (categoriaOld != null)
-        {
+        if (categoriaOld != null) {
             this.categoriaCurrent.setIdCategoria(this.categoriaOld.getIdCategoria());
-            this.categoriaCurrent.setNome( this.categoriaOld.getNome() );
+            this.categoriaCurrent.setNome(this.categoriaOld.getNome());
             this.tfID.setInteger(this.categoriaOld.getIdCategoria());
-            this.tfNome.setText( this.categoriaOld.getNome());
+            this.tfNome.setText(this.categoriaOld.getNome());
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
 
@@ -358,15 +351,13 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<CategoriaProduto,Integer> dao = DaoFactory.criarCategoriaProdutoDao();
+        IDao<CategoriaProduto, Integer> dao = DaoFactory.criarCategoriaProdutoDao();
 
-        try
-        {
-            if (novo)
-            {
+        try {
+            if (novo) {
                 dao.create(categoriaCurrent);
 
-                TableModelCategoria model = (TableModelCategoria)this.tbConsulta.getModel();
+                TableModelCategoria model = (TableModelCategoria) this.tbConsulta.getModel();
                 model.getCategorias().add(categoriaCurrent);
             } else {
                 dao.update(categoriaCurrent);
@@ -381,17 +372,22 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
 

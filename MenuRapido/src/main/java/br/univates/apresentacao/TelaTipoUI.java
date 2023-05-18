@@ -4,15 +4,16 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.TipoPagamento;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -24,41 +25,41 @@ public class TelaTipoUI extends javax.swing.JFrame {
     private TipoPagamento tipoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaTipoUI( TelaMenuUI tela) {
+    public TelaTipoUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<TipoPagamento> tipo = DaoFactory.criarTipoPagamentoDao().readAll();
-        
-        this.tbConsulta.setModel( new TableModelTipo(tipo));
+
+        this.tbConsulta.setModel(new TableModelTipo(tipo));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     private void setTipo(TipoPagamento tipo) {
-    
+
         this.tipoCurrent = tipo;
-        
+
         if (tipo.getIdTipo() == 0) {
-            this.tfID.setText("" );
+            this.tfID.setText("");
         } else {
             this.tfID.setInteger(tipo.getIdTipo());
         }
-        
+
         this.tfNome.setText(tipo.getNome());
     }
 
@@ -245,41 +246,41 @@ public class TelaTipoUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelTipo model = (TableModelTipo)this.tbConsulta.getModel();
-        TipoPagamento tipo = model.getTipos().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelTipo model = (TableModelTipo) this.tbConsulta.getModel();
+        TipoPagamento tipo = model.getTipos().get(linhaSelecionada);
+
         this.setTipo(tipo);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(true);
         this.tfNome.setEditable(true);
-        
+
         this.novo = true;
-        
+
         if (tipoCurrent != null) {
             this.tipoOld = tipoCurrent.clone();
         }
-        
+
         this.setTipo(new TipoPagamento());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (tipoCurrent != null) {
             this.tipoOld = tipoCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfID.setEditable(false);
             this.tfNome.setEditable(true);
@@ -290,36 +291,29 @@ public class TelaTipoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (tipoCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarTipoPagamentoDao().delete( tipoCurrent.getIdTipo() );
+        if (tipoCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelTipo model = (TableModelTipo)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarTipoPagamentoDao().delete(tipoCurrent.getIdTipo());
+
+                    TableModelTipo model = (TableModelTipo) this.tbConsulta.getModel();
                     model.getTipos().remove(tipoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfID.setText( "" );
-                    this.tfNome.setText( "" );
-                    
+                    this.tfID.setText("");
+                    this.tfNome.setText("");
+
                     this.tipoCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Este tipo de pagamento não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione um tipo de pagamento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -338,17 +332,16 @@ public class TelaTipoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNomeFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (tipoOld != null)
-        {
+        if (tipoOld != null) {
             this.tipoCurrent.setIdTipo(this.tipoOld.getIdTipo());
-            this.tipoCurrent.setNome( this.tipoOld.getNome() );
+            this.tipoCurrent.setNome(this.tipoOld.getNome());
             this.tfID.setInteger(this.tipoOld.getIdTipo());
-            this.tfNome.setText( this.tipoOld.getNome());
+            this.tfNome.setText(this.tipoOld.getNome());
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
 
@@ -358,15 +351,13 @@ public class TelaTipoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<TipoPagamento,Integer> dao = DaoFactory.criarTipoPagamentoDao();
+        IDao<TipoPagamento, Integer> dao = DaoFactory.criarTipoPagamentoDao();
 
-        try
-        {
-            if (novo)
-            {
+        try {
+            if (novo) {
                 dao.create(tipoCurrent);
 
-                TableModelTipo model = (TableModelTipo)this.tbConsulta.getModel();
+                TableModelTipo model = (TableModelTipo) this.tbConsulta.getModel();
                 model.getTipos().add(tipoCurrent);
             } else {
                 dao.update(tipoCurrent);
@@ -381,17 +372,22 @@ public class TelaTipoUI extends javax.swing.JFrame {
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
 

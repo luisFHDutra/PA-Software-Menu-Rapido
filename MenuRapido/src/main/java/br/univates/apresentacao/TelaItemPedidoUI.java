@@ -4,9 +4,11 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.ItemPedido;
 import br.univates.negocio.Produto;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -387,11 +389,11 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         this.itemCurrent.setValorProduto(this.tfValor.getDouble());
 
         if (novo) {
-            
+
             this.itensPedidos.add(itemCurrent);
-            
+
         } else {
-            
+
             this.itensPedidos.remove(this.tbConsulta.getSelectedRow());
 
             this.itensPedidos.add(itemCurrent);
@@ -410,7 +412,14 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void cbProdutoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbProdutoFocusLost

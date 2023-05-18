@@ -4,15 +4,16 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.Mesa;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -24,43 +25,43 @@ public class TelaMesaUI extends javax.swing.JFrame {
     private Mesa mesaOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaMesaUI( TelaMenuUI tela) {
+    public TelaMesaUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<Mesa> mesa = DaoFactory.criarMesaDao().readAll();
-        
-        this.tbConsulta.setModel( new TableModelMesa(mesa));
+
+        this.tbConsulta.setModel(new TableModelMesa(mesa));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfNumero.setEditable(false);
         this.tfQuantLugares.setEditable(false);
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     private void setMesa(Mesa mesa) {
-    
+
         this.mesaCurrent = mesa;
-        
+
         if (mesa.getNroMesa() == 0) {
-            this.tfNumero.setText("" );
+            this.tfNumero.setText("");
         } else {
             this.tfNumero.setInteger(mesa.getNroMesa());
         }
-        
-        if (mesa.getQuantidadeLugares()== 0) {
-            this.tfQuantLugares.setText("" );
+
+        if (mesa.getQuantidadeLugares() == 0) {
+            this.tfQuantLugares.setText("");
         } else {
             this.tfQuantLugares.setInteger(mesa.getQuantidadeLugares());
         }
@@ -249,41 +250,41 @@ public class TelaMesaUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelMesa model = (TableModelMesa)this.tbConsulta.getModel();
-        Mesa mesa = model.getMesas().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelMesa model = (TableModelMesa) this.tbConsulta.getModel();
+        Mesa mesa = model.getMesas().get(linhaSelecionada);
+
         this.setMesa(mesa);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfNumero.setEditable(true);
         this.tfQuantLugares.setEditable(true);
-        
+
         this.novo = true;
-        
+
         if (mesaCurrent != null) {
             this.mesaOld = mesaCurrent.clone();
         }
-        
+
         this.setMesa(new Mesa());
         this.tfNumero.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (mesaCurrent != null) {
             this.mesaOld = mesaCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfNumero.setEditable(false);
             this.tfQuantLugares.setEditable(true);
@@ -294,36 +295,29 @@ public class TelaMesaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (mesaCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarMesaDao().delete( mesaCurrent.getNroMesa() );
+        if (mesaCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelMesa model = (TableModelMesa)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarMesaDao().delete(mesaCurrent.getNroMesa());
+
+                    TableModelMesa model = (TableModelMesa) this.tbConsulta.getModel();
                     model.getMesas().remove(mesaCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfNumero.setText( "" );
-                    this.tfQuantLugares.setText( "" );
-                    
+                    this.tfNumero.setText("");
+                    this.tfQuantLugares.setText("");
+
                     this.mesaCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Esta mesa não pode ser deletada", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione uma mesa na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -338,17 +332,16 @@ public class TelaMesaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNumeroFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (mesaOld != null)
-        {
+        if (mesaOld != null) {
             this.mesaCurrent.setNroMesa(this.mesaOld.getNroMesa());
-            this.mesaCurrent.setQuantidadeLugares(this.mesaOld.getQuantidadeLugares() );
+            this.mesaCurrent.setQuantidadeLugares(this.mesaOld.getQuantidadeLugares());
             this.tfNumero.setInteger(this.mesaOld.getNroMesa());
             this.tfQuantLugares.setInteger(this.mesaOld.getQuantidadeLugares());
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfNumero.setEditable(false);
         this.tfQuantLugares.setEditable(false);
 
@@ -358,15 +351,13 @@ public class TelaMesaUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<Mesa,Integer> dao = DaoFactory.criarMesaDao();
+        IDao<Mesa, Integer> dao = DaoFactory.criarMesaDao();
 
-        try
-        {
-            if (novo)
-            {
+        try {
+            if (novo) {
                 dao.create(mesaCurrent);
 
-                TableModelMesa model = (TableModelMesa)this.tbConsulta.getModel();
+                TableModelMesa model = (TableModelMesa) this.tbConsulta.getModel();
                 model.getMesas().add(mesaCurrent);
             } else {
                 dao.update(mesaCurrent);
@@ -381,17 +372,22 @@ public class TelaMesaUI extends javax.swing.JFrame {
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void tfQuantLugaresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfQuantLugaresFocusLost

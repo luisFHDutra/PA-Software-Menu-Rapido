@@ -4,16 +4,17 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.CategoriaProduto;
 import br.univates.negocio.Produto;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -25,77 +26,74 @@ public class TelaProdutoUI extends javax.swing.JFrame {
     private Produto produtoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaProdutoUI( TelaMenuUI tela) {
+    public TelaProdutoUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<Produto> produtos = DaoFactory.criarProdutoDao().readAll();
-        
-        this.tbConsulta.setModel( new TableModelProduto(produtos));
+
+        this.tbConsulta.setModel(new TableModelProduto(produtos));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
         this.tfDescricao.setEditable(false);
         this.tfValor.setEditable(false);
         this.cbCategoria.setEnabled(false);
-        
+
         ArrayList<CategoriaProduto> categorias = DaoFactory.criarCategoriaProdutoDao().readAll();
-        
+
         if (categorias == null) {
-            this.initCombos( new ArrayList<>() );
+            this.initCombos(new ArrayList<>());
         } else {
             this.initCombos(categorias);
         }
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     private void setProduto(Produto produto) {
-    
+
         this.produtoCurrent = produto;
-        
-        if (produto.getIdProduto()== 0) {
-            this.tfID.setText("" );
+
+        if (produto.getIdProduto() == 0) {
+            this.tfID.setText("");
         } else {
             this.tfID.setInteger(produto.getIdProduto());
         }
-        
+
         this.tfNome.setText(produto.getNome());
         this.tfDescricao.setText(produto.getDescricao());
-        
+
 //        if (produto.getValorProduto()== 0) {
 //            this.tfValor.setText("");
 //        } else {
 //            this.tfValor.setDouble(produto.getValorProduto());
 //        }
-        
         this.tfValor.setDouble(produto.getValorProduto());
-        
+
         if (produto.getCategoria() != null) {
             this.cbCategoria.setSelectedItem(produto.getCategoria());
         }
     }
 
-    private void initCombos(ArrayList<CategoriaProduto> categoriaValidadas)
-    {
+    private void initCombos(ArrayList<CategoriaProduto> categoriaValidadas) {
         this.cbCategoria.removeAllItems();
-        for (CategoriaProduto categoria: categoriaValidadas)
-        {
+        for (CategoriaProduto categoria : categoriaValidadas) {
             cbCategoria.addItem(categoria);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -338,44 +336,44 @@ public class TelaProdutoUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelProduto model = (TableModelProduto)this.tbConsulta.getModel();
-        Produto produto = model.getProdutos().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelProduto model = (TableModelProduto) this.tbConsulta.getModel();
+        Produto produto = model.getProdutos().get(linhaSelecionada);
+
         this.setProduto(produto);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(true);
         this.tfNome.setEditable(true);
         this.tfDescricao.setEditable(true);
         this.tfValor.setEditable(true);
         this.cbCategoria.setEnabled(true);
-        
+
         this.novo = true;
-        
+
         if (produtoCurrent != null) {
             this.produtoOld = produtoCurrent.clone();
         }
-        
+
         this.setProduto(new Produto());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (produtoCurrent != null) {
             this.produtoOld = produtoCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfID.setEditable(false);
             this.tfDescricao.setEditable(false);
@@ -389,38 +387,31 @@ public class TelaProdutoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (produtoCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarProdutoDao().delete( produtoCurrent.getIdProduto());
+        if (produtoCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelProduto model = (TableModelProduto)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarProdutoDao().delete(produtoCurrent.getIdProduto());
+
+                    TableModelProduto model = (TableModelProduto) this.tbConsulta.getModel();
                     model.getProdutos().remove(produtoCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfID.setText( "" );
-                    this.tfNome.setText( "" );
-                    this.tfDescricao.setText( "" );
-                    this.tfValor.setText( "" );
-                    
+                    this.tfID.setText("");
+                    this.tfNome.setText("");
+                    this.tfDescricao.setText("");
+                    this.tfValor.setText("");
+
                     this.produtoCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Este produto não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione um produto na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -439,23 +430,22 @@ public class TelaProdutoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNomeFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (produtoOld != null)
-        {
+        if (produtoOld != null) {
             this.produtoCurrent.setIdProduto(this.produtoOld.getIdProduto());
-            this.produtoCurrent.setNome( this.produtoOld.getNome());
+            this.produtoCurrent.setNome(this.produtoOld.getNome());
             this.produtoCurrent.setCategoria(this.produtoOld.getCategoria());
             this.produtoCurrent.setDescricao(this.produtoOld.getDescricao());
             this.produtoCurrent.setValorProduto(this.produtoOld.getValorProduto());
-            this.tfID.setInteger(this.produtoOld.getIdProduto() );
-            this.tfNome.setText( this.produtoOld.getNome());
-            this.tfDescricao.setText( this.produtoOld.getDescricao());
-            this.tfValor.setDouble( this.produtoOld.getValorProduto() );
+            this.tfID.setInteger(this.produtoOld.getIdProduto());
+            this.tfNome.setText(this.produtoOld.getNome());
+            this.tfDescricao.setText(this.produtoOld.getDescricao());
+            this.tfValor.setDouble(this.produtoOld.getValorProduto());
             this.cbCategoria.setSelectedItem(this.produtoOld.getCategoria());
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
         this.tfDescricao.setEditable(false);
@@ -469,15 +459,13 @@ public class TelaProdutoUI extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         this.produtoCurrent.setValorProduto(this.tfValor.getDouble());
-        IDao<Produto,Integer> dao = DaoFactory.criarProdutoDao();
-        
-        try
-        {
-            if (novo)
-            {
+        IDao<Produto, Integer> dao = DaoFactory.criarProdutoDao();
+
+        try {
+            if (novo) {
                 dao.create(produtoCurrent);
 
-                TableModelProduto model = (TableModelProduto)this.tbConsulta.getModel();
+                TableModelProduto model = (TableModelProduto) this.tbConsulta.getModel();
                 model.getProdutos().add(produtoCurrent);
             } else {
                 dao.update(produtoCurrent);
@@ -495,17 +483,22 @@ public class TelaProdutoUI extends javax.swing.JFrame {
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void tfDescricaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfDescricaoFocusLost
@@ -513,7 +506,7 @@ public class TelaProdutoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfDescricaoFocusLost
 
     private void cbCategoriaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbCategoriaFocusLost
-        this.produtoCurrent.setCategoria((CategoriaProduto)this.cbCategoria.getSelectedItem());
+        this.produtoCurrent.setCategoria((CategoriaProduto) this.cbCategoria.getSelectedItem());
     }//GEN-LAST:event_cbCategoriaFocusLost
 
     private void tfValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfValorFocusLost

@@ -4,15 +4,16 @@
  */
 package br.univates.apresentacao;
 
+import br.univates.menurapido.Sys;
 import br.univates.negocio.Usuario;
 import br.univates.persistencia.DaoFactory;
+import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -24,43 +25,43 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     private Usuario usuarioOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaUsuarioUI( TelaMenuUI tela) {
+    public TelaUsuarioUI(TelaMenuUI tela) {
         initComponents();
-        
+
         ArrayList<Usuario> usuarios = DaoFactory.criarUsuarioDao().readAll();
-        
-        this.tbConsulta.setModel( new TableModelUsuario(usuarios));
+
+        this.tbConsulta.setModel(new TableModelUsuario(usuarios));
         this.novo = false;
-        
+
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
-        
+
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
         this.tfUser.setEditable(false);
         this.tfSenha.setEditable(false);
-        
+
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
-    
+
     private void setUsuario(Usuario usuario) {
-    
+
         this.usuarioCurrent = usuario;
-        
+
         if (usuario.getIdUser() == 0) {
-            this.tfID.setText("" );
+            this.tfID.setText("");
         } else {
             this.tfID.setInteger(usuario.getIdUser());
         }
-        
+
         this.tfNome.setText(usuario.getName());
         this.tfSenha.setText("");
         this.tfUser.setText(usuario.getLogName());
@@ -284,43 +285,43 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConsultaMouseClicked
-        int linhaSelecionada  = this.tbConsulta.getSelectedRow();
-        
-        TableModelUsuario model = (TableModelUsuario)this.tbConsulta.getModel();
-        Usuario usuario = model.getUsuarios().get( linhaSelecionada );
-        
+        int linhaSelecionada = this.tbConsulta.getSelectedRow();
+
+        TableModelUsuario model = (TableModelUsuario) this.tbConsulta.getModel();
+        Usuario usuario = model.getUsuarios().get(linhaSelecionada);
+
         this.setUsuario(usuario);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        
+
         this.btnSalvar.setEnabled(true);
         this.btnCancelar.setEnabled(true);
         this.btnVoltar.setEnabled(true);
-        
+
         this.tfID.setEditable(true);
         this.tfNome.setEditable(true);
         this.tfUser.setEditable(true);
         this.tfSenha.setEditable(true);
-        
+
         this.novo = true;
-        
+
         if (usuarioCurrent != null) {
             this.usuarioOld = usuarioCurrent.clone();
         }
-        
+
         this.setUsuario(new Usuario());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         if (usuarioCurrent != null) {
             this.usuarioOld = usuarioCurrent.clone();
             this.btnSalvar.setEnabled(true);
             this.btnCancelar.setEnabled(true);
             this.btnVoltar.setEnabled(true);
-            
+
             this.novo = false;
             this.tfID.setEditable(false);
             this.tfUser.setEditable(false);
@@ -333,41 +334,34 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (usuarioCurrent != null)
-        {
-            try
-            {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?", 
-                                                            "Confirmação", 
-                                                            JOptionPane.YES_NO_OPTION);
-                
-                if (x == 0)
-                {
-                    DaoFactory.criarUsuarioDao().delete( usuarioCurrent.getIdUser() );
+        if (usuarioCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
 
-                    TableModelUsuario model = (TableModelUsuario)this.tbConsulta.getModel();
+                if (x == 0) {
+                    DaoFactory.criarUsuarioDao().delete(usuarioCurrent.getIdUser());
+
+                    TableModelUsuario model = (TableModelUsuario) this.tbConsulta.getModel();
                     model.getUsuarios().remove(usuarioCurrent);
 
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-                    this.tfID.setText( "" );
-                    this.tfNome.setText( "" );
-                    this.tfSenha.setText( "" );
-                    this.tfUser.setText( "" );
-                    
-                    this.tfSenha.setText( "" );
+                    this.tfID.setText("");
+                    this.tfNome.setText("");
+                    this.tfSenha.setText("");
+                    this.tfUser.setText("");
+
+                    this.tfSenha.setText("");
                     this.tfSenha.setVisible(false);
-                    
+
                     this.usuarioCurrent = null;
                 }
-            } 
-            catch (NotFoundException ex)
-            {
+            } catch (NotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Este usuário não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -394,21 +388,20 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tfSenhaFocusLost
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        if (usuarioOld != null)
-        {
-            this.usuarioCurrent.setIdUser(this.usuarioOld.getIdUser() );
-            this.usuarioCurrent.setNome( this.usuarioOld.getName() );
-            this.usuarioCurrent.setUser(this.usuarioOld.getLogName() );
-            this.usuarioCurrent.setHashCode(this.usuarioOld.getHashCode() );
-            this.tfID.setInteger(this.usuarioOld.getIdUser() );
-            this.tfNome.setText( this.usuarioOld.getName());
-            this.tfUser.setText( this.usuarioOld.getLogName());
-            this.tfSenha.setText( "" );
+        if (usuarioOld != null) {
+            this.usuarioCurrent.setIdUser(this.usuarioOld.getIdUser());
+            this.usuarioCurrent.setNome(this.usuarioOld.getName());
+            this.usuarioCurrent.setUser(this.usuarioOld.getLogName());
+            this.usuarioCurrent.setHashCode(this.usuarioOld.getHashCode());
+            this.tfID.setInteger(this.usuarioOld.getIdUser());
+            this.tfNome.setText(this.usuarioOld.getName());
+            this.tfUser.setText(this.usuarioOld.getLogName());
+            this.tfSenha.setText("");
         }
-        
+
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
-        
+
         this.tfID.setEditable(false);
         this.tfNome.setEditable(false);
         this.tfUser.setEditable(false);
@@ -420,15 +413,13 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        IDao<Usuario,Integer> dao = DaoFactory.criarUsuarioDao();
+        IDao<Usuario, Integer> dao = DaoFactory.criarUsuarioDao();
 
-        try
-        {
-            if (novo)
-            {
+        try {
+            if (novo) {
                 dao.create(usuarioCurrent);
 
-                TableModelUsuario model = (TableModelUsuario)this.tbConsulta.getModel();
+                TableModelUsuario model = (TableModelUsuario) this.tbConsulta.getModel();
                 model.getUsuarios().add(usuarioCurrent);
             } else {
                 dao.update(usuarioCurrent);
@@ -445,17 +436,22 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
-        }
-        catch (KeyViolationException | InvalidKeyException ex) 
-        {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+        } catch (KeyViolationException | InvalidKeyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NotFoundException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage() );
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        try {
+            Sys.getInstance().getDB().closeConnection();
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro fatal ao encerrar a conexão com o banco de dados",
+                    "Conexão com o banco de dados", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }//GEN-LAST:event_formWindowClosing
 
 
