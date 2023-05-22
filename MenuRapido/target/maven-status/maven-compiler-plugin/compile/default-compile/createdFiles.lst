@@ -9,7 +9,6 @@ br\univates\negocio\StatusAtendimento.class
 br\univates\menurapido\MenuRapido.class
 br\univates\persistencia\ProdutoDaoPostgres.class
 br\univates\negocio\Pedido.class
-br\univates\persistencia\ItemPedidoDaoPostgres.class
 br\univates\negocio\Mesa.class
 br\univates\persistencia\MesaDaoPostgres.class
 br\univates\persistencia\StatusAtendimentoDaoPostgres.class

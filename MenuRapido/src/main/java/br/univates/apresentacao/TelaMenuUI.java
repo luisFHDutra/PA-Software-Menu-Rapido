@@ -4,7 +4,6 @@
  */
 package br.univates.apresentacao;
 
-import br.univates.menurapido.MenuRapido;
 import br.univates.menurapido.Sys;
 import br.univates.negocio.Usuario;
 import br.univates.persistencia.DaoFactory;
@@ -59,7 +58,6 @@ public class TelaMenuUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenu3 = new javax.swing.JMenu();
-        btnTelaUsuario = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lbUsuarioConectado = new javax.swing.JLabel();
         btnTelaStatus = new javax.swing.JButton();
@@ -71,6 +69,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         btnSistema = new javax.swing.JMenu();
         btnLoggin = new javax.swing.JMenuItem();
+        btnTelaUsuario = new javax.swing.JMenuItem();
         btnSair = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
@@ -79,13 +78,6 @@ public class TelaMenuUI extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
-            }
-        });
-
-        btnTelaUsuario.setText("Usuários");
-        btnTelaUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTelaUsuarioActionPerformed(evt);
             }
         });
 
@@ -143,6 +135,14 @@ public class TelaMenuUI extends javax.swing.JFrame {
         });
         btnSistema.add(btnLoggin);
 
+        btnTelaUsuario.setText("Usuários");
+        btnTelaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaUsuarioActionPerformed(evt);
+            }
+        });
+        btnSistema.add(btnTelaUsuario);
+
         btnSair.setText("Sair");
         btnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,22 +169,18 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnTelaPedidos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTelaStatus))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btnTelaCategoria)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnTelaProdutos))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnTelaTipo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTelaMesas))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnTelaUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTelaStatus)))
+                        .addComponent(btnTelaMesas)))
                 .addGap(69, 69, 69))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(144, 144, 144)
-                .addComponent(btnTelaPedidos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,21 +188,19 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(lbUsuarioConectado, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnTelaUsuario)
+                    .addComponent(btnTelaPedidos)
                     .addComponent(btnTelaStatus))
-                .addGap(36, 36, 36)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTelaTipo)
                     .addComponent(btnTelaMesas))
-                .addGap(29, 29, 29)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTelaCategoria)
-                    .addComponent(btnTelaProdutos))
-                .addGap(18, 18, 18)
-                .addComponent(btnTelaPedidos)
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(btnTelaProdutos)
+                    .addComponent(btnTelaCategoria))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         pack();
@@ -261,12 +255,6 @@ public class TelaMenuUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogginActionPerformed
 
-    private void btnTelaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaUsuarioActionPerformed
-        TelaUsuarioUI tela = new TelaUsuarioUI(this);
-        tela.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnTelaUsuarioActionPerformed
-
     private void btnTelaStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaStatusActionPerformed
         TelaStatusUI tela = new TelaStatusUI(this);
         tela.setVisible(true);
@@ -303,6 +291,12 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaPedidosActionPerformed
 
+    private void btnTelaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaUsuarioActionPerformed
+        TelaUsuarioUI tela = new TelaUsuarioUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaUsuarioActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
@@ -313,7 +307,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
     private javax.swing.JButton btnTelaProdutos;
     private javax.swing.JButton btnTelaStatus;
     private javax.swing.JButton btnTelaTipo;
-    private javax.swing.JButton btnTelaUsuario;
+    private javax.swing.JMenuItem btnTelaUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
