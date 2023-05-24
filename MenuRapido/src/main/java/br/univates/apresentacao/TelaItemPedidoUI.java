@@ -27,7 +27,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     /**
      * Creates new form TelaUsuarioUI
      */
-    public TelaItemPedidoUI(TelaPedidoUI tela, ArrayList<ItemPedido> itens) {
+    public TelaItemPedidoUI(TelaPedidoUI tela, ArrayList<ItemPedido> itens, boolean onlyShowItens) {
         initComponents();
 
         this.itensPedidos = itens;
@@ -44,6 +44,12 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         this.tfValor.setEditable(false);
         this.cbProduto.setEnabled(false);
 
+        if (onlyShowItens) {
+            this.btnNovo.setEnabled(false);
+            this.btnEditar.setEnabled(false);
+            this.btnExcluir.setEnabled(false);
+        }
+        
         ArrayList<Produto> produtos = DaoFactory.criarProdutoDao().readAll();
 
         if (produtos == null) {

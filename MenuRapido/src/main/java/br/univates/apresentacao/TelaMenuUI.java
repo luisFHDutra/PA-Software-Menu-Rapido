@@ -83,6 +83,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
 
         jLabel1.setText("Usuário Conectado: ");
 
+        btnTelaStatus.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnTelaStatus.setText("Status Atendimento");
         btnTelaStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +91,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaTipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnTelaTipo.setText("Tipo de Pagamento");
         btnTelaTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,6 +99,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaCategoria.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnTelaCategoria.setText("Categoria Produtos");
         btnTelaCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +107,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaMesas.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnTelaMesas.setText("Mesas");
         btnTelaMesas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,6 +115,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaProdutos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnTelaProdutos.setText("Produtos");
         btnTelaProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +123,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
             }
         });
 
+        btnTelaPedidos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnTelaPedidos.setText("Pedidos");
         btnTelaPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,19 +194,19 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(lbUsuarioConectado, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTelaPedidos)
                     .addComponent(btnTelaStatus))
-                .addGap(27, 27, 27)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTelaTipo)
                     .addComponent(btnTelaMesas))
-                .addGap(28, 28, 28)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTelaProdutos)
                     .addComponent(btnTelaCategoria))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();

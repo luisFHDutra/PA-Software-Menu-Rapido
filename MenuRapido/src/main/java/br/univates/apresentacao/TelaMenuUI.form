@@ -110,22 +110,22 @@
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <Component id="lbUsuarioConectado" min="-2" pref="17" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnTelaPedidos" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnTelaStatus" min="-2" max="-2" attributes="0"/>
-              </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnTelaPedidos" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnTelaStatus" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnTelaTipo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnTelaMesas" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnTelaProdutos" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnTelaCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="66" max="32767" attributes="0"/>
+              <EmptySpace pref="47" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -140,6 +140,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTelaStatus">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Status Atendimento"/>
       </Properties>
       <Events>
@@ -148,6 +151,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTelaTipo">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Tipo de Pagamento"/>
       </Properties>
       <Events>
@@ -156,6 +162,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTelaCategoria">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Categoria Produtos"/>
       </Properties>
       <Events>
@@ -164,6 +173,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTelaMesas">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Mesas"/>
       </Properties>
       <Events>
@@ -172,6 +184,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTelaProdutos">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Produtos"/>
       </Properties>
       <Events>
@@ -180,6 +195,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnTelaPedidos">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Pedidos"/>
       </Properties>
       <Events>
