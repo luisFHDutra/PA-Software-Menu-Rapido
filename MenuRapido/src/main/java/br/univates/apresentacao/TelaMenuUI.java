@@ -28,10 +28,12 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.btnTelaCategoria.setEnabled(false);
         this.btnTelaMesas.setEnabled(false);
         this.btnTelaProdutos.setEnabled(false);
-        this.btnTelaStatus.setEnabled(false);
-        this.btnTelaTipo.setEnabled(false);
+        this.btnTelaStatusAtendimento.setEnabled(false);
+        this.btnTelaTipoPagamento.setEnabled(false);
         this.btnTelaUsuario.setEnabled(false);
         this.btnTelaPedidos.setEnabled(false);
+        this.btnTelaPagamento.setEnabled(false);
+        this.btnTelaStatusPedidos.setEnabled(false);
         
         this.setLocationRelativeTo(null);
     }
@@ -60,16 +62,19 @@ public class TelaMenuUI extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jLabel1 = new javax.swing.JLabel();
         lbUsuarioConectado = new javax.swing.JLabel();
-        btnTelaStatus = new javax.swing.JButton();
-        btnTelaTipo = new javax.swing.JButton();
-        btnTelaCategoria = new javax.swing.JButton();
-        btnTelaMesas = new javax.swing.JButton();
-        btnTelaProdutos = new javax.swing.JButton();
         btnTelaPedidos = new javax.swing.JButton();
+        btnTelaPagamento = new javax.swing.JButton();
+        btnTelaStatusPedidos = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnSistema = new javax.swing.JMenu();
         btnLoggin = new javax.swing.JMenuItem();
         btnTelaUsuario = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        btnTelaMesas = new javax.swing.JMenuItem();
+        btnTelaCategoria = new javax.swing.JMenuItem();
+        btnTelaTipoPagamento = new javax.swing.JMenuItem();
+        btnTelaStatusAtendimento = new javax.swing.JMenuItem();
+        btnTelaProdutos = new javax.swing.JMenuItem();
         btnSair = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
@@ -83,51 +88,27 @@ public class TelaMenuUI extends javax.swing.JFrame {
 
         jLabel1.setText("Usuário Conectado: ");
 
-        btnTelaStatus.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnTelaStatus.setText("Status Atendimento");
-        btnTelaStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTelaStatusActionPerformed(evt);
-            }
-        });
-
-        btnTelaTipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnTelaTipo.setText("Tipo de Pagamento");
-        btnTelaTipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTelaTipoActionPerformed(evt);
-            }
-        });
-
-        btnTelaCategoria.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnTelaCategoria.setText("Categoria Produtos");
-        btnTelaCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTelaCategoriaActionPerformed(evt);
-            }
-        });
-
-        btnTelaMesas.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnTelaMesas.setText("Mesas");
-        btnTelaMesas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTelaMesasActionPerformed(evt);
-            }
-        });
-
-        btnTelaProdutos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnTelaProdutos.setText("Produtos");
-        btnTelaProdutos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTelaProdutosActionPerformed(evt);
-            }
-        });
-
-        btnTelaPedidos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnTelaPedidos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnTelaPedidos.setText("Pedidos");
         btnTelaPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTelaPedidosActionPerformed(evt);
+            }
+        });
+
+        btnTelaPagamento.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnTelaPagamento.setText("Pagamento");
+        btnTelaPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaPagamentoActionPerformed(evt);
+            }
+        });
+
+        btnTelaStatusPedidos.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnTelaStatusPedidos.setText("Status dos Pedidos");
+        btnTelaStatusPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaStatusPedidosActionPerformed(evt);
             }
         });
 
@@ -149,6 +130,50 @@ public class TelaMenuUI extends javax.swing.JFrame {
         });
         btnSistema.add(btnTelaUsuario);
 
+        jMenu1.setText("Cadastros secundários");
+
+        btnTelaMesas.setText("Mesas");
+        btnTelaMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaMesasActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnTelaMesas);
+
+        btnTelaCategoria.setText("Categoria de Produtos");
+        btnTelaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaCategoriaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnTelaCategoria);
+
+        btnTelaTipoPagamento.setText("Tipo de Pagamentos");
+        btnTelaTipoPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaTipoPagamentoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnTelaTipoPagamento);
+
+        btnTelaStatusAtendimento.setText("Status de Atendimento");
+        btnTelaStatusAtendimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaStatusAtendimentoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnTelaStatusAtendimento);
+
+        btnTelaProdutos.setText("Produtos");
+        btnTelaProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaProdutosActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btnTelaProdutos);
+
+        btnSistema.add(jMenu1);
+
         btnSair.setText("Sair");
         btnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,24 +194,19 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(lbUsuarioConectado, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbUsuarioConectado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(btnTelaPedidos)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTelaPedidos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTelaStatus))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTelaCategoria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTelaProdutos))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnTelaTipo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTelaMesas)))
-                .addGap(69, 69, 69))
+                .addGap(26, 26, 26)
+                .addComponent(btnTelaPagamento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addComponent(btnTelaStatusPedidos)
+                .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,19 +214,13 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(lbUsuarioConectado, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTelaPedidos)
-                    .addComponent(btnTelaStatus))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTelaTipo)
-                    .addComponent(btnTelaMesas))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTelaProdutos)
-                    .addComponent(btnTelaCategoria))
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addComponent(btnTelaPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnTelaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTelaStatusPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         pack();
@@ -250,46 +264,18 @@ public class TelaMenuUI extends javax.swing.JFrame {
             this.btnTelaCategoria.setEnabled(true);
             this.btnTelaMesas.setEnabled(true);
             this.btnTelaProdutos.setEnabled(true);
-            this.btnTelaStatus.setEnabled(true);
-            this.btnTelaTipo.setEnabled(true);
+            this.btnTelaStatusAtendimento.setEnabled(true);
+            this.btnTelaTipoPagamento.setEnabled(true);
             this.btnTelaUsuario.setEnabled(true);
             this.btnTelaPedidos.setEnabled(true);
+            this.btnTelaPagamento.setEnabled(true);
+            this.btnTelaStatusPedidos.setEnabled(true);
         }
         else
         {
             Sys.getInstance().setUser(aux);
         }
     }//GEN-LAST:event_btnLogginActionPerformed
-
-    private void btnTelaStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaStatusActionPerformed
-        TelaStatusUI tela = new TelaStatusUI(this);
-        tela.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnTelaStatusActionPerformed
-
-    private void btnTelaTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaTipoActionPerformed
-        TelaTipoUI tela = new TelaTipoUI(this);
-        tela.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnTelaTipoActionPerformed
-
-    private void btnTelaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaCategoriaActionPerformed
-        TelaCategoriaUI tela = new TelaCategoriaUI(this);
-        tela.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnTelaCategoriaActionPerformed
-
-    private void btnTelaMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaMesasActionPerformed
-        TelaMesaUI tela = new TelaMesaUI(this);
-        tela.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnTelaMesasActionPerformed
-
-    private void btnTelaProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaProdutosActionPerformed
-        TelaProdutoUI tela = new TelaProdutoUI(this);
-        tela.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnTelaProdutosActionPerformed
 
     private void btnTelaPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaPedidosActionPerformed
         TelaPedidoUI tela = new TelaPedidoUI(this);
@@ -303,18 +289,63 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaUsuarioActionPerformed
 
+    private void btnTelaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaPagamentoActionPerformed
+        TelaPagamentoUI tela = new TelaPagamentoUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaPagamentoActionPerformed
+
+    private void btnTelaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaCategoriaActionPerformed
+        TelaCategoriaUI tela = new TelaCategoriaUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaCategoriaActionPerformed
+
+    private void btnTelaMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaMesasActionPerformed
+        TelaMesaUI tela = new TelaMesaUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaMesasActionPerformed
+
+    private void btnTelaTipoPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaTipoPagamentoActionPerformed
+        TelaTipoUI tela = new TelaTipoUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaTipoPagamentoActionPerformed
+
+    private void btnTelaStatusAtendimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaStatusAtendimentoActionPerformed
+        TelaStatusUI tela = new TelaStatusUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaStatusAtendimentoActionPerformed
+
+    private void btnTelaProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaProdutosActionPerformed
+        TelaProdutoUI tela = new TelaProdutoUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaProdutosActionPerformed
+
+    private void btnTelaStatusPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaStatusPedidosActionPerformed
+        TelaStatusPedidosUI tela = new TelaStatusPedidosUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaStatusPedidosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
     private javax.swing.JMenu btnSistema;
-    private javax.swing.JButton btnTelaCategoria;
-    private javax.swing.JButton btnTelaMesas;
+    private javax.swing.JMenuItem btnTelaCategoria;
+    private javax.swing.JMenuItem btnTelaMesas;
+    private javax.swing.JButton btnTelaPagamento;
     private javax.swing.JButton btnTelaPedidos;
-    private javax.swing.JButton btnTelaProdutos;
-    private javax.swing.JButton btnTelaStatus;
-    private javax.swing.JButton btnTelaTipo;
+    private javax.swing.JMenuItem btnTelaProdutos;
+    private javax.swing.JMenuItem btnTelaStatusAtendimento;
+    private javax.swing.JButton btnTelaStatusPedidos;
+    private javax.swing.JMenuItem btnTelaTipoPagamento;
     private javax.swing.JMenuItem btnTelaUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lbUsuarioConectado;

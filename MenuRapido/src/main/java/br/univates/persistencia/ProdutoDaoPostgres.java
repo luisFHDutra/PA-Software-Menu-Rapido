@@ -153,8 +153,9 @@ public class ProdutoDaoPostgres extends DaoAdapter<Produto,Integer>{
         {
             dbcm = Sys.getInstance().getDB();
             
-            String sql = "UPDATE produto SET pro_valor = ? WHERE id_produto = ?";
-            dbcm.runPreparedSQL(sql, produto.getValorProduto(), produto.getIdProduto() );
+            String sql = "UPDATE produto SET pro_valor = ?, descricao = ?, nome = ?, id_categoria = ? WHERE id_produto = ?";
+            dbcm.runPreparedSQL(sql, produto.getValorProduto(), produto.getDescricao(), produto.getNome(),
+                    produto.getCategoria().getIdCategoria(), produto.getIdProduto() );
         } 
         catch (DataBaseException ex)
         {

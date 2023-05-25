@@ -37,8 +37,13 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             
             String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?);";
 
-            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getStatusAtendimento().getIdStatus(),
-                    pedido.getMesa().getNroMesa(), pedido.getPagamento().getIdTipo());
+            Integer idTipo = null;
+            if (pedido.getPagamento()!= null) idTipo = pedido.getPagamento().getIdTipo();
+            
+            Integer idStatus = null;
+            if (pedido.getStatusAtendimento() != null) idStatus = pedido.getStatusAtendimento().getIdStatus();
+            
+            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getMesa().getNroMesa(), idStatus, idTipo);
             
             ArrayList<ItemPedido> item = pedido.getItemPedido();
             for (ItemPedido itemPedido : item) 
@@ -250,8 +255,9 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
         {
             dbcm = Sys.getInstance().getDB();
             
-            String sql = "UPDATE pedido SET id_status = ? WHERE id_pedido = ?";
-            dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getIdPedido());
+            String sql = "UPDATE pedido SET id_status = ?, nro_mesa = ?, id_tipo = ? WHERE id_pedido = ?";
+            dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), 
+                    pedido.getMesa().getNroMesa(), pedido.getPagamento().getIdTipo(), pedido.getIdPedido());
         } 
         catch (DataBaseException ex)
         {

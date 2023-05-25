@@ -33,6 +33,8 @@ public class TelaProdutoUI extends javax.swing.JFrame {
     public TelaProdutoUI(TelaMenuUI tela) {
         initComponents();
 
+        this.setTitle("Produtos");
+        
         ArrayList<Produto> produtos = DaoFactory.criarProdutoDao().readAll();
 
         this.tbConsulta.setModel(new TableModelProduto(produtos));

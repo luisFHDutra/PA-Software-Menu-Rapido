@@ -32,6 +32,8 @@ public class TelaStatusUI extends javax.swing.JFrame {
     public TelaStatusUI(TelaMenuUI tela) {
         initComponents();
 
+        this.setTitle("Status de Atendimento");
+        
         ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
 
         this.tbConsulta.setModel(new TableModelStatus(status));

@@ -11,11 +11,11 @@ import java.util.ArrayList;
  *
  * @author luis.dutra
  */
-public class TableModelPedido extends TableModelViewAdapter{
+public class TableModelPagamento extends TableModelViewAdapter{
 
     private ArrayList<Pedido> lista;
 
-    public TableModelPedido(ArrayList<Pedido> lista)
+    public TableModelPagamento(ArrayList<Pedido> lista)
     {
         this.lista = lista;
     }
@@ -33,13 +33,13 @@ public class TableModelPedido extends TableModelViewAdapter{
     @Override
     public int getColumnCount()
     {
-        return 3;
+        return 5;
     }
 
     @Override
     public String getColumnName(int columnIndex)
     {
-        String[] col = { "ID","Mesa","Valor Total" };
+        String[] col = { "ID","Status","Mesa","Pagamento","Valor Total" };
         return col[columnIndex];
     }
 
@@ -57,8 +57,15 @@ public class TableModelPedido extends TableModelViewAdapter{
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         Pedido aux = lista.get(rowIndex);
-        Object[] vet = { aux.getIdPedido(), 
-            aux.getMesa().getNroMesa(), aux.getTotalPedido() };
+        
+        String tipoPagamento = "";
+        if (aux.getPagamento() != null) tipoPagamento = aux.getPagamento().getNome();
+        
+        String statusPedido = "";
+        if (aux.getStatusAtendimento()!= null) statusPedido = aux.getStatusAtendimento().getNome();
+        
+        Object[] vet = { aux.getIdPedido(), statusPedido, 
+            aux.getMesa().getNroMesa(), tipoPagamento, aux.getTotalPedido() };
         return vet[columnIndex];
     }
     

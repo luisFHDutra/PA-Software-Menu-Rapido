@@ -32,6 +32,8 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
     public TelaCategoriaUI(TelaMenuUI tela) {
         initComponents();
 
+        this.setTitle("Categoria de Produtos");
+        
         ArrayList<CategoriaProduto> categoria = DaoFactory.criarCategoriaProdutoDao().readAll();
 
         this.tbConsulta.setModel(new TableModelCategoria(categoria));

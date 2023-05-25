@@ -32,6 +32,8 @@ public class TelaTipoUI extends javax.swing.JFrame {
     public TelaTipoUI(TelaMenuUI tela) {
         initComponents();
 
+        this.setTitle("Tipos de Pagamento");
+        
         ArrayList<TipoPagamento> tipo = DaoFactory.criarTipoPagamentoDao().readAll();
 
         this.tbConsulta.setModel(new TableModelTipo(tipo));

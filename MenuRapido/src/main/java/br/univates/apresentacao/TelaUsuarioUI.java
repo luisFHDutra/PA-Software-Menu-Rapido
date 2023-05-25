@@ -32,6 +32,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     public TelaUsuarioUI(TelaMenuUI tela) {
         initComponents();
 
+        this.setTitle("Usuários");
+        
         ArrayList<Usuario> usuarios = DaoFactory.criarUsuarioDao().readAll();
 
         this.tbConsulta.setModel(new TableModelUsuario(usuarios));

@@ -138,8 +138,9 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
         {
             dbcm = Sys.getInstance().getDB();
             
-            String sql = "UPDATE usuario SET nome = ? WHERE id_usuario = ?";
-            dbcm.runPreparedSQL(sql, usuario.getName(), usuario.getIdUser() );
+            String sql = "UPDATE usuario SET nome = ?, user = ?, hash_code = ? WHERE id_usuario = ?";
+            dbcm.runPreparedSQL(sql, usuario.getName(), 
+                    usuario.getLogName(), usuario.getHashCode(), usuario.getIdUser() );
         } 
         catch (DataBaseException ex)
         {

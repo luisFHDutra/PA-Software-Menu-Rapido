@@ -32,6 +32,8 @@ public class TelaMesaUI extends javax.swing.JFrame {
     public TelaMesaUI(TelaMenuUI tela) {
         initComponents();
 
+        this.setTitle("Mesas");
+        
         ArrayList<Mesa> mesa = DaoFactory.criarMesaDao().readAll();
 
         this.tbConsulta.setModel(new TableModelMesa(mesa));

@@ -30,6 +30,8 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     public TelaItemPedidoUI(TelaPedidoUI tela, ArrayList<ItemPedido> itens, boolean onlyShowItens) {
         initComponents();
 
+        this.setTitle("Itens do Pedido");
+        
         this.itensPedidos = itens;
 
         this.tbConsulta.setModel(new TableModelItem(itens));
@@ -327,8 +329,8 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
             this.btnVoltar.setEnabled(true);
 
             this.novo = false;
-            this.tfQuantidade.setEditable(false);
-            this.tfValor.setEditable(true);
+            this.tfQuantidade.setEditable(true);
+            this.tfValor.setEditable(false);
             this.cbProduto.setEnabled(false);
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um item na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
