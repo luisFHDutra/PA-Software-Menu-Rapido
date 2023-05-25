@@ -50,13 +50,6 @@ public class TelaPedidoUI extends javax.swing.JFrame {
 
         this.tfID.setEditable(false);
 
-//        ArrayList<StatusAtendimento> status = DaoFactory.criarStatusAtendimentoDao().readAll();
-//        if (status == null) {
-//            this.initCBStatus(new ArrayList<>());
-//        } else {
-//            this.initCBStatus(status);
-//        }
-
         ArrayList<Mesa> mesas = DaoFactory.criarMesaDao().readAll();
         if (mesas == null) {
             this.initCBMesa(new ArrayList<>());
@@ -64,18 +57,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.initCBMesa(mesas);
         }
 
-//        ArrayList<TipoPagamento> tipos = DaoFactory.criarTipoPagamentoDao().readAll();
-//        if (tipos == null) {
-//            this.initCBTipo(new ArrayList<>());
-//        } else {
-//            this.initCBTipo(tipos);
-//        }
-
-//        this.cbTipoPagamento.setEnabled(false);
         this.cbMesa.setEnabled(false);
-//        this.cbStatus.setEnabled(false);
-
-//        this.btnTelaItens.setEnabled(false);
 
         this.onlyShowItens = true;
 
@@ -94,27 +76,12 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.tfID.setInteger(pedido.getIdPedido());
         }
 
-//        if (pedido.getStatusAtendimento() != null) {
-//            this.cbStatus.setSelectedItem(pedido.getStatusAtendimento());
-//        }
-
         if (pedido.getMesa() != null) {
             this.cbMesa.setSelectedItem(pedido.getMesa());
         }
 
-//        if (pedido.getPagamento() != null) {
-//            this.cbTipoPagamento.setSelectedItem(pedido.getPagamento());
-//        }
-
         this.itens = pedido.getItemPedido();
     }
-
-//    private void initCBStatus(ArrayList<StatusAtendimento> status) {
-//        this.cbStatus.removeAllItems();
-//        for (StatusAtendimento s : status) {
-//            cbStatus.addItem(s);
-//        }
-//    }
 
     private void initCBMesa(ArrayList<Mesa> mesas) {
         this.cbMesa.removeAllItems();
@@ -122,14 +89,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             cbMesa.addItem(mesa);
         }
     }
-
-//    private void initCBTipo(ArrayList<TipoPagamento> tipos) {
-//        this.cbTipoPagamento.removeAllItems();
-//        for (TipoPagamento tipo : tipos) {
-//            cbTipoPagamento.addItem(tipo);
-//        }
-//    }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,6 +116,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         btnTelaItens = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(500, 448));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -208,6 +169,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setToolTipText("");
+
         tfID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfIDFocusLost(evt);
@@ -253,28 +216,26 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnTelaItens)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
                         .addGap(18, 18, 18)
                         .addComponent(btnSalvar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4))
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTelaItens)
-                            .addComponent(tfID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbMesa, 0, 395, Short.MAX_VALUE))))
-                .addContainerGap())
+                    .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbMesa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(29, 29, 29))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -285,19 +246,18 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(btnTelaItens))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnSalvar))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(btnTelaItens)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnCancelar)
+                        .addComponent(btnSalvar)))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNovo)
@@ -307,23 +267,22 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                 .addComponent(btnExcluir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
-                .addContainerGap())
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(29, 29, 29))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnExcluir)
-                        .addComponent(btnEditar)
-                        .addComponent(btnNovo))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar)
+                    .addComponent(btnNovo)
                     .addComponent(btnVoltar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         pack();
@@ -345,11 +304,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         this.btnVoltar.setEnabled(true);
 
         this.tfID.setEditable(true);
-//        this.cbTipoPagamento.setEnabled(true);
         this.cbMesa.setEnabled(true);
-//        this.cbStatus.setEnabled(true);
-
-//        this.btnTelaItens.setEnabled(true);
 
         this.onlyShowItens = false;
 
@@ -374,11 +329,6 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.novo = false;
             this.tfID.setEditable(false);
             this.cbMesa.setEnabled(true);
-//            this.cbTipoPagamento.setEnabled(false);
-//            this.cbStatus.setEnabled(true);
-//            this.cbStatus.requestFocus();
-
-//            this.btnTelaItens.setEnabled(true);
             this.onlyShowItens = false;
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -429,20 +379,15 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.pedidoCurrent.setStatusAtendimento(this.pedidoOld.getStatusAtendimento());
             this.pedidoCurrent.setItemPedido(this.pedidoOld.getItemPedido());
             this.tfID.setInteger(this.pedidoOld.getIdPedido());
-//            this.cbTipoPagamento.setSelectedItem(this.pedidoOld.getPagamento());
             this.cbMesa.setSelectedItem(this.pedidoOld.getMesa());
-//            this.cbStatus.setSelectedItem(this.pedidoOld.getStatusAtendimento());
         }
 
         this.tbConsulta.revalidate();
         this.tbConsulta.repaint();
 
         this.tfID.setEditable(false);
-//        this.cbTipoPagamento.setEnabled(false);
         this.cbMesa.setEnabled(false);
-//        this.cbStatus.setEnabled(false);
 
-//        this.btnTelaItens.setEnabled(false);
         this.onlyShowItens = true;
 
         this.btnSalvar.setEnabled(false);
@@ -458,8 +403,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
 
                 dao.create(pedidoCurrent);
 
-                TableModelPedido model = (TableModelPedido) this.tbConsulta.getModel();
-                model.getPedidos().add(pedidoCurrent);
+                ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
+                this.tbConsulta.setModel(new TableModelPedido(pedidos));
             } else {
 
                 dao.update(pedidoCurrent);
@@ -469,11 +414,8 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.tbConsulta.repaint();
 
             this.tfID.setEditable(false);
-//            this.cbTipoPagamento.setEnabled(false);
             this.cbMesa.setEnabled(false);
-//            this.cbStatus.setEnabled(false);
 
-//            this.btnTelaItens.setEnabled(false);
             this.onlyShowItens = true;
 
             this.btnSalvar.setEnabled(false);
