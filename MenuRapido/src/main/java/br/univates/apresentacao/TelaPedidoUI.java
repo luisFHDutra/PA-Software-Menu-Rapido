@@ -244,12 +244,13 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(cbMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(btnTelaItens)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCancelar)
-                        .addComponent(btnSalvar)))
+                        .addComponent(btnSalvar))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(btnTelaItens)))
                 .addGap(25, 25, 25))
         );
 
@@ -444,9 +445,13 @@ public class TelaPedidoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_cbMesaFocusLost
 
     private void btnTelaItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaItensActionPerformed
-        TelaItemPedidoUI tela = new TelaItemPedidoUI(this, itens, onlyShowItens);
-        tela.setVisible(true);
-        this.setVisible(false);
+        if (pedidoCurrent != null) {
+            TelaItemPedidoUI tela = new TelaItemPedidoUI(this, itens, onlyShowItens);
+            tela.setVisible(true);
+            this.setVisible(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnTelaItensActionPerformed
 
 
