@@ -5,6 +5,7 @@
 package br.univates.apresentacao;
 
 import br.univates.menurapido.Sys;
+import br.univates.negocio.UserPermissao;
 import br.univates.negocio.Usuario;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.db.DataBaseException;
@@ -48,7 +49,16 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.tfNome.setEditable(false);
         this.tfUser.setEditable(false);
         this.tfSenha.setEditable(false);
+        this.cbUserPermissao.setEnabled(false);
+        
+        ArrayList<UserPermissao> permissoes = DaoFactory.criarUserPermissaoDao().readAll();
 
+        if (permissoes == null) {
+            this.initCombos(new ArrayList<>());
+        } else {
+            this.initCombos(permissoes);
+        }
+        
         this.telaMenu = tela;
 
         this.setLocationRelativeTo(null);
@@ -64,11 +74,22 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.tfID.setInteger(usuario.getIdUser());
         }
 
+        if (usuario.getPermissao() != null) {
+            this.cbUserPermissao.setSelectedItem(usuario.getPermissao());
+        }
+        
         this.tfNome.setText(usuario.getName());
         this.tfSenha.setText("");
         this.tfUser.setText(usuario.getLogName());
     }
 
+    private void initCombos(ArrayList<UserPermissao> permissoes) {
+        this.cbUserPermissao.removeAllItems();
+        for (UserPermissao permissao : permissoes) {
+            cbUserPermissao.addItem(permissao);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,10 +101,6 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         tbConsulta = new javax.swing.JTable();
-        btnNovo = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
-        btnExcluir = new javax.swing.JButton();
-        btnVoltar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tfID = new br.univates.raiz.JIntegerField();
         jLabel2 = new javax.swing.JLabel();
@@ -95,6 +112,12 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         tfSenha = new javax.swing.JPasswordField();
+        cbUserPermissao = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        btnVoltar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(500, 474));
@@ -121,34 +144,6 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tbConsulta);
-
-        btnNovo.setText("Novo");
-        btnNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovoActionPerformed(evt);
-            }
-        });
-
-        btnEditar.setText("Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-
-        btnExcluir.setText("Excluir");
-        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirActionPerformed(evt);
-            }
-        });
-
-        btnVoltar.setText("Voltar");
-        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVoltarActionPerformed(evt);
-            }
-        });
 
         tfID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -196,6 +191,42 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             }
         });
 
+        cbUserPermissao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbUserPermissaoFocusLost(evt);
+            }
+        });
+
+        jLabel1.setText("Nível de permissão:");
+
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -203,32 +234,48 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalvar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jLabel4))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfUser, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
-                            .addComponent(tfSenha)))
+                        .addGap(75, 75, 75)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                            .addComponent(tfUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(tfNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                            .addComponent(cbUserPermissao, 0, 345, Short.MAX_VALUE)
+                            .addComponent(tfID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnNovo)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSalvar)))
+                .addGap(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(8, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -236,7 +283,11 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbUserPermissao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
@@ -245,9 +296,15 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(tfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnCancelar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVoltar)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar)
+                    .addComponent(btnNovo))
                 .addContainerGap())
         );
 
@@ -255,33 +312,16 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnNovo)
-                .addGap(18, 18, 18)
-                .addComponent(btnEditar)
-                .addGap(18, 18, 18)
-                .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 198, Short.MAX_VALUE)
-                .addComponent(btnVoltar)
-                .addContainerGap())
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnExcluir)
-                        .addComponent(btnEditar)
-                        .addComponent(btnNovo))
-                    .addComponent(btnVoltar))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
         pack();
@@ -306,7 +346,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.tfNome.setEditable(true);
         this.tfUser.setEditable(true);
         this.tfSenha.setEditable(true);
-
+        this.cbUserPermissao.setEnabled(true);
+        
         this.novo = true;
 
         if (usuarioCurrent != null) {
@@ -330,6 +371,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.tfUser.setEditable(false);
             this.tfSenha.setEditable(false);
             this.tfNome.setEditable(true);
+            this.cbUserPermissao.setEnabled(false);
             this.tfNome.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -392,10 +434,12 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.usuarioCurrent.setNome(this.usuarioOld.getName());
             this.usuarioCurrent.setUser(this.usuarioOld.getLogName());
             this.usuarioCurrent.setHashCode(this.usuarioOld.getHashCode());
+            this.usuarioCurrent.setPermissao(this.usuarioOld.getPermissao());
             this.tfID.setInteger(this.usuarioOld.getIdUser());
             this.tfNome.setText(this.usuarioOld.getName());
             this.tfUser.setText(this.usuarioOld.getLogName());
             this.tfSenha.setText("");
+            this.cbUserPermissao.setSelectedItem(this.usuarioOld.getPermissao());
         }
 
         this.tbConsulta.revalidate();
@@ -405,7 +449,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.tfNome.setEditable(false);
         this.tfUser.setEditable(false);
         this.tfSenha.setEditable(false);
-
+        this.cbUserPermissao.setEnabled(false);
+        
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
         this.btnVoltar.setEnabled(true);
@@ -431,7 +476,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
             this.tfNome.setEditable(false);
             this.tfUser.setEditable(false);
             this.tfSenha.setEditable(false);
-
+            this.cbUserPermissao.setEnabled(false);
+            
             this.btnSalvar.setEnabled(false);
             this.btnCancelar.setEnabled(false);
             this.btnVoltar.setEnabled(true);
@@ -457,6 +503,10 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
         this.usuarioCurrent.setHashCode(new String(this.tfSenha.getPassword()));
     }//GEN-LAST:event_tfSenhaFocusLost
 
+    private void cbUserPermissaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbUserPermissaoFocusLost
+        this.usuarioCurrent.setPermissao((UserPermissao) this.cbUserPermissao.getSelectedItem());
+    }//GEN-LAST:event_cbUserPermissaoFocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -465,6 +515,8 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JComboBox<UserPermissao> cbUserPermissao;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -10,6 +10,7 @@ import br.univates.negocio.Pedido;
 import br.univates.negocio.Produto;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.negocio.TipoPagamento;
+import br.univates.negocio.UserPermissao;
 import br.univates.negocio.Usuario;
 import br.univates.raiz.persistence.IDao;
 
@@ -52,5 +53,10 @@ public class DaoFactory {
     public static IDao<Usuario,Integer> criarUsuarioDao()
     {
         return new UsuarioDaoPostgres();
+    }
+    
+    public static IDao<UserPermissao,Integer> criarUserPermissaoDao()
+    {
+        return new UserPermissaoDaoPostgres();
     }
 }

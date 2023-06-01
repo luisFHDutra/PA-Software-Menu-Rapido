@@ -17,12 +17,14 @@ public class Usuario implements User, Comparable<Usuario> {
     private String nome;
     private String user;
     private String hashCode;
+    private UserPermissao permissao;
 
-    public Usuario(int idUser, String nome, String user, String hashCode) {
+    public Usuario(int idUser, String nome, String user, String hashCode, UserPermissao permissao) {
         this.idUser = idUser;
         this.nome = nome;
         this.user = user;
         this.hashCode = hashCode;
+        this.permissao = permissao;
     }
 
     public Usuario() {
@@ -30,6 +32,7 @@ public class Usuario implements User, Comparable<Usuario> {
         this.nome = "";
         this.user = "";
         this.hashCode = "";
+        this.permissao = null;
     }
     
     @Override
@@ -51,6 +54,10 @@ public class Usuario implements User, Comparable<Usuario> {
         return idUser;
     }
 
+    public UserPermissao getPermissao() {
+        return permissao;
+    }
+    
     public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
@@ -63,6 +70,10 @@ public class Usuario implements User, Comparable<Usuario> {
         this.user = user;
     }
 
+    public void setPermissao(UserPermissao permissao) {
+        this.permissao = permissao;
+    }
+    
     public void setHashCode(String hashCode) {
         this.hashCode = Authenticator.getHashCode(hashCode);
     }
@@ -89,6 +100,6 @@ public class Usuario implements User, Comparable<Usuario> {
     @Override
     public Usuario clone()
     {
-        return new Usuario(this.idUser,this.nome,this.user,this.hashCode);
+        return new Usuario(this.idUser,this.nome,this.user,this.hashCode,this.permissao);
     }
 }

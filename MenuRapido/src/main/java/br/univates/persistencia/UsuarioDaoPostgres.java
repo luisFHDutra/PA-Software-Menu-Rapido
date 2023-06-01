@@ -5,6 +5,7 @@
 package br.univates.persistencia;
 
 import br.univates.menurapido.Sys;
+import br.univates.negocio.UserPermissao;
 import br.univates.negocio.Usuario;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
@@ -29,10 +30,10 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
         {
             dbcm = Sys.getInstance().getDB();
             
-            String sql = "INSERT INTO usuario VALUES ( ?, ?, ?, ?);";
+            String sql = "INSERT INTO usuario VALUES ( ?, ?, ?, ?, ?);";
             
             dbcm.runPreparedSQL(sql, user.getIdUser(), user.getName(),
-                    user.getLogName(), user.getHashCode());
+                    user.getLogName(), user.getHashCode(), user.getPermissao().getIdPermissao());
         } 
         catch (DataBaseException ex)
         {
@@ -63,8 +64,16 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
                 String nome = rs.getString("nome");
                 String user = rs.getString("user");
                 String hashCode = rs.getString("hash_code");
+                int idPermissao = rs.getInt("id_permissao");
                 
-                u = new Usuario(id,nome,user,hashCode);
+                UserPermissao permissao = null;
+                try {
+                    permissao = DaoFactory.criarUserPermissaoDao().read(idPermissao);
+                } catch (NotFoundException ex) {
+                    System.out.println("não existe");
+                }
+                
+                u = new Usuario(id,nome,user,hashCode,permissao);
             }
         } 
         catch (DataBaseException ex)
@@ -105,8 +114,16 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
                     String nome = rs.getString("nome");
                     String user = rs.getString("user");
                     String hashCode = rs.getString("hash_code");
-
-                    Usuario u = new Usuario(id,nome,user,hashCode);
+                    int idPermissao = rs.getInt("id_permissao");
+                
+                    UserPermissao permissao = null;
+                    try {
+                        permissao = DaoFactory.criarUserPermissaoDao().read(idPermissao);
+                    } catch (NotFoundException ex) {
+                        System.out.println("não existe");
+                    }
+                    
+                    Usuario u = new Usuario(id,nome,user,hashCode,permissao);
                     lista.add(u);
                     
                     rs.next();

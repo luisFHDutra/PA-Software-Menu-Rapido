@@ -33,13 +33,13 @@ public class TableModelUsuario extends TableModelViewAdapter{
     @Override
     public int getColumnCount()
     {
-        return 3;
+        return 4;
     }
 
     @Override
     public String getColumnName(int columnIndex)
     {
-        String[] col = { "ID","LogName","Nome" };
+        String[] col = { "ID","LogName","Nome","Nível de Permissão" };
         return col[columnIndex];
     }
 
@@ -57,7 +57,7 @@ public class TableModelUsuario extends TableModelViewAdapter{
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         Usuario aux = lista.get(rowIndex);
-        Object[] vet = { aux.getIdUser(), aux.getLogName(), aux.getName() };
+        Object[] vet = { aux.getIdUser(), aux.getLogName(), aux.getName(), aux.getPermissao().getNome() };
         return vet[columnIndex];
     }
     
