@@ -337,7 +337,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (usuarioCurrent != null) {
+        if (usuarioCurrent != null && usuarioCurrent.getIdUser() != Sys.getInstance().getUser().getIdUser()) {
             try {
                 int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
                         "Confirmação",
@@ -365,7 +365,7 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Este usuário não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecione um usuário válido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 

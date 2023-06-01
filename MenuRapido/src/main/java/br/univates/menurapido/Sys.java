@@ -4,7 +4,7 @@
  */
 package br.univates.menurapido;
 
-import br.univates.raiz.auth.User;
+import br.univates.negocio.Usuario;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
 import javax.swing.JOptionPane;
@@ -17,7 +17,7 @@ public class Sys {
     
     private String nomeSys;
     private String licenciado;
-    private User user;
+    private Usuario user;
     private DataBaseConnectionManager dbcm;
     
     private static Sys sys = new Sys();
@@ -46,7 +46,7 @@ public class Sys {
         }
     }
 
-    public void setUser(User user)
+    public void setUser(Usuario user)
     {
         this.user = user;
     }
@@ -61,7 +61,7 @@ public class Sys {
         return licenciado;
     }
 
-    public User getUser()
+    public Usuario getUser()
     {
         return user;
     }

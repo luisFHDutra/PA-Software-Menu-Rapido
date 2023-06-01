@@ -249,7 +249,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
 
     private void btnLogginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogginActionPerformed
         
-        Usuario aux = (Usuario)Sys.getInstance().getUser();
+        Usuario aux = Sys.getInstance().getUser();
         Sys.getInstance().setUser(null);
         
         Usuario u = userVerifier();
