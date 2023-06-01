@@ -19,6 +19,9 @@ public class Sys {
     private String licenciado;
     private Usuario user;
     private DataBaseConnectionManager dbcm;
+    public final static int permissaoAdmin = 1;
+    public final static int permissaoUser = 2;
+    public final static int permissaoIntermediaria = 3;
     
     private static Sys sys = new Sys();
 

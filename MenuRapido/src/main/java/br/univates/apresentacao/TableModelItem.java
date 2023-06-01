@@ -33,13 +33,13 @@ public class TableModelItem extends TableModelViewAdapter{
     @Override
     public int getColumnCount()
     {
-        return 3;
+        return 4;
     }
 
     @Override
     public String getColumnName(int columnIndex)
     {
-        String[] col = { "Produto","Quantidade","Valor Produto" };
+        String[] col = { "Produto","Quantidade","Valor Original","Valor Aplicado" };
         return col[columnIndex];
     }
 
@@ -57,7 +57,7 @@ public class TableModelItem extends TableModelViewAdapter{
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         ItemPedido aux = lista.get(rowIndex);
-        Object[] vet = { aux.getProduto().getNome(), aux.getQuantidade(), aux.getValorProduto() };
+        Object[] vet = { aux.getProduto().getNome(), aux.getQuantidade(), aux.getProduto().getValorProduto(), aux.getValorProduto() };
         return vet[columnIndex];
     }
     

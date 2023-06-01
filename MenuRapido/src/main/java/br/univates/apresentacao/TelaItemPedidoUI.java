@@ -21,7 +21,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     private ItemPedido itemCurrent;
     private ItemPedido itemOld;
     private boolean novo;
-    private boolean existe;
+//    private boolean existe;
     private ArrayList<ItemPedido> itensPedidos;
     private TelaPedidoUI telaPedidos;
 
@@ -37,7 +37,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
 
         this.tbConsulta.setModel(new TableModelItem(itens));
         this.novo = false;
-        this.existe = false;
+//        this.existe = false;
         
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
@@ -310,7 +310,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         this.cbProduto.setEnabled(true);
 
         this.novo = true;
-        this.existe = false;
+//        this.existe = false;
         
         if (itemCurrent != null) {
             this.itemOld = itemCurrent.clone();
@@ -399,18 +399,18 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         this.itemCurrent.setValorProduto(this.tfValor.getDouble());
 
         if (novo) {
-
-            for (ItemPedido itemPedido : itensPedidos) {
-                if (itemCurrent.getProduto().getIdProduto() != itemPedido.getProduto().getIdProduto()) {
-                   this.itensPedidos.add(itemCurrent);
-                } else {
-                    this.existe = true;
-                }
-            }
+            this.itensPedidos.add(itemCurrent);
+//            for (ItemPedido itemPedido : itensPedidos) {
+//                if (itemCurrent.getProduto().getIdProduto() != itemPedido.getProduto().getIdProduto()) {
+//                   this.itensPedidos.add(itemCurrent);
+//                } else {
+//                    this.existe = true;
+//                }
+//            }
             
-            if (existe) {
-                JOptionPane.showMessageDialog(this, "Este item já existe no pedido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            }
+//            if (existe) {
+//                JOptionPane.showMessageDialog(this, "Este item já existe no pedido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+//            }
 
         } else {
 

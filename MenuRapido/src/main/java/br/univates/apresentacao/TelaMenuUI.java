@@ -25,6 +25,8 @@ public class TelaMenuUI extends javax.swing.JFrame {
         
         initComponents();
         
+        this.setTitle("Menu Rápido");
+        
         this.btnTelaCategoria.setEnabled(false);
         this.btnTelaMesas.setEnabled(false);
         this.btnTelaProdutos.setEnabled(false);
@@ -258,12 +260,22 @@ public class TelaMenuUI extends javax.swing.JFrame {
             Sys.getInstance().setUser(u);
             this.lbUsuarioConectado.setText(u.getName());
             
-            this.btnTelaCategoria.setEnabled(true);
-            this.btnTelaMesas.setEnabled(true);
-            this.btnTelaProdutos.setEnabled(true);
-            this.btnTelaStatusAtendimento.setEnabled(true);
-            this.btnTelaTipoPagamento.setEnabled(true);
-            this.btnTelaUsuario.setEnabled(true);
+            if (u.getPermissao().getIdPermissao() == Sys.permissaoAdmin) {
+                this.btnTelaCategoria.setEnabled(true);
+                this.btnTelaMesas.setEnabled(true);
+                this.btnTelaProdutos.setEnabled(true);
+                this.btnTelaStatusAtendimento.setEnabled(true);
+                this.btnTelaTipoPagamento.setEnabled(true);
+                this.btnTelaUsuario.setEnabled(true);
+            } else {
+                this.btnTelaCategoria.setEnabled(false);
+                this.btnTelaMesas.setEnabled(false);
+                this.btnTelaProdutos.setEnabled(false);
+                this.btnTelaStatusAtendimento.setEnabled(false);
+                this.btnTelaTipoPagamento.setEnabled(false);
+                this.btnTelaUsuario.setEnabled(false);
+            }
+            
             this.btnTelaPedidos.setEnabled(true);
             this.btnTelaPagamento.setEnabled(true);
             this.btnTelaStatusPedidos.setEnabled(true);
