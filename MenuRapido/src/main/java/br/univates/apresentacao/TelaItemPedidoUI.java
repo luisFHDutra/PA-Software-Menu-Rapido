@@ -21,7 +21,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     private ItemPedido itemCurrent;
     private ItemPedido itemOld;
     private boolean novo;
-//    private boolean existe;
+    private int userPermissao;
     private ArrayList<ItemPedido> itensPedidos;
     private TelaPedidoUI telaPedidos;
 
@@ -33,11 +33,12 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
 
         this.setTitle("Itens do Pedido");
         
+        this.userPermissao = Sys.getInstance().getUser().getPermissao().getIdPermissao();
+        
         this.itensPedidos = itens;
 
         this.tbConsulta.setModel(new TableModelItem(itens));
         this.novo = false;
-//        this.existe = false;
         
         this.btnSalvar.setEnabled(false);
         this.btnCancelar.setEnabled(false);
@@ -306,11 +307,13 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         this.btnVoltar.setEnabled(true);
 
         this.tfQuantidade.setEditable(true);
-        this.tfValor.setEditable(true);
         this.cbProduto.setEnabled(true);
+        
+        if (this.userPermissao == Sys.permissaoAdmin || this.userPermissao == Sys.permissaoIntermediaria) {
+            this.tfValor.setEditable(true);
+        }
 
         this.novo = true;
-//        this.existe = false;
         
         if (itemCurrent != null) {
             this.itemOld = itemCurrent.clone();
@@ -396,21 +399,21 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        this.itemCurrent.setValorProduto(this.tfValor.getDouble());
+        if (this.userPermissao == Sys.permissaoAdmin || this.userPermissao == Sys.permissaoIntermediaria) 
+        {
+            this.itemCurrent.setValorProduto(this.tfValor.getDouble());
+        } else {
+            this.itemCurrent.setValorProduto(this.itemCurrent.getProduto().getValorProduto());
+        }
 
         if (novo) {
-            this.itensPedidos.add(itemCurrent);
-//            for (ItemPedido itemPedido : itensPedidos) {
-//                if (itemCurrent.getProduto().getIdProduto() != itemPedido.getProduto().getIdProduto()) {
-//                   this.itensPedidos.add(itemCurrent);
-//                } else {
-//                    this.existe = true;
-//                }
-//            }
-            
-//            if (existe) {
-//                JOptionPane.showMessageDialog(this, "Este item já existe no pedido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-//            }
+            for (ItemPedido itemPedido : itensPedidos) {
+                if (itemCurrent.getProduto().getIdProduto() != itemPedido.getProduto().getIdProduto()) {
+                   this.itensPedidos.add(itemCurrent);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Este item já existe no pedido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
 
         } else {
 

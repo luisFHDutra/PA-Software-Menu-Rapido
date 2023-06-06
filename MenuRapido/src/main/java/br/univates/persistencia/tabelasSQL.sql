@@ -3,7 +3,7 @@ CREATE DATABASE menuRapido;
 CREATE TABLE usuario (
   id_usuario integer PRIMARY KEY,
   nome varchar,
-  "user" varchar,
+  log_name varchar,
   hash_code varchar,
   id_permissao integer
 );

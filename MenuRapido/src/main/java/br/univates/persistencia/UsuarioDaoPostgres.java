@@ -62,7 +62,7 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
                 // não precisa while por que eu sei que só tem um resultado
                 int id = rs.getInt("id_usuario");
                 String nome = rs.getString("nome");
-                String user = rs.getString("user");
+                String user = rs.getString("log_name");
                 String hashCode = rs.getString("hash_code");
                 int idPermissao = rs.getInt("id_permissao");
                 
@@ -112,7 +112,7 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
                 {
                     int id = rs.getInt("id_usuario");
                     String nome = rs.getString("nome");
-                    String user = rs.getString("user");
+                    String user = rs.getString("log_name");
                     String hashCode = rs.getString("hash_code");
                     int idPermissao = rs.getInt("id_permissao");
                 
@@ -155,9 +155,9 @@ public class UsuarioDaoPostgres extends DaoAdapter<Usuario,Integer>{
         {
             dbcm = Sys.getInstance().getDB();
             
-            String sql = "UPDATE usuario SET nome = ?, user = ?, hash_code = ? WHERE id_usuario = ?";
+            String sql = "UPDATE usuario SET nome = ?, log_name = ?, hash_code = ?, id_permissao = ? WHERE id_usuario = ?";
             dbcm.runPreparedSQL(sql, usuario.getName(), 
-                    usuario.getLogName(), usuario.getHashCode(), usuario.getIdUser() );
+                    usuario.getLogName(), usuario.getHashCode(), usuario.getPermissao().getIdPermissao(), usuario.getIdUser() );
         } 
         catch (DataBaseException ex)
         {

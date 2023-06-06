@@ -368,10 +368,10 @@ public class TelaUsuarioUI extends javax.swing.JFrame {
 
             this.novo = false;
             this.tfID.setEditable(false);
-            this.tfUser.setEditable(false);
+            this.tfUser.setEditable(true);
             this.tfSenha.setEditable(false);
             this.tfNome.setEditable(true);
-            this.cbUserPermissao.setEnabled(false);
+            this.cbUserPermissao.setEnabled(true);
             this.tfNome.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
