@@ -9,6 +9,7 @@ import br.univates.negocio.Pedido;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.db.DataBaseException;
+import br.univates.raiz.persistence.Filter;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
@@ -32,8 +33,14 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
 
         this.setTitle("Status dos Pedidos");
         
-        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
-
+        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+            @Override
+            public boolean isAccept(Pedido record)
+            {
+                return !record.getStatusAtendimento().getNome().equals("Finalizado");
+            }
+        } );
+        
         this.tbConsulta.setModel(new TableModelStatusPedidos(pedidos));
 
         this.btnSalvar.setEnabled(false);
@@ -263,6 +270,13 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
 
             dao.update(pedidoCurrent);
 
+            if (pedidoCurrent.getStatusAtendimento().getNome().equals("Finalizado")) {
+                TableModelStatusPedidos model = (TableModelStatusPedidos) this.tbConsulta.getModel();
+                model.getPedidos().remove(pedidoCurrent);
+                
+                this.pedidoCurrent = null;
+            }
+            
             this.tbConsulta.revalidate();
             this.tbConsulta.repaint();
 

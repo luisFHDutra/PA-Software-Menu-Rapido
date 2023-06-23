@@ -405,19 +405,14 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         } else {
             this.itemCurrent.setValorProduto(this.itemCurrent.getProduto().getValorProduto());
         }
-
-        if (novo) {
-            for (ItemPedido itemPedido : itensPedidos) {
-                if (itemCurrent.getProduto().getIdProduto() != itemPedido.getProduto().getIdProduto()) {
-                   this.itensPedidos.add(itemCurrent);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Este item já existe no pedido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-
-        } else {
-
+    
+        if(novo == false) {
+        
             this.itensPedidos.remove(this.tbConsulta.getSelectedRow());
+
+            this.itensPedidos.add(itemCurrent);
+    
+        } else {
 
             this.itensPedidos.add(itemCurrent);
         }

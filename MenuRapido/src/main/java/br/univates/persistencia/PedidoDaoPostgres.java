@@ -273,6 +273,9 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
         {
             dbcm = Sys.getInstance().getDB();
             
+            String sqlDeleteItens = "DELETE FROM item_pedido WHERE id_pedido = ?";
+            dbcm.runPreparedSQL(sqlDeleteItens, id_pedido);
+            
             String sql = "DELETE FROM pedido WHERE id_pedido = ?";
             dbcm.runPreparedSQL(sql, id_pedido );
         } 

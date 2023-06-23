@@ -9,6 +9,7 @@ import br.univates.negocio.Pedido;
 import br.univates.negocio.TipoPagamento;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.db.DataBaseException;
+import br.univates.raiz.persistence.Filter;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.NotFoundException;
 import java.util.ArrayList;
@@ -32,8 +33,14 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
 
         this.setTitle("Pagamento");
         
-        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
-
+        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+            @Override
+            public boolean isAccept(Pedido record)
+            {
+                return record.getStatusAtendimento().getNome().equals("Finalizado");
+            }
+        } );
+        
         this.tbConsulta.setModel(new TableModelPagamento(pedidos));
 
         this.btnSalvar.setEnabled(false);
@@ -90,6 +97,7 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         cbTipoPagamento = new javax.swing.JComboBox<>();
+        btnPagar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(500, 368));
@@ -184,6 +192,13 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnPagar.setText("Pagar");
+        btnPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -192,6 +207,8 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnEditar)
+                .addGap(18, 18, 18)
+                .addComponent(btnPagar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addGap(20, 20, 20))
@@ -206,7 +223,8 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
-                    .addComponent(btnEditar))
+                    .addComponent(btnEditar)
+                    .addComponent(btnPagar))
                 .addGap(17, 17, 17))
         );
 
@@ -297,10 +315,37 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
         this.pedidoCurrent.setPagamento((TipoPagamento) this.cbTipoPagamento.getSelectedItem());
     }//GEN-LAST:event_cbTipoPagamentoFocusLost
 
+    private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
+        if (pedidoCurrent != null) {
+            try {
+                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja pagar?",
+                        "Confirmação",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (x == 0) {
+                    DaoFactory.criarPedidoDao().delete(pedidoCurrent.getIdPedido());
+
+                    TableModelPagamento model = (TableModelPagamento) this.tbConsulta.getModel();
+                    model.getPedidos().remove(pedidoCurrent);
+
+                    this.tbConsulta.revalidate();
+                    this.tbConsulta.repaint();
+
+                    this.pedidoCurrent = null;
+                }
+            } catch (NotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Este pedido não pode ser pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPagarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnPagar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JComboBox<TipoPagamento> cbTipoPagamento;
