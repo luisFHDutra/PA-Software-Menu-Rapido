@@ -78,7 +78,6 @@ public class TelaStatusUI extends javax.swing.JFrame {
         tbConsulta = new javax.swing.JTable();
         btnNovo = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnExcluir = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tfID = new br.univates.raiz.JIntegerField();
@@ -125,13 +124,6 @@ public class TelaStatusUI extends javax.swing.JFrame {
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
-            }
-        });
-
-        btnExcluir.setText("Excluir");
-        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirActionPerformed(evt);
             }
         });
 
@@ -219,15 +211,13 @@ public class TelaStatusUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNovo)
                 .addGap(18, 18, 18)
                 .addComponent(btnEditar)
-                .addGap(18, 18, 18)
-                .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 198, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnVoltar)
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -241,7 +231,6 @@ public class TelaStatusUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnExcluir)
                         .addComponent(btnEditar)
                         .addComponent(btnNovo))
                     .addComponent(btnVoltar))
@@ -295,34 +284,6 @@ public class TelaStatusUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        if (statusCurrent != null) {
-            try {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir?",
-                        "Confirmação",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (x == 0) {
-                    DaoFactory.criarStatusAtendimentoDao().delete(statusCurrent.getIdStatus());
-
-                    TableModelStatus model = (TableModelStatus) this.tbConsulta.getModel();
-                    model.getStatus().remove(statusCurrent);
-
-                    this.tbConsulta.revalidate();
-                    this.tbConsulta.repaint();
-                    this.tfID.setText("");
-                    this.tfNome.setText("");
-
-                    this.statusCurrent = null;
-                }
-            } catch (NotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Este status de atendimento não pode ser deletado", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um status de atendimento na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         telaMenu.setVisible(true);
@@ -400,7 +361,6 @@ public class TelaStatusUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;

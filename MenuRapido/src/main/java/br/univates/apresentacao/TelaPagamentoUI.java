@@ -37,7 +37,7 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
             @Override
             public boolean isAccept(Pedido record)
             {
-                return record.getStatusAtendimento().getNome().equals("Finalizado");
+                return record.getStatusAtendimento().getIdStatus() == 3;
             }
         } );
         

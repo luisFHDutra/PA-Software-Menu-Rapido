@@ -15,6 +15,10 @@ CREATE TABLE status_atendimento (
   nome varchar
 );
 
+INSERT INTO status_atendimento VALUES (1, 'Em atendimento');
+INSERT INTO status_atendimento VALUES (2, 'Em produção');
+INSERT INTO status_atendimento VALUES (3, 'Finalizado');
+
 CREATE TABLE tipo_pagamento (
   id_tipo integer PRIMARY KEY,
   nome varchar

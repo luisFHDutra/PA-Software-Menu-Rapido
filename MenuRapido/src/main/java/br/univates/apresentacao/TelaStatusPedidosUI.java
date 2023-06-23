@@ -37,7 +37,7 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
             @Override
             public boolean isAccept(Pedido record)
             {
-                return !record.getStatusAtendimento().getNome().equals("Finalizado");
+                return record.getStatusAtendimento().getIdStatus() != 3;
             }
         } );
         
@@ -270,7 +270,7 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
 
             dao.update(pedidoCurrent);
 
-            if (pedidoCurrent.getStatusAtendimento().getNome().equals("Finalizado")) {
+            if (pedidoCurrent.getStatusAtendimento().getIdStatus() == 3) {
                 TableModelStatusPedidos model = (TableModelStatusPedidos) this.tbConsulta.getModel();
                 model.getPedidos().remove(pedidoCurrent);
                 
