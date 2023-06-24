@@ -11,6 +11,7 @@ import br.univates.negocio.Pedido;
 import br.univates.negocio.Produto;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.negocio.TipoPagamento;
+import br.univates.raiz.Data;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.DaoAdapter;
@@ -35,8 +36,8 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
         
         try {
             dbcm.runSQL("begin transaction;");
-            
-            String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?, ?);";
+   
+            String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?, ?, ?);";
 
             Integer idTipo = null;
             if (pedido.getPagamento()!= null) idTipo = pedido.getPagamento().getIdTipo();
@@ -44,7 +45,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             Integer idStatus = null;
             if (pedido.getStatusAtendimento() != null) idStatus = pedido.getStatusAtendimento().getIdStatus();
             
-            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getPago(), pedido.getMesa().getNroMesa(), idStatus, idTipo);
+            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getPago(), java.sql.Date.valueOf(pedido.getData()), pedido.getMesa().getNroMesa(), idStatus, idTipo);
             
             ArrayList<ItemPedido> item = pedido.getItemPedido();
             for (ItemPedido itemPedido : item) 
@@ -87,6 +88,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                 int mesa = rs.getInt("nro_mesa");
                 int idTipo = rs.getInt("id_tipo");
                 int pago = rs.getInt("pago");
+                String data = rs.getDate("data_abertura").toString();
                 
                 StatusAtendimento s = null;
                 try {
@@ -136,7 +138,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                     }
                 }
                 
-                p = new Pedido(id, s, m, t, itens, pago);
+                p = new Pedido(id, s, m, t, itens, pago, data);
             }
         }catch (DataBaseException ex)
         {
@@ -176,6 +178,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                     int mesa = rs.getInt("nro_mesa");
                     int idTipo = rs.getInt("id_tipo");
                     int pago = rs.getInt("pago");
+                    String data = rs.getDate("data_abertura").toString();
                     
                     StatusAtendimento s = null;
                     try {
@@ -226,7 +229,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                         }
                     }
 
-                    Pedido p = new Pedido(idPedido, s, m, t, itens, pago);
+                    Pedido p = new Pedido(idPedido, s, m, t, itens, pago, data);
                     
                     lista.add(p);
 

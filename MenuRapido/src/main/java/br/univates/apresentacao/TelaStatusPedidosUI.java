@@ -37,7 +37,7 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
             @Override
             public boolean isAccept(Pedido record)
             {
-                return record.getStatusAtendimento().getIdStatus() != 3;
+                return record.getStatusAtendimento().getIdStatus() != 3 && record.getData().equals(Sys.getInstance().getCurrentDate());
             }
         } );
         

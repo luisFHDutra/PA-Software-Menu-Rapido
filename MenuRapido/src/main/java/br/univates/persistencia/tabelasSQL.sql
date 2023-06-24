@@ -45,6 +45,7 @@ CREATE TABLE produto (
 CREATE TABLE pedido (
   id_pedido integer PRIMARY KEY,
   pago integer,
+  data_abertura date,
   nro_mesa integer,
   id_status integer,
   id_tipo integer

@@ -10,6 +10,7 @@ import br.univates.negocio.Mesa;
 import br.univates.negocio.Pedido;
 import br.univates.persistencia.DaoFactory;
 import br.univates.raiz.db.DataBaseException;
+import br.univates.raiz.persistence.Filter;
 import br.univates.raiz.persistence.IDao;
 import br.univates.raiz.persistence.InvalidKeyException;
 import br.univates.raiz.persistence.KeyViolationException;
@@ -38,7 +39,12 @@ public class TelaPedidoUI extends javax.swing.JFrame {
 
         this.setTitle("Pedidos");
         
-        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
+        ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+            @Override
+            public boolean isAccept(Pedido record) {
+                return record.getData().equals(Sys.getInstance().getCurrentDate());
+            }
+        });
 
         this.tbConsulta.setModel(new TableModelPedido(pedidos));
         this.novo = false;

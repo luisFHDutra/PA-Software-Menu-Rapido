@@ -5,6 +5,7 @@
 package br.univates.menurapido;
 
 import br.univates.negocio.Usuario;
+import br.univates.raiz.Data;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ public class Sys {
     public final static int permissaoAdmin = 1;
     public final static int permissaoUser = 2;
     public final static int permissaoIntermediaria = 3;
+    public String currentDate;
     
     private static Sys sys = new Sys();
 
@@ -35,6 +37,10 @@ public class Sys {
         this.nomeSys = "Menu Rápido";
         this.licenciado = "Luís Dutra";
         this.user = null;
+        
+        Data date = new Data();
+        this.currentDate = date.getDataFormatada();
+        
         try
         {
             this.dbcm = new DataBaseConnectionManager( DataBaseConnectionManager.POSTGRESQL,
@@ -72,6 +78,10 @@ public class Sys {
     public DataBaseConnectionManager getDB()
     {
         return dbcm;
+    }
+
+    public String getCurrentDate() {
+        return currentDate;
     }
     
 }

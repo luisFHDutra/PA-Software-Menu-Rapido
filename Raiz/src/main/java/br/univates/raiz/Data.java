@@ -220,7 +220,7 @@ public class Data
         return 0;
     }
 
-    public String getDataFormatada(int codFormato)
+    public String getDataFormatada()
     {
         // 31 de março de 2023
         // Terça-feira, 31 de março de 2023
