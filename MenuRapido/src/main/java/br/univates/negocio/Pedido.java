@@ -6,6 +6,7 @@ package br.univates.negocio;
 
 import br.univates.raiz.Data;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Pedido implements Comparable<Pedido>{
     private TipoPagamento pagamento;
     private ArrayList<ItemPedido> itemPedido;
     private int pago;
-    private String data;
+    private String dataString;
 
     public Pedido(int idPedido, StatusAtendimento statusAtendimento, Mesa mesa, TipoPagamento pagamento, ArrayList<ItemPedido> itemPedido, int pago, String data) {
         this.idPedido = idPedido;
@@ -28,11 +29,11 @@ public class Pedido implements Comparable<Pedido>{
         this.pagamento = pagamento;
         this.itemPedido = itemPedido;
         this.pago = pago;
-        this.data = data;
+        this.dataString = data;
     }
 
     public Pedido() {
-        Data data = new Data();
+        Data dataAux = new Data();
         
         this.idPedido = 0;
         this.statusAtendimento = null;
@@ -40,7 +41,7 @@ public class Pedido implements Comparable<Pedido>{
         this.pagamento = null;
         this.itemPedido = new ArrayList();
         this.pago = 0;
-        this.data = data.getDataFormatada();
+        this.dataString = dataAux.getDataFormatada();
     }
     
     public int getIdPedido() {
@@ -78,10 +79,10 @@ public class Pedido implements Comparable<Pedido>{
         return pago;
     }
 
-    public String getData() {
-        return data;
+    public String getDataString() {
+        return dataString;
     }
-    
+
     public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
     }
@@ -106,8 +107,8 @@ public class Pedido implements Comparable<Pedido>{
         this.pago = pago;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataString(String data) {
+        this.dataString = data;
     }
     
     @Override
@@ -132,7 +133,7 @@ public class Pedido implements Comparable<Pedido>{
     @Override
     public Pedido clone()
     {
-        return new Pedido(this.idPedido, this.statusAtendimento, this.mesa, this.pagamento, this.itemPedido, this.pago, this.data);
+        return new Pedido(this.idPedido, this.statusAtendimento, this.mesa, this.pagamento, this.itemPedido, this.pago, this.dataString);
     }
     
 }

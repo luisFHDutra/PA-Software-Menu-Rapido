@@ -45,7 +45,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             Integer idStatus = null;
             if (pedido.getStatusAtendimento() != null) idStatus = pedido.getStatusAtendimento().getIdStatus();
             
-            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getPago(), java.sql.Date.valueOf(pedido.getData()), pedido.getMesa().getNroMesa(), idStatus, idTipo);
+            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getDataString(), pedido.getPago(), pedido.getMesa().getNroMesa(), idStatus, idTipo);
             
             ArrayList<ItemPedido> item = pedido.getItemPedido();
             for (ItemPedido itemPedido : item) 

@@ -36,6 +36,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.btnTelaPedidos.setEnabled(false);
         this.btnTelaPagamento.setEnabled(false);
         this.btnTelaStatusPedidos.setEnabled(false);
+        this.btnTelaRelatorio.setEnabled(false);
         
         this.setLocationRelativeTo(null);
     }
@@ -77,6 +78,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
         btnTelaTipoPagamento = new javax.swing.JMenuItem();
         btnTelaStatusAtendimento = new javax.swing.JMenuItem();
         btnTelaProdutos = new javax.swing.JMenuItem();
+        btnTelaRelatorio = new javax.swing.JMenuItem();
         btnSair = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
@@ -177,6 +179,14 @@ public class TelaMenuUI extends javax.swing.JFrame {
 
         btnSistema.add(jMenu1);
 
+        btnTelaRelatorio.setText("Relatório");
+        btnTelaRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelaRelatorioActionPerformed(evt);
+            }
+        });
+        btnSistema.add(btnTelaRelatorio);
+
         btnSair.setText("Sair");
         btnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,6 +277,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 this.btnTelaStatusAtendimento.setEnabled(true);
                 this.btnTelaTipoPagamento.setEnabled(true);
                 this.btnTelaUsuario.setEnabled(true);
+                this.btnTelaRelatorio.setEnabled(true);
             } else {
                 this.btnTelaCategoria.setEnabled(false);
                 this.btnTelaMesas.setEnabled(false);
@@ -274,6 +285,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
                 this.btnTelaStatusAtendimento.setEnabled(false);
                 this.btnTelaTipoPagamento.setEnabled(false);
                 this.btnTelaUsuario.setEnabled(false);
+                this.btnTelaRelatorio.setEnabled(false);
             }
             
             this.btnTelaPedidos.setEnabled(true);
@@ -340,6 +352,12 @@ public class TelaMenuUI extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnTelaStatusPedidosActionPerformed
 
+    private void btnTelaRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelaRelatorioActionPerformed
+        TelaRelatorioPedidosUI tela = new TelaRelatorioPedidosUI(this);
+        tela.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnTelaRelatorioActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnLoggin;
     private javax.swing.JMenuItem btnSair;
@@ -349,6 +367,7 @@ public class TelaMenuUI extends javax.swing.JFrame {
     private javax.swing.JButton btnTelaPagamento;
     private javax.swing.JButton btnTelaPedidos;
     private javax.swing.JMenuItem btnTelaProdutos;
+    private javax.swing.JMenuItem btnTelaRelatorio;
     private javax.swing.JMenuItem btnTelaStatusAtendimento;
     private javax.swing.JButton btnTelaStatusPedidos;
     private javax.swing.JMenuItem btnTelaTipoPagamento;

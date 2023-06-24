@@ -37,7 +37,7 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
             @Override
             public boolean isAccept(Pedido record)
             {
-                return record.getStatusAtendimento().getIdStatus() != 3 && record.getData().equals(Sys.getInstance().getCurrentDate());
+                return record.getStatusAtendimento().getIdStatus() != 3 && record.getDataString().equals(Sys.getInstance().getCurrentDate());
             }
         } );
         
@@ -62,7 +62,7 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public void setProduto(Pedido pedido) {
+    public void setPedido(Pedido pedido) {
 
         this.pedidoCurrent = pedido;
         
@@ -225,7 +225,7 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
         TableModelStatusPedidos model = (TableModelStatusPedidos) this.tbConsulta.getModel();
         Pedido pedido = model.getPedidos().get(linhaSelecionada);
 
-        this.setProduto(pedido);
+        this.setPedido(pedido);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
