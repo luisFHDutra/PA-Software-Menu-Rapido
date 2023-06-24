@@ -32,15 +32,14 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
         initComponents();
 
         this.setTitle("Pagamento");
-        
+
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
             @Override
-            public boolean isAccept(Pedido record)
-            {
-                return record.getStatusAtendimento().getIdStatus() == 3;
+            public boolean isAccept(Pedido record) {
+                return record.getStatusAtendimento().getIdStatus() == 3 && record.getPago() == 0;
             }
-        } );
-        
+        });
+
         this.tbConsulta.setModel(new TableModelPagamento(pedidos));
 
         this.btnSalvar.setEnabled(false);
@@ -65,7 +64,7 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
     public void setProduto(Pedido pedido) {
 
         this.pedidoCurrent = pedido;
-        
+
         if (pedido.getPagamento() != null) {
             this.cbTipoPagamento.setSelectedItem(pedido.getPagamento());
         }
@@ -284,7 +283,7 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
         IDao<Pedido, Integer> dao = DaoFactory.criarPedidoDao();
 
         try {
-            
+
             dao.update(pedidoCurrent);
 
             this.tbConsulta.revalidate();
@@ -317,24 +316,37 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
         if (pedidoCurrent != null) {
-            try {
-                int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja pagar?",
-                        "Confirmação",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (x == 0) {
-                    DaoFactory.criarPedidoDao().delete(pedidoCurrent.getIdPedido());
-
-                    TableModelPagamento model = (TableModelPagamento) this.tbConsulta.getModel();
-                    model.getPedidos().remove(pedidoCurrent);
-
+            int x = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja pagar?",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION);
+            if (x == 0) {
+                this.pedidoCurrent.setPago(1);
+                
+                IDao<Pedido, Integer> dao = DaoFactory.criarPedidoDao();
+                
+                try {
+                    
+                    dao.update(pedidoCurrent);
+                    
                     this.tbConsulta.revalidate();
                     this.tbConsulta.repaint();
-
-                    this.pedidoCurrent = null;
+                    
+                    this.cbTipoPagamento.setEnabled(false);
+                    
+                    this.btnSalvar.setEnabled(false);
+                    this.btnCancelar.setEnabled(false);
+                    this.btnVoltar.setEnabled(true);
+                } catch (NotFoundException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
                 }
-            } catch (NotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Este pedido não pode ser pago", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                
+                TableModelPagamento model = (TableModelPagamento) this.tbConsulta.getModel();
+                model.getPedidos().remove(pedidoCurrent);
+                
+                this.tbConsulta.revalidate();
+                this.tbConsulta.repaint();
+                
+                this.pedidoCurrent = null;
             }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um pedido na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);

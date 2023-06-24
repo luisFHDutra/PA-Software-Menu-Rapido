@@ -401,7 +401,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
 
         try {
             if (novo) {
-
+                
                 dao.create(pedidoCurrent);
 
                 ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
