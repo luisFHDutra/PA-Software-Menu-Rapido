@@ -367,7 +367,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        telaPedidos.itens = itensPedidos;
+        telaPedidos.pedidoCurrent.setItemPedido(itensPedidos);
         telaPedidos.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
@@ -405,7 +405,7 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
         } else {
             this.itemCurrent.setValorProduto(this.itemCurrent.getProduto().getValorProduto());
         }
-    
+        
         if(novo == false) {
         
             this.itensPedidos.remove(this.tbConsulta.getSelectedRow());

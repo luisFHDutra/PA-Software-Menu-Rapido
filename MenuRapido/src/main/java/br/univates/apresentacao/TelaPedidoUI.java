@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
  */
 public class TelaPedidoUI extends javax.swing.JFrame {
 
-    private Pedido pedidoCurrent;
+    public Pedido pedidoCurrent;
     private Pedido pedidoOld;
     private boolean novo;
     private TelaMenuUI telaMenu;
@@ -72,7 +72,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public void setProduto(Pedido pedido) {
+    public void setPedido(Pedido pedido) {
 
         this.pedidoCurrent = pedido;
 
@@ -301,7 +301,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         TableModelPedido model = (TableModelPedido) this.tbConsulta.getModel();
         Pedido pedido = model.getPedidos().get(linhaSelecionada);
 
-        this.setProduto(pedido);
+        this.setPedido(pedido);
     }//GEN-LAST:event_tbConsultaMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -321,7 +321,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
             this.pedidoOld = pedidoCurrent.clone();
         }
 
-        this.setProduto(new Pedido());
+        this.setPedido(new Pedido());
         this.tfID.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
@@ -410,7 +410,13 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                 
                 dao.create(pedidoCurrent);
 
-                ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll();
+                ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+                    @Override
+                    public boolean isAccept(Pedido record) {
+                    return record.getDataString().equals(Sys.getInstance().getCurrentDate());
+                }
+                });
+                
                 this.tbConsulta.setModel(new TableModelPedido(pedidos));
             } else {
 

@@ -6,7 +6,6 @@ package br.univates.apresentacao;
 
 import br.univates.menurapido.Sys;
 import br.univates.negocio.ItemPedido;
-import br.univates.negocio.Mesa;
 import br.univates.negocio.Pedido;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.negocio.TipoPagamento;

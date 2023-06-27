@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -121,6 +122,27 @@ public class DataBaseConnectionManager
         }
     }
 
+    public void executeUpdate(String sql) throws SQLException {
+        try {
+            
+            this.connection.createStatement().executeUpdate(sql);
+        } finally {
+            // Fecha a conexão para liberar os recursos
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        try {
+            
+            return this.connection.prepareStatement(sql);
+        } finally {
+            // Não fechamos a conexão aqui, pois o PreparedStatement será responsável por fechá-la
+        }
+    }
+    
     public void runSQL(String sql) throws DataBaseException
     {
         try

@@ -6,7 +6,6 @@ package br.univates.negocio;
 
 import br.univates.raiz.Data;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *

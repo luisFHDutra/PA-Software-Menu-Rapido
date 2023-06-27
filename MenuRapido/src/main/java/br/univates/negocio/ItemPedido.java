@@ -22,6 +22,8 @@ public class ItemPedido implements Comparable<ItemPedido> {
 
     public ItemPedido() {
        this.produto = null;
+       this.valorProduto = 0;
+       this.quantidade = 0;
     }
     
     public Produto getProduto() {

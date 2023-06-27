@@ -11,11 +11,11 @@ import br.univates.negocio.Pedido;
 import br.univates.negocio.Produto;
 import br.univates.negocio.StatusAtendimento;
 import br.univates.negocio.TipoPagamento;
-import br.univates.raiz.Data;
 import br.univates.raiz.db.DataBaseConnectionManager;
 import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.DaoAdapter;
 import br.univates.raiz.persistence.NotFoundException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
         
         try {
             dbcm.runSQL("begin transaction;");
-   
+            
             String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?, ?, ?);";
 
             Integer idTipo = null;
@@ -44,16 +44,11 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             
             Integer idStatus = null;
             if (pedido.getStatusAtendimento() != null) idStatus = pedido.getStatusAtendimento().getIdStatus();
-            
+
             dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getDataString(), pedido.getPago(), pedido.getMesa().getNroMesa(), idStatus, idTipo);
             
-            ArrayList<ItemPedido> item = pedido.getItemPedido();
-            for (ItemPedido itemPedido : item) 
-            {
-                String sqlItem = "INSERT INTO item_pedido VALUES ( ?, ?, ?, ?);";
-                dbcm.runPreparedSQL(sqlItem, itemPedido.getProduto().getIdProduto(), pedido.getIdPedido(),
-                        itemPedido.getQuantidade(), itemPedido.getValorProduto() );
-            }
+            createItem(pedido);
+            
             dbcm.runSQL("commit;");
             
         } catch (DataBaseException ex) {
@@ -62,12 +57,41 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             } catch (DataBaseException ex1) {
                 Logger.getLogger(PedidoDaoPostgres.class.getName()).log(Level.SEVERE, null, ex1);
             }
+
             JOptionPane.showMessageDialog(null, 
                     "Erro no banco de dados",
                     "Inserção no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    private void createItem(Pedido pedido) {
+       DataBaseConnectionManager dbcm = Sys.getInstance().getDB();
+        
+        ArrayList<ItemPedido> itens = pedido.getItemPedido();
+
+        String sql = "INSERT INTO item_pedido (id_produto, id_pedido, quantidade, pro_valor) VALUES (?, ?, ?, ?)";
+
+        PreparedStatement statement = null;
+        try {
+
+            // Prepara a instrução SQL
+            statement = dbcm.prepareStatement(sql);
+
+            // Percorre a lista de itens e insere cada um no banco de dados
+            for (ItemPedido item : itens) {
+                statement.setInt(1, item.getProduto().getIdProduto());
+                statement.setInt(2, pedido.getIdPedido());
+                statement.setInt(3, item.getQuantidade());
+                statement.setDouble(4, item.getValorProduto());
+
+                // Executa a instrução SQL para inserir o item
+                statement.executeUpdate();
+            }
+    }   catch (SQLException ex) {
+            Logger.getLogger(PedidoDaoPostgres.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @Override
     public Pedido read(Integer id_pedido) {
         Pedido p = null;

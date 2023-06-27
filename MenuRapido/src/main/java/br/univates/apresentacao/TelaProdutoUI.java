@@ -369,10 +369,10 @@ public class TelaProdutoUI extends javax.swing.JFrame {
 
             this.novo = false;
             this.tfID.setEditable(false);
-            this.tfDescricao.setEditable(false);
+            this.tfDescricao.setEditable(true);
             this.tfValor.setEditable(true);
-            this.tfNome.setEditable(false);
-            this.cbCategoria.setEnabled(false);
+            this.tfNome.setEditable(true);
+            this.cbCategoria.setEnabled(true);
             this.tfNome.requestFocus();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um produto na tabela", "Aviso", JOptionPane.INFORMATION_MESSAGE);
