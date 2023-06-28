@@ -370,6 +370,9 @@ public class TelaRelatorioPedidosUI extends javax.swing.JFrame {
 
             this.tbConsulta.setModel(new TableModelRelatorioPedidos(pedidos));
 
+            this.tbConsulta.revalidate();
+            this.tbConsulta.repaint();
+            
             this.lbQtdPedidos.setText("" + pedidos.size());
 
             double valorTotal = 0;
