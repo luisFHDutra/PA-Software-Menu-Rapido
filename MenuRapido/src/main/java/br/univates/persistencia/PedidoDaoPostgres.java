@@ -272,13 +272,16 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
 
             String sql = "";
             
-            if (pedido.getPagamento() != null) {
-                sql = "UPDATE pedido SET id_tipo = ? WHERE id_pedido = ?";
-                dbcm.runPreparedSQL(sql, pedido.getPagamento().getIdTipo(), pedido.getIdPedido());
-            } else if (pedido.getStatusAtendimento() != null) {
-                sql = "UPDATE pedido SET id_status = ? WHERE id_pedido = ?";
-                dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getIdPedido());
-            } else if (pedido.getPagamento() == null && pedido.getStatusAtendimento() == null) {
+            if (pedido.getPagamento() != null) 
+            {
+                sql = "UPDATE pedido SET id_tipo = ?, pago = ?, nro_mesa = ? WHERE id_pedido = ?";
+                dbcm.runPreparedSQL(sql, pedido.getPagamento().getIdTipo(), pedido.getPago(), pedido.getMesa().getNroMesa(), pedido.getIdPedido());
+            } else if (pedido.getStatusAtendimento() != null) 
+            {
+                sql = "UPDATE pedido SET id_status = ?, pago = ?, nro_mesa = ? WHERE id_pedido = ?";
+                dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getPago(), pedido.getMesa().getNroMesa(), pedido.getIdPedido());
+            } else if (pedido.getPagamento() == null && pedido.getStatusAtendimento() == null) 
+            {
                 sql = "UPDATE pedido SET nro_mesa = ? WHERE id_pedido = ?";
                 dbcm.runPreparedSQL(sql, pedido.getMesa().getNroMesa(), pedido.getIdPedido());
             }
