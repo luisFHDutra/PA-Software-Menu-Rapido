@@ -56,7 +56,7 @@ public class TelaStatusUI extends javax.swing.JFrame {
 
         this.statusCurrent = status;
 
-        if (status.getIdStatus() == 0) {
+        if (status.getIdStatus() == null) {
             this.tfID.setText("");
         } else {
             this.tfID.setInteger(status.getIdStatus());

@@ -10,20 +10,20 @@ package br.univates.negocio;
  */
 public class TipoPagamento implements Comparable<TipoPagamento> {
     
-    private int idTipo;
+    private Integer idTipo;
     private String nome;
 
-    public TipoPagamento(int idTipo, String nome) {
+    public TipoPagamento(Integer idTipo, String nome) {
         this.idTipo = idTipo;
         this.nome = nome;
     }
 
     public TipoPagamento() {
-        this.idTipo = 0;
+        this.idTipo = null;
         this.nome = "";
     }
     
-    public int getIdTipo() {
+    public Integer getIdTipo() {
         return idTipo;
     }
 
@@ -31,7 +31,7 @@ public class TipoPagamento implements Comparable<TipoPagamento> {
         return nome;
     }
 
-    public void setIdTipo(int idTipo) {
+    public void setIdTipo(Integer idTipo) {
         this.idTipo = idTipo;
     }
 
@@ -54,8 +54,17 @@ public class TipoPagamento implements Comparable<TipoPagamento> {
     @Override
     public boolean equals(Object objeto)
     {
-        TipoPagamento outroTipo = (TipoPagamento)objeto;
-        return ( this.idTipo == outroTipo.getIdTipo() );
+        if (this == objeto) {
+            return true;
+        }
+        if (objeto == null || getClass() != objeto.getClass()) {
+            return false;
+        }
+        TipoPagamento outroTipo = (TipoPagamento) objeto;
+        if (idTipo == null) {
+            return outroTipo.getIdTipo() == null;
+        }
+        return idTipo.equals(outroTipo.getIdTipo());
     }
     
     @Override

@@ -56,7 +56,7 @@ public class TelaTipoUI extends javax.swing.JFrame {
 
         this.tipoCurrent = tipo;
 
-        if (tipo.getIdTipo() == 0) {
+        if (tipo.getIdTipo() == null) {
             this.tfID.setText("");
         } else {
             this.tfID.setInteger(tipo.getIdTipo());

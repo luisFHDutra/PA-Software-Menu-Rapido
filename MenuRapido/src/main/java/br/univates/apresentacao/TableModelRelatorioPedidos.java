@@ -33,13 +33,13 @@ public class TableModelRelatorioPedidos extends TableModelViewAdapter{
     @Override
     public int getColumnCount()
     {
-        return 4;
+        return 5;
     }
 
     @Override
     public String getColumnName(int columnIndex)
     {
-        String[] col = { "ID","Mesa","Valor Total","Data de Abertura" };
+        String[] col = { "ID","Status do Pedido","Mesa","Valor Total","Data de Abertura" };
         return col[columnIndex];
     }
 
@@ -57,7 +57,7 @@ public class TableModelRelatorioPedidos extends TableModelViewAdapter{
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         Pedido aux = lista.get(rowIndex);
-        Object[] vet = { aux.getIdPedido(), 
+        Object[] vet = { aux.getIdPedido(), aux.getStatusAtendimento().getNome(),
             aux.getMesa().getNroMesa(), aux.getTotalPedido(), aux.getDataString() };
         return vet[columnIndex];
     }

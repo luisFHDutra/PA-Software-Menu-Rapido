@@ -56,13 +56,13 @@ public class TelaMesaUI extends javax.swing.JFrame {
 
         this.mesaCurrent = mesa;
 
-        if (mesa.getNroMesa() == 0) {
+        if (mesa.getNroMesa() == null) {
             this.tfNumero.setText("");
         } else {
             this.tfNumero.setInteger(mesa.getNroMesa());
         }
 
-        if (mesa.getQuantidadeLugares() == 0) {
+        if (mesa.getQuantidadeLugares() == null) {
             this.tfQuantLugares.setText("");
         } else {
             this.tfQuantLugares.setInteger(mesa.getQuantidadeLugares());

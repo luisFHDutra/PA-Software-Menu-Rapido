@@ -10,20 +10,20 @@ package br.univates.negocio;
  */
 public class CategoriaProduto implements Comparable<CategoriaProduto> {
     
-    private int idCategoria;
+    private Integer idCategoria;
     private String nome;
 
-    public CategoriaProduto(int idCategoria, String nome) {
+    public CategoriaProduto(Integer idCategoria, String nome) {
         this.idCategoria = idCategoria;
         this.nome = nome;
     }
 
     public CategoriaProduto() {
-        this.idCategoria = 0;
+        this.idCategoria = null;
         this.nome = "";
     }
     
-    public int getIdCategoria() {
+    public Integer getIdCategoria() {
         return idCategoria;
     }
 
@@ -31,7 +31,7 @@ public class CategoriaProduto implements Comparable<CategoriaProduto> {
         return nome;
     }
 
-    public void setIdCategoria(int idCategoria) {
+    public void setIdCategoria(Integer idCategoria) {
         this.idCategoria = idCategoria;
     }
 
@@ -54,8 +54,17 @@ public class CategoriaProduto implements Comparable<CategoriaProduto> {
     @Override
     public boolean equals(Object objeto)
     {
-        CategoriaProduto outraCategoria = (CategoriaProduto)objeto;
-        return ( this.idCategoria == outraCategoria.getIdCategoria() );
+        if (this == objeto) {
+            return true;
+        }
+        if (objeto == null || getClass() != objeto.getClass()) {
+            return false;
+        }
+        CategoriaProduto outraCategoria = (CategoriaProduto) objeto;
+        if (idCategoria == null) {
+            return outraCategoria.getIdCategoria() == null;
+        }
+        return idCategoria.equals(outraCategoria.getIdCategoria());
     }
     
     @Override

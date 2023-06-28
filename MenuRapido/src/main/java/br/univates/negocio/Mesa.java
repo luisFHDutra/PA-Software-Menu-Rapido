@@ -10,32 +10,32 @@ package br.univates.negocio;
  */
 public class Mesa implements Comparable<Mesa>{
     
-    private int nroMesa;
-    private int quantidadeLugares;
+    private Integer nroMesa;
+    private Integer quantidadeLugares;
 
-    public Mesa(int nroMesa, int quantidadeLugares) {
+    public Mesa(Integer nroMesa, Integer quantidadeLugares) {
         this.nroMesa = nroMesa;
         this.quantidadeLugares = quantidadeLugares;
     }
 
     public Mesa() {
-        this.nroMesa = 0;
-        this.quantidadeLugares = 0;
+        this.nroMesa = null;
+        this.quantidadeLugares = null;
     }
     
-    public int getNroMesa() {
+    public Integer getNroMesa() {
         return nroMesa;
     }
 
-    public int getQuantidadeLugares() {
+    public Integer getQuantidadeLugares() {
         return quantidadeLugares;
     }
 
-    public void setNroMesa(int nroMesa) {
+    public void setNroMesa(Integer nroMesa) {
         this.nroMesa = nroMesa;
     }
 
-    public void setQuantidadeLugares(int quantidadeLugares) {
+    public void setQuantidadeLugares(Integer quantidadeLugares) {
         this.quantidadeLugares = quantidadeLugares;
     }
     
@@ -54,8 +54,17 @@ public class Mesa implements Comparable<Mesa>{
     @Override
     public boolean equals(Object objeto)
     {
-        Mesa outraMesa = (Mesa)objeto;
-        return ( toString().equalsIgnoreCase(outraMesa.getNroMesa()+"") );
+        if (this == objeto) {
+            return true;
+        }
+        if (objeto == null || getClass() != objeto.getClass()) {
+            return false;
+        }
+        Mesa outraMesa = (Mesa) objeto;
+        if (nroMesa == null) {
+            return outraMesa.getNroMesa() == null;
+        }
+        return nroMesa.equals(outraMesa.getNroMesa());
     }
     
     @Override

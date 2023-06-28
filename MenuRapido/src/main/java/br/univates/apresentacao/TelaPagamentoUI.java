@@ -36,7 +36,12 @@ public class TelaPagamentoUI extends javax.swing.JFrame {
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
             @Override
             public boolean isAccept(Pedido record) {
-                return record.getStatusAtendimento().getIdStatus() == 3 && record.getPago() == 0 && record.getDataString().equals(Sys.getInstance().getCurrentDate());
+                
+                if (record.getStatusAtendimento() != null) {
+                    return record.getStatusAtendimento().getIdStatus() == 3 && record.getPago() == 0 && record.getDataString().equals(Sys.getInstance().getCurrentDate());
+                }
+                
+                return record.getPago() == 0 && record.getDataString().equals(Sys.getInstance().getCurrentDate());
             }
         });
 

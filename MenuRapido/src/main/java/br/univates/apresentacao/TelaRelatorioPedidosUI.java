@@ -15,6 +15,7 @@ import br.univates.raiz.InvalidDateException;
 import br.univates.raiz.db.DataBaseException;
 import br.univates.raiz.persistence.Filter;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -32,7 +33,7 @@ public class TelaRelatorioPedidosUI extends javax.swing.JFrame {
     public int ano;
     public int mes;
     public int dia;
-    
+
     /**
      * Creates new form TelaUsuarioUI
      */
@@ -42,16 +43,16 @@ public class TelaRelatorioPedidosUI extends javax.swing.JFrame {
         this.setTitle("Relatório dos Pedidos");
 
         this.pedidoCurrent = new Pedido();
-        
+
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
             @Override
             public boolean isAccept(Pedido record) {
                 return record.getIdPedido() == 0;
             }
-            });
+        });
 
         this.tbConsulta.setModel(new TableModelRelatorioPedidos(pedidos));
-        
+
         ArrayList<TipoPagamento> tipos = DaoFactory.criarTipoPagamentoDao().readAll();
         if (tipos == null) {
             this.initCBTipo(new ArrayList<>());
@@ -65,11 +66,11 @@ public class TelaRelatorioPedidosUI extends javax.swing.JFrame {
         } else {
             this.initCBStatus(status);
         }
-        
+
         this.btnVoltar.setEnabled(true);
 
         this.telaMenu = tela;
-        
+
         this.setLocationRelativeTo(null);
     }
 
@@ -78,15 +79,17 @@ public class TelaRelatorioPedidosUI extends javax.swing.JFrame {
         for (TipoPagamento tipo : tipos) {
             cbTipoPagamento.addItem(tipo);
         }
+        this.cbTipoPagamento.addItem(null);
     }
-    
+
     private void initCBStatus(ArrayList<StatusAtendimento> status) {
         this.cbStatusAtendimento.removeAllItems();
         for (StatusAtendimento statusAtendimento : status) {
             cbStatusAtendimento.addItem(statusAtendimento);
         }
+        this.cbStatusAtendimento.addItem(null);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -309,43 +312,78 @@ public class TelaRelatorioPedidosUI extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void cbStatusAtendimentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbStatusAtendimentoFocusLost
-        this.pedidoCurrent.setStatusAtendimento((StatusAtendimento) this.cbStatusAtendimento.getSelectedItem());
+        if (this.cbStatusAtendimento.getSelectedItem() != null) {
+            this.pedidoCurrent.setStatusAtendimento((StatusAtendimento) this.cbStatusAtendimento.getSelectedItem());
+        }
     }//GEN-LAST:event_cbStatusAtendimentoFocusLost
 
     private void cbTipoPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbTipoPagamentoFocusLost
-        this.pedidoCurrent.setPagamento((TipoPagamento) this.cbTipoPagamento.getSelectedItem());
+        if (this.cbTipoPagamento.getSelectedItem() != null) {
+            this.pedidoCurrent.setPagamento((TipoPagamento) this.cbTipoPagamento.getSelectedItem());
+        }
     }//GEN-LAST:event_cbTipoPagamentoFocusLost
 
     private void btnConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaActionPerformed
         try {
             Data data = new Data(dia, mes, ano);
             this.dataSelecionada = data.getDataFormatada();
+
+            ArrayList<Pedido> pedidos = null;
             
-            ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
-            @Override
-            public boolean isAccept(Pedido record) {
-                return record.getStatusAtendimento().getIdStatus() == pedidoCurrent.getStatusAtendimento().getIdStatus()
-                        && record.getPagamento().getIdTipo() == pedidoCurrent.getPagamento().getIdTipo()
-                        && record.getDataString().equals(dataSelecionada);
+            if (pedidoCurrent.getPagamento() == null && pedidoCurrent.getStatusAtendimento() == null) 
+            {
+                pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+                    @Override
+                    public boolean isAccept(Pedido record) {
+                        return record.getDataString().equals(dataSelecionada);
+                    }
+                });
+            } else if (pedidoCurrent.getPagamento() == null) 
+            {
+                pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+                    @Override
+                    public boolean isAccept(Pedido record) {
+                        return Objects.equals(record.getStatusAtendimento().getIdStatus(), pedidoCurrent.getStatusAtendimento().getIdStatus())
+                                && record.getDataString().equals(dataSelecionada);
+                    }
+                });
+            } else if (pedidoCurrent.getStatusAtendimento() == null) 
+            {
+                pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+                    @Override
+                    public boolean isAccept(Pedido record) {
+                        return Objects.equals(record.getPagamento().getIdTipo(), pedidoCurrent.getPagamento().getIdTipo())
+                                && record.getDataString().equals(dataSelecionada);
+                    }
+                });
+            } else 
+            {
+                pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
+                    @Override
+                    public boolean isAccept(Pedido record) {
+                        return Objects.equals(record.getStatusAtendimento().getIdStatus(), pedidoCurrent.getStatusAtendimento().getIdStatus())
+                                && Objects.equals(record.getPagamento().getIdTipo(), pedidoCurrent.getPagamento().getIdTipo())
+                                && record.getDataString().equals(dataSelecionada);
+                    }
+                });
             }
-            });
 
             this.tbConsulta.setModel(new TableModelRelatorioPedidos(pedidos));
-            
-            this.lbQtdPedidos.setText(""+pedidos.size());
-            
+
+            this.lbQtdPedidos.setText("" + pedidos.size());
+
             double valorTotal = 0;
-        
-            for (Pedido pedido: pedidos) {
+
+            for (Pedido pedido : pedidos) {
                 valorTotal += pedido.getTotalPedido();
             }
-            
-            this.lbFaturamentoTotal.setText(""+valorTotal);
-            
+
+            this.lbFaturamentoTotal.setText("" + valorTotal);
+
         } catch (InvalidDateException ex) {
             Logger.getLogger(TelaRelatorioPedidosUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_btnConsultaActionPerformed
 
     private void tfAnoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfAnoFocusLost

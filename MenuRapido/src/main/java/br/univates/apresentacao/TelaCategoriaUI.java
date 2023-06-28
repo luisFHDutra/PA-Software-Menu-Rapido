@@ -56,7 +56,7 @@ public class TelaCategoriaUI extends javax.swing.JFrame {
 
         this.categoriaCurrent = categoria;
 
-        if (categoria.getIdCategoria() == 0) {
+        if (categoria.getIdCategoria() == null) {
             this.tfID.setText("");
         } else {
             this.tfID.setInteger(categoria.getIdCategoria());

@@ -42,7 +42,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
             @Override
             public boolean isAccept(Pedido record) {
-                return record.getDataString().equals(Sys.getInstance().getCurrentDate());
+                return (record.getDataString().equals(Sys.getInstance().getCurrentDate()) && record.getPago() == 0);
             }
         });
 
@@ -413,7 +413,7 @@ public class TelaPedidoUI extends javax.swing.JFrame {
                 ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
                     @Override
                     public boolean isAccept(Pedido record) {
-                    return record.getDataString().equals(Sys.getInstance().getCurrentDate());
+                    return (record.getDataString().equals(Sys.getInstance().getCurrentDate()) && record.getPago() == 0);
                 }
                 });
                 

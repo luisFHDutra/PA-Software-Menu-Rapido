@@ -33,24 +33,18 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
     public void create(Pedido pedido) {
         DataBaseConnectionManager dbcm;
         dbcm = Sys.getInstance().getDB();
-        
+
         try {
             dbcm.runSQL("begin transaction;");
-            
-            String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?, ?, ?);";
 
-            Integer idTipo = null;
-            if (pedido.getPagamento()!= null) idTipo = pedido.getPagamento().getIdTipo();
-            
-            Integer idStatus = null;
-            if (pedido.getStatusAtendimento() != null) idStatus = pedido.getStatusAtendimento().getIdStatus();
+            String sql = "INSERT INTO pedido VALUES ( ?, ?, ?, ?);";
 
-            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getDataString(), pedido.getPago(), pedido.getMesa().getNroMesa(), idStatus, idTipo);
-            
+            dbcm.runPreparedSQL(sql, pedido.getIdPedido(), pedido.getDataString(), pedido.getPago(), pedido.getMesa().getNroMesa());
+
             createItem(pedido);
-            
+
             dbcm.runSQL("commit;");
-            
+
         } catch (DataBaseException ex) {
             try {
                 dbcm.runSQL("rollback;");
@@ -58,15 +52,15 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                 Logger.getLogger(PedidoDaoPostgres.class.getName()).log(Level.SEVERE, null, ex1);
             }
 
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(null,
                     "Erro no banco de dados",
                     "Inserção no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void createItem(Pedido pedido) {
-       DataBaseConnectionManager dbcm = Sys.getInstance().getDB();
-        
+        DataBaseConnectionManager dbcm = Sys.getInstance().getDB();
+
         ArrayList<ItemPedido> itens = pedido.getItemPedido();
 
         String sql = "INSERT INTO item_pedido (id_produto, id_pedido, quantidade, pro_valor) VALUES (?, ?, ?, ?)";
@@ -87,11 +81,11 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                 // Executa a instrução SQL para inserir o item
                 statement.executeUpdate();
             }
-    }   catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(PedidoDaoPostgres.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public Pedido read(Integer id_pedido) {
         Pedido p = null;
@@ -113,7 +107,7 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                 int idTipo = rs.getInt("id_tipo");
                 int pago = rs.getInt("pago");
                 String data = rs.getDate("data_abertura").toString();
-                
+
                 StatusAtendimento s = null;
                 try {
                     s = DaoFactory.criarStatusAtendimentoDao().read(idStatus);
@@ -136,10 +130,10 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                 }
 
                 ArrayList<ItemPedido> itens = new ArrayList();
-                
+
                 String sqlItem = "SELECT * FROM item_pedido WHERE id_pedido = ?;";
                 ResultSet rsItem = dbcm.runPreparedQuerySQL(sqlItem, id_pedido);
-                
+
                 if (rsItem.isBeforeFirst()) // acho alguma coisa?
                 {
                     rsItem.next();
@@ -147,32 +141,29 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                         int idProduto = rsItem.getInt("id_produto");
                         int quantidade = rsItem.getInt("quantidade");
                         double pro_valor = rsItem.getDouble("pro_valor");
-                        
+
                         Produto pro = null;
                         try {
                             pro = DaoFactory.criarProdutoDao().read(idProduto);
                         } catch (NotFoundException ex) {
                             System.out.println("não existe");
                         }
-                        
+
                         ItemPedido i = new ItemPedido(pro, pro_valor, quantidade);
                         itens.add(i);
-                        
+
                         rs.next();
                     }
                 }
-                
+
                 p = new Pedido(id, s, m, t, itens, pago, data);
             }
-        }catch (DataBaseException ex)
-        {
-            JOptionPane.showMessageDialog(null, 
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
                     "Erro de sintaxe ou semântica",
                     "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
-        } 
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, 
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,
                     "DataType errado na query",
                     "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
@@ -195,15 +186,14 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
             if (rs.isBeforeFirst()) // acho alguma coisa?
             {
                 rs.next();
-                while (!rs.isAfterLast()) 
-                {
+                while (!rs.isAfterLast()) {
                     int idPedido = rs.getInt("id_pedido");
                     int idStatus = rs.getInt("id_status");
                     int mesa = rs.getInt("nro_mesa");
                     int idTipo = rs.getInt("id_tipo");
                     int pago = rs.getInt("pago");
                     String data = rs.getDate("data_abertura").toString();
-                    
+
                     StatusAtendimento s = null;
                     try {
                         s = DaoFactory.criarStatusAtendimentoDao().read(idStatus);
@@ -226,15 +216,14 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                     }
 
                     ArrayList<ItemPedido> itens = new ArrayList();
-                
+
                     String sqlItem = "SELECT * FROM item_pedido WHERE id_pedido = ?;";
                     ResultSet rsItem = dbcm.runPreparedQuerySQL(sqlItem, idPedido);
 
                     if (rsItem.isBeforeFirst()) // acho alguma coisa?
                     {
                         rsItem.next();
-                        while (!rsItem.isAfterLast()) 
-                        {
+                        while (!rsItem.isAfterLast()) {
                             int idProduto = rsItem.getInt("id_produto");
                             int quantidade = rsItem.getInt("quantidade");
                             double pro_valor = rsItem.getDouble("pro_valor");
@@ -254,22 +243,19 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
                     }
 
                     Pedido p = new Pedido(idPedido, s, m, t, itens, pago, data);
-                    
+
                     lista.add(p);
 
                     rs.next();
                 }
             }
 
-        }catch (DataBaseException ex)
-        {
-            JOptionPane.showMessageDialog(null, 
+        } catch (DataBaseException ex) {
+            JOptionPane.showMessageDialog(null,
                     "Erro de sintaxe ou semântica",
                     "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
-        } 
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, 
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,
                     "DataType errado na query",
                     "Consulta no banco de dados", JOptionPane.ERROR_MESSAGE);
         }
@@ -280,15 +266,29 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
     @Override
     public void update(Pedido pedido) throws NotFoundException {
         DataBaseConnectionManager dbcm;
-        
-        try
-        {
+
+        try {
             dbcm = Sys.getInstance().getDB();
+
+            String sql = "";
             
-            String sql = "UPDATE pedido SET id_status = ?, pago = ?, nro_mesa = ?, id_tipo = ?  WHERE id_pedido = ?";
-            dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getPago(), 
+            if (pedido.getPagamento() != null) {
+                sql = "UPDATE pedido SET id_tipo = ? WHERE id_pedido = ?";
+                dbcm.runPreparedSQL(sql, pedido.getPagamento().getIdTipo(), pedido.getIdPedido());
+            } else if (pedido.getStatusAtendimento() != null) {
+                sql = "UPDATE pedido SET id_status = ? WHERE id_pedido = ?";
+                dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getIdPedido());
+            } else if (pedido.getPagamento() == null && pedido.getStatusAtendimento() == null) {
+                sql = "UPDATE pedido SET nro_mesa = ? WHERE id_pedido = ?";
+                dbcm.runPreparedSQL(sql, pedido.getMesa().getNroMesa(), pedido.getIdPedido());
+            }
+            else {
+                sql = "UPDATE pedido SET id_status = ?, pago = ?, nro_mesa = ?, id_tipo = ?  WHERE id_pedido = ?";
+                dbcm.runPreparedSQL(sql, pedido.getStatusAtendimento().getIdStatus(), pedido.getPago(), 
                     pedido.getMesa().getNroMesa(), pedido.getPagamento().getIdTipo(), pedido.getIdPedido());
-        } 
+            }
+        }
+            
         catch (DataBaseException ex)
         {
             throw new NotFoundException();
@@ -298,19 +298,16 @@ public class PedidoDaoPostgres extends DaoAdapter<Pedido, Integer> {
     @Override
     public void delete(Integer id_pedido) throws NotFoundException {
         DataBaseConnectionManager dbcm;
-        
-        try
-        {
+
+        try {
             dbcm = Sys.getInstance().getDB();
-            
+
             String sqlDeleteItens = "DELETE FROM item_pedido WHERE id_pedido = ?";
             dbcm.runPreparedSQL(sqlDeleteItens, id_pedido);
-            
+
             String sql = "DELETE FROM pedido WHERE id_pedido = ?";
-            dbcm.runPreparedSQL(sql, id_pedido );
-        } 
-        catch (DataBaseException ex)
-        {
+            dbcm.runPreparedSQL(sql, id_pedido);
+        } catch (DataBaseException ex) {
             throw new NotFoundException();
         }
     }

@@ -10,20 +10,20 @@ package br.univates.negocio;
  */
 public class StatusAtendimento implements Comparable<StatusAtendimento> {
     
-    private int idStatus;
+    private Integer idStatus;
     private String nome;
 
-    public StatusAtendimento(int idStatus, String nome) {
+    public StatusAtendimento(Integer idStatus, String nome) {
         this.idStatus = idStatus;
         this.nome = nome;
     }
 
     public StatusAtendimento() {
-        this.idStatus = 0;
+        this.idStatus = null;
         this.nome = "";
     }
     
-    public int getIdStatus() {
+    public Integer getIdStatus() {
         return idStatus;
     }
 
@@ -31,7 +31,7 @@ public class StatusAtendimento implements Comparable<StatusAtendimento> {
         return nome;
     }
 
-    public void setIdStatus(int idStatus) {
+    public void setIdStatus(Integer idStatus) {
         this.idStatus = idStatus;
     }
 
@@ -54,8 +54,17 @@ public class StatusAtendimento implements Comparable<StatusAtendimento> {
     @Override
     public boolean equals(Object objeto)
     {
-        StatusAtendimento outroStatus = (StatusAtendimento)objeto;
-        return ( this.idStatus == outroStatus.getIdStatus() );
+        if (this == objeto) {
+            return true;
+        }
+        if (objeto == null || getClass() != objeto.getClass()) {
+            return false;
+        }
+        StatusAtendimento outroStatus = (StatusAtendimento) objeto;
+        if (idStatus == null) {
+            return outroStatus.getIdStatus() == null;
+        }
+        return idStatus.equals(outroStatus.getIdStatus());
     }
     
     @Override

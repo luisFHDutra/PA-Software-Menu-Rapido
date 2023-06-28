@@ -32,15 +32,19 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
         initComponents();
 
         this.setTitle("Status dos Pedidos");
-        
+
         ArrayList<Pedido> pedidos = DaoFactory.criarPedidoDao().readAll(new Filter<Pedido>() {
             @Override
-            public boolean isAccept(Pedido record)
-            {
-                return record.getStatusAtendimento().getIdStatus() != 3 && record.getDataString().equals(Sys.getInstance().getCurrentDate());
+            public boolean isAccept(Pedido record) {
+
+                if (record.getStatusAtendimento() != null) {
+                    return record.getStatusAtendimento().getIdStatus() != 3 && record.getDataString().equals(Sys.getInstance().getCurrentDate());
+                }
+
+                return record.getDataString().equals(Sys.getInstance().getCurrentDate());
             }
-        } );
-        
+        });
+
         this.tbConsulta.setModel(new TableModelStatusPedidos(pedidos));
 
         this.btnSalvar.setEnabled(false);
@@ -65,8 +69,8 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
     public void setPedido(Pedido pedido) {
 
         this.pedidoCurrent = pedido;
-        
-        if (pedido.getStatusAtendimento()!= null) {
+
+        if (pedido.getStatusAtendimento() != null) {
             this.cbStatusAtendimento.setSelectedItem(pedido.getStatusAtendimento());
         }
 
@@ -270,13 +274,15 @@ public class TelaStatusPedidosUI extends javax.swing.JFrame {
 
             dao.update(pedidoCurrent);
 
-            if (pedidoCurrent.getStatusAtendimento().getIdStatus() == 3) {
-                TableModelStatusPedidos model = (TableModelStatusPedidos) this.tbConsulta.getModel();
-                model.getPedidos().remove(pedidoCurrent);
-                
-                this.pedidoCurrent = null;
+            if (pedidoCurrent.getStatusAtendimento() != null) {
+                if (pedidoCurrent.getStatusAtendimento().getIdStatus() == 3) {
+                    TableModelStatusPedidos model = (TableModelStatusPedidos) this.tbConsulta.getModel();
+                    model.getPedidos().remove(pedidoCurrent);
+
+                    this.pedidoCurrent = null;
+                }
             }
-            
+
             this.tbConsulta.revalidate();
             this.tbConsulta.repaint();
 

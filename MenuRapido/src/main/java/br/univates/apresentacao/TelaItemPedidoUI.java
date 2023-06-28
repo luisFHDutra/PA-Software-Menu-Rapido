@@ -442,6 +442,8 @@ public class TelaItemPedidoUI extends javax.swing.JFrame {
 
     private void cbProdutoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbProdutoFocusLost
         this.itemCurrent.setProduto((Produto) this.cbProduto.getSelectedItem());
+        
+        this.tfValor.setDouble(this.itemCurrent.getProduto().getValorProduto());
     }//GEN-LAST:event_cbProdutoFocusLost
 
     private void tfValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfValorFocusLost
